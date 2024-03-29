@@ -1,0 +1,26 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-latest']
+        node_version: [18.17]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: run build
+        run: |
+          cd web && yarn
+          yarn build
+
+      - name: run lint
+        run: |
+          cd web && yarn
+          yarn lint
