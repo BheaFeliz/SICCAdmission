@@ -20,7 +20,7 @@ class AuthController extends Controller
             'position' => 'nullable|string|max:50'
         ]);
 
-        $userData = array_merge($data, ['role' => $data['role'] ?? 'staff']);
+        $userData = array_merge($data, ['role' => $data['role'] ?? 'student']);
 
         User::create($userData);
 
