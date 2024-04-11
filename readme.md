@@ -1,12 +1,6 @@
-# PCBee
+# SICC
 
-PCBee Ordering Management System
-
-## Clone the PCBee repo from GitHub
-
-```
-git clone git@github.com:chevyB/pcbee.git
-```
+SICC Admission Test Reservation
 
 ## Installation
 
