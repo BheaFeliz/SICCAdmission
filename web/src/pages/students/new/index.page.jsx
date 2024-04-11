@@ -6,16 +6,16 @@ import PageHeader from '@/components/organisms/PageHeader'
 import TextInput from '@/components/organisms/TextInput'
 import Template from '@/components/templates/Template'
 
-const AddStaff = () => {
+const AddStudent = () => {
   const breadcrumbs = [
     {
-      href: '/staffs',
-      title: 'Staffs',
+      href: '/students',
+      title: 'Students',
       icon: FaUserFriends,
     },
     {
       href: '#',
-      title: 'Staff Create',
+      title: 'Student Create',
     },
   ]
 
@@ -24,10 +24,11 @@ const AddStaff = () => {
       <PageHeader breadcrumbs={breadcrumbs} />
 
       <form className='flex center w-80 flex-col gap-2'>
-        <TextInput label='Name' name='createStaff' />
-        <TextInput label='Position' name='createStaff' />
-        <TextInput label='Contact Number' name='createStaff' />
-        <TextInput label='Account Type' name='createStaff' />
+        <TextInput label='Name' name='createStudent' />
+        <TextInput label='Age' name='createStudent' />
+        <TextInput label='Gender' name='createStudent' />
+        <TextInput label='Course' name='createStudent' />
+        <TextInput label='District' name='createStudent' />
 
         <Button color='warning' type='submit' style={{ width: 140 }}>
           Submit
@@ -37,4 +38,4 @@ const AddStaff = () => {
   )
 }
 
-export default AddStaff
+export default AddStudent

@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import {
-  HiOutlineChatAlt2,
-  HiOutlineShoppingBag,
+  HiOutlineCalendar,
   HiOutlineUsers,
   HiTemplate,
 } from 'react-icons/hi'
@@ -13,19 +12,14 @@ const links = [
     link: '/dashboard',
   },
   {
-    label: 'Orders',
-    icon: <HiOutlineShoppingBag />,
-    link: '/orders',
+    label: 'Scheduling',
+    icon: <HiOutlineCalendar />,
+    link: '/scheduling',
   },
   {
-    label: 'Staffs',
+    label: 'Students',
     icon: <HiOutlineUsers />,
-    link: '/staffs',
-  },
-  {
-    label: 'Messages',
-    icon: <HiOutlineChatAlt2 />,
-    link: '/messages',
+    link: '/students',
   },
 ]
 

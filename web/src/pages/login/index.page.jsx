@@ -14,7 +14,7 @@ const Login = () => {
         <Image src='/logo.png' alt='logo' width={120} height={100} />
 
         <h1 className='text-xl font-bold text-blue-900'>
-          Ordering Parts System
+          Samal Island State College
         </h1>
 
         <form onSubmit={handleSubmit}>
@@ -27,7 +27,7 @@ const Login = () => {
               {...formState}
             />
 
-            <Button color='warning' className='w-full' type='submit'>
+            <Button color='blue' className='w-full' type='submit'>
               Submit
             </Button>
           </div>

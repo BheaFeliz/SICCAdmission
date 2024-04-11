@@ -9,7 +9,7 @@ const useHooks = () => {
   const breadcrumbs = [
     {
       href: '#',
-      title: 'Staffs',
+      title: 'Students',
       icon: FaUserFriends,
     },
   ]

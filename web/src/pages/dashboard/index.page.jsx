@@ -16,12 +16,11 @@ const Dashboard = () => {
   ]
 
   const cardData = [
-    { title: '1000', description: 'Delivered' },
-    { title: '12500', description: 'Open' },
-    { title: '1000', description: 'In Transit' },
-    { title: '200', description: 'Cancelled' },
-    { title: '3000', description: 'On Hold' },
-    { title: ' ₱ 1,000,000.00', description: 'Total Amount Order' },
+    { title: '1000', description: 'BS Criminology' },
+    { title: '12500', description: 'BS Tourism Management' },
+    { title: '1000', description: 'BS Agri-Business' },
+    { title: '200', description: 'BS Entrepreneurship' },
+    { title: '3000', description: 'Bachelor of Public Administration' },
   ]
 
   return (
