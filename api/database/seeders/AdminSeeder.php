@@ -16,7 +16,7 @@ class AdminSeeder extends Seeder
         DB::table('users')->upsert([
             'name' => 'Admin',
             'username' => 'admin',
-            'password' => Hash::make('!p@ssword123'),
+            'password' => Hash::make('P@ssword123'),
             'role' => 'admin',
         ], ['username']);
     }

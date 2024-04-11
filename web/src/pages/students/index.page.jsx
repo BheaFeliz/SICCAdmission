@@ -32,9 +32,9 @@ const Dashboard = () => {
       <PageHeader
         breadcrumbs={breadcrumbs}
         right={
-          <Link href='/staffs/new'>
+          <Link href='/students/new'>
             <Button size='xs' color='warning'>
-              Create Staff
+              Create Student
             </Button>
           </Link>
         }
@@ -43,11 +43,12 @@ const Dashboard = () => {
         <Loading />
       : <Table>
           <TableHead>
-            <TableHeadCell>ID</TableHeadCell>
+          <TableHeadCell>ID</TableHeadCell>
             <TableHeadCell>Name</TableHeadCell>
-            <TableHeadCell>Username</TableHeadCell>
-            <TableHeadCell>Phone</TableHeadCell>
-            <TableHeadCell>Position</TableHeadCell>
+            <TableHeadCell>Age</TableHeadCell>
+            <TableHeadCell>Gender</TableHeadCell>
+            <TableHeadCell>Course</TableHeadCell>
+            <TableHeadCell>District</TableHeadCell>
             <TableHeadCell>Role</TableHeadCell>
           </TableHead>
           <TableBody>
@@ -56,9 +57,10 @@ const Dashboard = () => {
                 <TableRow key={user.id}>
                   <TableCell>{user.id}</TableCell>
                   <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.username}</TableCell>
-                  <TableCell>{user.phone}</TableCell>
-                  <TableCell>{user.position}</TableCell>
+                  <TableCell>{user.age}</TableCell>
+                  <TableCell>{user.gender}</TableCell>
+                  <TableCell>{user.course}</TableCell>
+                  <TableCell>{user.district}</TableCell>
                   <TableCell>{user.role}</TableCell>
                 </TableRow>
               ))}
