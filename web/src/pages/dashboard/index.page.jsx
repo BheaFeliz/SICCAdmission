@@ -38,7 +38,7 @@ const Dashboard = () => {
         <DatePicker />
       </div>
 
-      <div className='grid grid-cols-3 gap-4'>
+      <div className='grid grid-cols-5 gap-3'>
         {cardData.map((card, index) => (
           <CardItem
             key={index}
