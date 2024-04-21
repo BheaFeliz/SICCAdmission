@@ -3,11 +3,11 @@ import Link from 'next/link'
 import DatePicker from "@/components/organisms/DatePicker";
 import SelectInput from "@/components/organisms/SelectInput";
 import TextInput from "@/components/organisms/TextInput";
-import Template from "@/components/templates/Template";
+import StudentTemplate from "@/components/templates/StudentTemplate";
 
 const Registration = () => {
   return (
-    <Template>
+    <StudentTemplate>
 
         <form>
           <div className=" style=min-height: 140px;">
@@ -383,7 +383,7 @@ const Registration = () => {
             </div>
             </form>
 
-            </Template>
+            </StudentTemplate>
   
   );
 }
