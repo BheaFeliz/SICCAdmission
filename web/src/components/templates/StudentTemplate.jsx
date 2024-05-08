@@ -1,4 +1,4 @@
-import Navbar from '@/components/organisms/Navbar'
+import Navbar from '@/components/organisms/StudentNavbar'
 
 
 const StudentTemplate = ({ children, contentSx }) => {
