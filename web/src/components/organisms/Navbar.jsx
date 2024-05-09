@@ -7,7 +7,7 @@ const Navbar = () => {
     <nav className='p-3 px-8 flex justify-between items-center bg-gray-50'>
       <Link href='/' className='font-bold flex items-center'>
         <Image src='/logo.png' width={30} height={30} alt='logo' />
-        <span className='px-2'>Samal Island State College</span>
+        <span className='px-2'>Samal Island City College</span>
       </Link>
 
       <div className='flex gap-5 '>
