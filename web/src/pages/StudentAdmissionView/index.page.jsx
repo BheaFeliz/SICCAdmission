@@ -38,10 +38,9 @@ const Dashboard = () => {
       /> */}
       {isLoading ?
         <Loading />
-        
       : <Table>
           <TableHead>
-          <TableHeadCell>ID</TableHeadCell>
+            <TableHeadCell>ID</TableHeadCell>
             <TableHeadCell>First Name</TableHeadCell>
           </TableHead>
           <TableBody>

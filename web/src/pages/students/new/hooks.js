@@ -16,7 +16,7 @@ const schema = yup.object({
   gender: yup.string().required(errors.required),
   course: yup.string().required(errors.required),
   district: yup.string().required(errors.required),
-});
+})
 
 export const useHooks = () => {
   const router = useRouter()

@@ -43,7 +43,7 @@ const Dashboard = () => {
         <Loading />
       : <Table>
           <TableHead>
-          <TableHeadCell>ID</TableHeadCell>
+            <TableHeadCell>ID</TableHeadCell>
             <TableHeadCell>First Name</TableHeadCell>
             <TableHeadCell>Last Name</TableHeadCell>
             <TableHeadCell>Age</TableHeadCell>

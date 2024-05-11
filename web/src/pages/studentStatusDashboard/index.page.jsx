@@ -10,13 +10,21 @@ const studentStatusDashboard = () => {
     {
       href: '#',
       title: 'SICC Online Admission Application Portal',
-    //   icon: FaRegChartBar,
+      //   icon: FaRegChartBar,
     },
   ]
 
   const cardData = [
-    { title: 'Online Application Form', description: 'Visit this site to reserve your admission test here.', link: '/Registration' } ,
-    { title: 'Check Your Enrollment Status', description: 'Visit this site to check your admission slot here.', link: '/referenceInput' },
+    {
+      title: 'Online Application Form',
+      description: 'Visit this site to reserve your admission test here.',
+      link: '/Registration',
+    },
+    {
+      title: 'Check Your Enrollment Status',
+      description: 'Visit this site to check your admission slot here.',
+      link: '/referenceInput',
+    },
     // { title: '1000', description: 'BS Agri-Business' },
   ]
 
