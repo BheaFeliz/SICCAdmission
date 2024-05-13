@@ -318,7 +318,7 @@ const Registration = () => {
                 <Modal.Footer>
                   <Button
                     onClick={() => setOpenModal(false)}
-                    href='/FileUpload'
+                    href='/SubFile'
                   >
                     I accept
                   </Button>
