@@ -24,6 +24,7 @@ const studentStatusDashboard = () => {
     <StudentTemplate>
       <PageHeader breadcrumbs={breadcrumbs} />
 
+      <div className="container mx-auto mb-8" >
       <div className='m-5 grid gap-5 mb-6 md:grid-cols-3'>
         {cardData.map((card, index) => (
           <CardItem
@@ -33,6 +34,7 @@ const studentStatusDashboard = () => {
             link={card.link}
           />
         ))}
+      </div>
       </div>
     </StudentTemplate>
   )
