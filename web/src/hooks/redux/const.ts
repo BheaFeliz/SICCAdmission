@@ -192,32 +192,17 @@ export const SDistrict = [
     selected: true,
     hidden: true,
   },
-]
-export const SBarangay = [
   {
-    value: 0,
-    label: 'Barangay',
-    disabled: true,
-    selected: true,
-    hidden: true,
+    value: 'd1',
+    label: 'District I',
   },
-]
-export const SCitym = [
   {
-    value: 0,
-    label: 'City/Monicipality',
-    disabled: true,
-    selected: true,
-    hidden: true,
+    value: 'd2',
+    label: 'District II',
   },
-]
-export const SProvice = [
   {
-    value: 0,
-    label: 'Province',
-    disabled: true,
-    selected: true,
-    hidden: true,
+    value: 'd3',
+    label: 'District III',
   },
 ]
 export const famBackground = [
