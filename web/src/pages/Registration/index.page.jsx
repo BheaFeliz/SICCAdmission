@@ -13,13 +13,10 @@ import {
   IndigentP,
   monthoption,
   ofw,
-  SBarangay,
   Scategory,
-  SCitym,
   Scourse,
   SDistrict,
   sex,
-  SProvice,
   Studenttype,
   suffixoption,
 } from '@/hooks/redux/const'
@@ -135,21 +132,9 @@ const Registration = () => {
                 label='District'
                 name='district'
               />
-              <SelectInput
-                options={SBarangay}
-                label='Barangay'
-                name='barangay'
-              />
-              <SelectInput
-                options={SCitym}
-                label='City/Municipality'
-                name='cityM'
-              />
-              <SelectInput
-                options={SProvice}
-                label='Province'
-                name='province'
-              />
+              <TextInput label='Barangay' name='barangay' />
+              <TextInput label='City/Municipality' name='cityM' />
+              <TextInput label='Province' name='province' />
               <TextInput label='Zip Code' name='Zcode' />
             </div>
 
@@ -316,10 +301,7 @@ const Registration = () => {
                   </div>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button
-                    onClick={() => setOpenModal(false)}
-                    href='/SubFile'
-                  >
+                  <Button onClick={() => setOpenModal(false)} href='/SubFile'>
                     I accept
                   </Button>
                   <Button color='gray' onClick={() => setOpenModal(false)}>

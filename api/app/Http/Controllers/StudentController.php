@@ -7,12 +7,15 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    public function index(Request $request)
+    public function store(Request $request)
     {
-        // Retrieve admission forms from the database
-        $admissionform = AdmissionForm::all(); // Assuming Student is the model for admission forms
-        
-        // Return admission forms as JSON response
-        return response()->json(['admissionform' => $admissionform]);
+        // Validate incoming request
+        $validatedData = $request->validate(AdmissionForm::$rules);
+
+        // Create a new admission form entry
+        $admissionForm = AdmissionForm::create($validatedData);
+
+        // Return a response
+        return response()->json(['admissionForm' => $admissionForm], 201);
     }
 }

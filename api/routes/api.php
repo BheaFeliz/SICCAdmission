@@ -57,7 +57,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
        
     
     Route::get('/categories', [CategoryController::class, 'index']);
-    Route::get('/stores', [StoreController::class, 'index']);
-    Route::get('/admissionform', [StudentController::class, 'index']);
+    // Route::get('/stores', [StoreController::class, 'index']);
+    Route::post('/admissionform', [StudentController::class, 'store']);
 });
 

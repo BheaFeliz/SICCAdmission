@@ -45,51 +45,51 @@ export const monthoption = [
     hidden: true,
   },
   {
-    value: 'III',
+    value: 'january',
     label: 'January',
   },
   {
-    value: 'Jr.',
+    value: 'febuary',
     label: 'Febuary',
   },
   {
-    value: 'Sr.',
+    value: 'march',
     label: 'March',
   },
   {
-    value: 'I',
+    value: 'april',
     label: 'April',
   },
   {
-    value: 'II',
+    value: 'may',
     label: 'May',
   },
   {
-    value: 'III',
+    value: 'june',
     label: 'June',
   },
   {
-    value: 'IV',
+    value: 'july',
     label: 'July',
   },
   {
-    value: 'IV',
+    value: 'august',
     label: 'August',
   },
   {
-    value: 'III',
+    value: 'september',
     label: 'September',
   },
   {
-    value: 'III',
+    value: 'october',
     label: 'October',
   },
   {
-    value: 'III',
+    value: 'november',
     label: 'November',
   },
   {
-    value: 'III',
+    value: 'december',
     label: 'December',
   },
 ]
