@@ -13,13 +13,10 @@ import {
   IndigentP,
   monthoption,
   ofw,
-  SBarangay,
   Scategory,
-  SCitym,
   Scourse,
   SDistrict,
   sex,
-  SProvice,
   Studenttype,
   suffixoption,
 } from '@/hooks/redux/const'
@@ -135,18 +132,15 @@ const Registration = () => {
                 label='District'
                 name='district'
               />
-              <SelectInput
-                options={SBarangay}
+              <TextInput
                 label='Barangay'
                 name='barangay'
               />
-              <SelectInput
-                options={SCitym}
+              <TextInput
                 label='City/Municipality'
                 name='cityM'
               />
-              <SelectInput
-                options={SProvice}
+              <TextInput
                 label='Province'
                 name='province'
               />
