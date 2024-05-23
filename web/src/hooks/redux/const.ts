@@ -192,6 +192,19 @@ export const SDistrict = [
     selected: true,
     hidden: true,
   },
+
+  {
+    value: 'd1',
+    label: 'District I',
+  },
+  {
+    value: 'd2',
+    label: 'District II',
+  },
+  {
+    value: 'd3',
+    label: 'District III',
+  },
 ]
 
 export const famBackground = [

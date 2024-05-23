@@ -15,7 +15,6 @@ import {
   ofw,
   Scategory,
   Scourse,
-  SDistrict,
   sex,
   Studenttype,
   suffixoption,
@@ -31,7 +30,7 @@ const Registration = () => {
       icon: SiGoogleforms,
     },
   ]
-  const { handleSubmit: handleFormSubmit } = useFormSubmission() // Get form submission handlers
+  const { handleSubmit: handleFormSubmit } = useFormSubmission()
 
   const [openModal, setOpenModal] = useState(false)
   const [showTextInput, setShowTextInput] = useState(false)
@@ -140,10 +139,14 @@ const Registration = () => {
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-3'>
               <TextInput label='Purok/Block/Sitio' name='pbs' />
               <SelectInput
-                options={SDistrict}
+                options={[
+                  { value: 'd1', label: 'District I' },
+                  { value: 'd2', label: 'District II' },
+                  { value: 'd3', label: 'District III' },
+                ]}
                 label='District'
                 name='district'
-                key={SDistrict}
+                key='district'
               />
               <TextInput label='Barangay' name='barangay' />
               <TextInput label='City/Municipality' name='cityM' />
