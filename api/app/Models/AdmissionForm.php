@@ -11,58 +11,17 @@ class AdmissionForm extends Model
 
     protected $guarded = [];
     protected $fillable = [
-        
-        'fname',
-        'lname',
-        'mname',
-        'prefix',
-        'age',
-        'Monthoption',
-        'date',
-        'year',
-        'sex',
-        'gender',
-        'civil_status',
-        'contactnumber',
-        'email',
-        'pbirth',
-        'IndigentP',
-        'indigentPy',
-        'pbs',
-        'district',
-        'brgy',
-        'citym',
-        'province',
-        'citym',
-        'Zcode',
-        'familyB',
-        'sincewhen',
-        'Nsibling',
-        'supstudy',
-        'ofw',
-        'ofwprofession',
-        'Studenttype',
-        'studentCat',
-        'F_nameSchool',
-        'F_Atrack',
-        'F_AMprovince',
-        'F_Ygrad',
-        'T_nameSchool',
-        'T_Atrack',
-        'T_AMprovince',
-        'T_Ygrad',
-        'selectcourse'
-        
-
-        
+        'fname', 'lname', 'mname', 'prefix', 'age', 'Monthoption', 'date', 'year',
+        'sex', 'gender', 'civil_status', 'contactnumber', 'email', 'pbirth', 'IndigentP',
+        'indigentPy', 'pbs', 'district', 'brgy', 'citym', 'province', 'Zcode', 'familyB',
+        'sincewhen', 'Nsibling', 'supstudy', 'ofw', 'ofwprofession', 'Studenttype', 
+        'studentCat', 'F_nameSchool', 'F_Atrack', 'F_AMprovince', 'F_Ygrad', 'T_nameSchool', 
+        'T_Atrack', 'T_AMprovince', 'T_Ygrad', 'selectcourse'
     ];
 
     public static $rules = [
         'contactnumber' => 'nullable|digits:11',
+        'email' => 'nullable|email',
         // Define other validation rules here...
     ];
-    
-
-
-    
 }

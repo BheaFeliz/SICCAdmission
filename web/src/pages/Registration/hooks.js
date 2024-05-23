@@ -1,7 +1,24 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
+import { useMutation } from 'react-query'
+import * as Yup from 'yup'
 
+import { studentApi } from '@/hooks/api/studentApi'
+import {
+  Civilstatus,
+  famBackground,
+  Gender,
+  IndigentP,
+  monthoption,
+  ofw,
+  Scategory,
+  Scourse,
+  SDistrict,
+  sex,
+  Studenttype,
+  suffixoption,
+} from '@/hooks/redux/const'
 import { useHandleError } from '@/hooks/useHandleError'
 import { useToast } from '@/hooks/useToast'
 
@@ -9,11 +26,13 @@ const validationSchema = Yup.object().shape({
   fname: Yup.string().required(),
   lname: Yup.string().required(),
   mname: Yup.string().required(),
-  prefix: Yup.string().nullable(),
+  pref: Yup.string()
+    .nullable()
+    .oneOf(suffixoption.map((option) => option.value)),
   age: Yup.number().integer().required(),
-  Monthoption: Yup.string()
+  monthoption: Yup.string()
     .required()
-    .oneOf(dateoption.map((option) => option.value)),
+    .oneOf(monthoption.map((option) => option.value)),
   date: Yup.number().integer().required(),
   year: Yup.number().integer().required(),
   sex: Yup.string()
@@ -35,8 +54,10 @@ const validationSchema = Yup.object().shape({
     .oneOf(IndigentP.map((option) => option.value)),
   IndigentPy: Yup.string().nullable(),
   pbs: Yup.string().nullable(),
-  district: Yup.string().required(),
-  brgy: Yup.string().required(),
+  district: Yup.string()
+    .required()
+    .oneOf(SDistrict.map((option) => option.value)),
+  barangay: Yup.string().required(), // Changed from 'brgy'
   cityM: Yup.string().required(),
   province: Yup.string().required(),
   Zcode: Yup.number().integer().nullable(),
@@ -70,27 +91,42 @@ const validationSchema = Yup.object().shape({
   email_verified_at: Yup.date().nullable(),
 })
 
-export default validationSchema
-
 export function useFormSubmission() {
   const router = useRouter()
   const { addToast } = useToast()
   const { handleError } = useHandleError()
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await fetch('/api/admission-form', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (response.ok) {
+        addToast('Form submitted successfully', 'success')
+        router.push('/success')
+      } else {
+        throw new Error('Failed to submit form')
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      addToast('Failed to submit form', 'error')
+      handleError(error)
+    }
+  }
   const {
     register,
     formState: { errors },
     handleSubmit,
     control,
   } = useForm({
-    defaultValues: {
-      // Provide default values for your form fields here
-    },
-    resolver: yupResolver(schema), // Use Yup schema for form validation
+    defaultValues: {},
+    resolver: yupResolver(validationSchema),
   })
-
-  const onSubmit = async (data) => {
-    // Logic for form submission
-  }
 
   return {
     handleSubmit: handleSubmit(onSubmit),
@@ -99,5 +135,45 @@ export function useFormSubmission() {
       register,
       control,
     },
+  }
+}
+
+export const useStudents = () => {
+  const { data, isError, isLoading, refetch } = studentApi.useGetStudentsQuery()
+
+  const admissionform = useMemo(() => data?.admissionform || [], [data])
+
+  const {
+    mutate: submitForm,
+    isLoading: isSubmitting,
+    isError: submitError,
+  } = useMutation(async (formData) => {
+    try {
+      const response = await fetch('/admissionform', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to submit form')
+      }
+
+      // Refetch student data after successful form submission
+      refetch()
+    } catch (error) {
+      throw new Error('Failed to submit form')
+    }
+  })
+
+  return {
+    admissionform,
+    isError,
+    isLoading,
+    submitForm,
+    isSubmitting,
+    submitError,
   }
 }

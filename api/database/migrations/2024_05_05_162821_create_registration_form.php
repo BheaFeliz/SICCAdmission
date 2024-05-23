@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRegistrationForm extends Migration
+class CreateAdmissionFormTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,6 @@ class CreateRegistrationForm extends Migration
     {
         // Define valid choices for selectcourse
         $validChoices = ['bsab', 'bse', 'bpa', 'bstmt', 'bsc'];
-
-
 
         Schema::create('admissionform', function (Blueprint $table) use ($validChoices) {
             $table->id();
@@ -29,7 +27,7 @@ class CreateRegistrationForm extends Migration
             $table->integer('year')->nullable();
             $table->string('sex')->nullable();
             $table->string('gender')->nullable();
-            $table->string('civilstatus')->nullable();
+            $table->string('civilstatus')->nullable(); // Changed from civil_status
             $table->string('contactnumber', 11)->nullable();
             $table->string('email')->nullable();
             $table->string('pbirth')->nullable();

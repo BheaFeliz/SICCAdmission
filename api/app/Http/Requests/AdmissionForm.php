@@ -13,7 +13,7 @@ class AdmissionFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return true; // You can customize the authorization logic if needed
+        return true;
     }
 
     /**
@@ -22,7 +22,6 @@ class AdmissionFormRequest extends FormRequest
      * @return array
      */
     public function rules()
-
     {
         return [
             'fname' => 'required|string',
@@ -68,6 +67,3 @@ class AdmissionFormRequest extends FormRequest
         ];
     }
 }
-
-
-

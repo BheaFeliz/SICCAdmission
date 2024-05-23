@@ -21,6 +21,8 @@ import {
   suffixoption,
 } from '@/hooks/redux/const'
 
+import { useFormSubmission } from './hooks'
+
 const Registration = () => {
   const breadcrumbs = [
     {
@@ -29,6 +31,7 @@ const Registration = () => {
       icon: SiGoogleforms,
     },
   ]
+  const { handleSubmit: handleFormSubmit } = useFormSubmission() // Get form submission handlers
 
   const [openModal, setOpenModal] = useState(false)
   const [showTextInput, setShowTextInput] = useState(false)
@@ -79,23 +82,31 @@ const Registration = () => {
     <Template>
       <PageHeader breadcrumbs={breadcrumbs} />
       <Card>
-        <form>
+        <form onSubmit={handleFormSubmit}>
           <div className=' style=min-height: 140px;'>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
               <TextInput label='First Name' name='fname' />
               <TextInput label='Last Name' name='lname' />
               <TextInput label='Middle Name' name='mname' />
-              <SelectInput options={suffixoption} name='pref' />
+              <SelectInput
+                options={suffixoption}
+                name='pref'
+                key={suffixoption}
+              />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
               <TextInput label='Age' name='age' />
               <div className='grid grid-cols-3 gap-1'>
-                <SelectInput options={monthoption} name='monthoption' />
+                <SelectInput
+                  options={monthoption}
+                  name='monthoption'
+                  key={monthoption}
+                />
                 <TextInput label='Day' name='date' />
                 <TextInput label='Year' name='year' />
               </div>
-              <SelectInput options={sex} name='sex' />
-              <SelectInput options={Gender} name='gender' />
+              <SelectInput options={sex} name='sex' key={sex} />
+              <SelectInput options={Gender} name='gender' key={Gender} />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
               <SelectInput options={Civilstatus} name='civilstatus' />
@@ -111,6 +122,7 @@ const Registration = () => {
                 options={IndigentP}
                 name='IndigentP'
                 onChange={handleIndigentChange}
+                key={IndigentP}
               />
               {showTextInput && (
                 <TextInput
@@ -131,6 +143,7 @@ const Registration = () => {
                 options={SDistrict}
                 label='District'
                 name='district'
+                key={SDistrict}
               />
               <TextInput label='Barangay' name='barangay' />
               <TextInput label='City/Municipality' name='cityM' />
@@ -147,6 +160,7 @@ const Registration = () => {
                 name='familyB'
                 onChange={handleFamilyBackgroundChange}
                 className='w-full md:w-auto'
+                key={famBackground}
               />
               {showFamilyBackgroundInput && (
                 <TextInput
@@ -169,6 +183,7 @@ const Registration = () => {
                 onChange={handleOFWChange}
                 name='ofw'
                 className='w-full md:w-auto'
+                key={ofw}
               />
               {showOFWInput && (
                 <TextInput
@@ -184,6 +199,7 @@ const Registration = () => {
                 label='Student Category'
                 name='Studenttype'
                 onChange={handleStudentCategoryChange}
+                key={Scategory}
               />
               {showWorkingStudentInput && (
                 <TextInput
@@ -200,6 +216,7 @@ const Registration = () => {
                 options={Studenttype}
                 name='StudentCat'
                 onChange={handleStudentTypeChange}
+                key={Studenttype}
               />
             </div>
 
@@ -268,7 +285,11 @@ const Registration = () => {
             )}
 
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
-              <SelectInput options={Scourse} name='selectcourse' />
+              <SelectInput
+                options={Scourse}
+                name='selectcourse'
+                key={Scourse}
+              />
             </div>
 
             <div name='modal'>
