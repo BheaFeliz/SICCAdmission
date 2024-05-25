@@ -1,10 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
-import { useMutation } from 'react-query'
 import * as Yup from 'yup'
 
-import { studentApi } from '@/hooks/api/studentApi'
+import { useCreateStudentMutation } from '@/hooks/api/studentApi'
 import {
   Civilstatus,
   famBackground,
@@ -19,10 +18,9 @@ import {
   Studenttype,
   suffixoption,
 } from '@/hooks/redux/const'
-import { useHandleError } from '@/hooks/useHandleError'
 import { useToast } from '@/hooks/useToast'
 
-const validationSchema = Yup.object().shape({
+const schema = Yup.object({
   fname: Yup.string().required(),
   lname: Yup.string().required(),
   mname: Yup.string().required(),
@@ -90,90 +88,29 @@ const validationSchema = Yup.object().shape({
     .oneOf(Scourse.map((option) => option.value)),
   email_verified_at: Yup.date().nullable(),
 })
-
-export function useFormSubmission() {
+export function useHooks() {
   const router = useRouter()
   const { addToast } = useToast()
-  const { handleError } = useHandleError()
-
-  const onSubmit = async (data) => {
-    try {
-      const response = await fetch('/api/admission-form', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (response.ok) {
-        addToast('Form submitted successfully', 'success')
-        router.push('/success')
-      } else {
-        throw new Error('Failed to submit form')
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error)
-      addToast('Failed to submit form', 'error')
-      handleError(error)
-    }
-  }
   const {
     register,
     formState: { errors },
     handleSubmit,
-    control,
-  } = useForm({
-    defaultValues: {},
-    resolver: yupResolver(validationSchema),
-  })
+  } = useForm({ defaultValues: {}, resolver: yupResolver(schema) })
+  const [createStudentMutation] = useCreateStudentMutation()
+
+  const onSubmit = async (data) => {
+    const { message } = await createStudentMutation(data).unwrap()
+    addToast({
+      message: message,
+    })
+    router.push('/subfile')
+  }
 
   return {
     handleSubmit: handleSubmit(onSubmit),
     formState: {
       errors,
       register,
-      control,
     },
-  }
-}
-
-export const useStudents = () => {
-  const { data, isError, isLoading, refetch } = studentApi.useGetStudentsQuery()
-
-  const admissionform = useMemo(() => data?.admissionform || [], [data])
-
-  const {
-    mutate: submitForm,
-    isLoading: isSubmitting,
-    isError: submitError,
-  } = useMutation(async (formData) => {
-    try {
-      const response = await fetch('/admissionform', {
-        method: 'POST',
-        body: JSON.stringify(formData),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to submit form')
-      }
-
-      // Refetch student data after successful form submission
-      refetch()
-    } catch (error) {
-      throw new Error('Failed to submit form')
-    }
-  })
-
-  return {
-    admissionform,
-    isError,
-    isLoading,
-    submitForm,
-    isSubmitting,
-    submitError,
   }
 }

@@ -4,25 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdmissionFormRequest;
 use App\Models\AdmissionForm;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class StudentController extends Controller
 {
     public function store(AdmissionFormRequest $request)
     {
-        try {
-            // Create a new admission form entry
-            $admissionForm = AdmissionForm::create($request->validated());
+        // Validate the incoming request
+        $validatedData = $request->validated();
+        
+        // Create or update the AdmissionForm model
+        $admissionForm = AdmissionForm::create($validatedData);
 
-            // Return a success response
-            return response()->json(['admissionForm' => $admissionForm], 201);
-        } catch (\Exception $e) {
-            // Log the error
-            Log::error('Error storing admission form: ' . $e->getMessage());
+        // Optionally, you can perform additional processing here, such as file uploads
+        // For example:
+        // if ($request->hasFile('files')) {
+        //     foreach ($request->file('files') as $file) {
+        //         // Process each file
+        //     }
+        // }
 
-            // Return an error response
-            return response()->json(['message' => 'Failed to store admission form'], 500);
-        }
+        // Log the successful creation of the AdmissionForm
+        Log::info('Admission form submitted successfully', ['admission_form_id' => $admissionForm->id]);
+
+        // Return a response indicating success
+        return response()->json($admissionForm, 201);
     }
 }

@@ -7,7 +7,15 @@ export const studentApi = baseApi.injectEndpoints({
       query: () => '/admissionform',
       providesTags: ['admissionform'],
     }),
+    createStudent: builder.mutation({
+      invalidatesTags: ['admissionform'],
+      query: (body) => ({
+        url: 'admissionform',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 })
 
-export const { useGetStudentsQuery } = studentApi
+export const { useGetStudentsQuery, useCreateStudentMutation } = studentApi

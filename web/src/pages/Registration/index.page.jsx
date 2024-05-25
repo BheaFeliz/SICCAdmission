@@ -20,7 +20,7 @@ import {
   suffixoption,
 } from '@/hooks/redux/const'
 
-import { useFormSubmission } from './hooks'
+import { useHooks } from './hooks'
 
 const Registration = () => {
   const breadcrumbs = [
@@ -30,9 +30,10 @@ const Registration = () => {
       icon: SiGoogleforms,
     },
   ]
-  const { handleSubmit: handleFormSubmit } = useFormSubmission()
 
+  const { formState, handleSubmit } = useHooks()
   const [openModal, setOpenModal] = useState(false)
+
   const [showTextInput, setShowTextInput] = useState(false)
   const [showFamilyBackgroundInput, setShowFamilyBackgroundInput] =
     useState(false)
@@ -81,39 +82,44 @@ const Registration = () => {
     <Template>
       <PageHeader breadcrumbs={breadcrumbs} />
       <Card>
-        <form onSubmit={handleFormSubmit}>
+        <form onSubmit={handleSubmit}>
           <div className=' style=min-height: 140px;'>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-              <TextInput label='First Name' name='fname' />
-              <TextInput label='Last Name' name='lname' />
-              <TextInput label='Middle Name' name='mname' />
-              <SelectInput
-                options={suffixoption}
-                name='pref'
-                key={suffixoption}
-              />
+              <TextInput label='First Name' name='fname' {...formState} />
+              <TextInput label='Last Name' name='lname' {...formState} />
+              <TextInput label='Middle Name' name='mname' {...formState} />
+              <SelectInput options={suffixoption} name='pref' {...formState} />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-              <TextInput label='Age' name='age' />
+              <TextInput label='Age' name='age' {...formState} />
               <div className='grid grid-cols-3 gap-1'>
                 <SelectInput
                   options={monthoption}
                   name='monthoption'
-                  key={monthoption}
+                  {...formState}
                 />
-                <TextInput label='Day' name='date' />
-                <TextInput label='Year' name='year' />
+                <TextInput label='Day' name='date' {...formState} />
+                <TextInput label='Year' name='year' {...formState} />
               </div>
-              <SelectInput options={sex} name='sex' key={sex} />
-              <SelectInput options={Gender} name='gender' key={Gender} />
+              <SelectInput options={sex} name='sex' {...formState} />
+              <SelectInput options={Gender} name='gender' {...formState} />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-              <SelectInput options={Civilstatus} name='civilstatus' />
-              <TextInput label='Mobile Number' name='contactnumber' />
-              <TextInput label='Email Address' name='email' />
+              <SelectInput
+                options={Civilstatus}
+                name='civilstatus'
+                {...formState}
+              />
+              <TextInput
+                label='Mobile Number'
+                name='contactnumber'
+                {...formState}
+              />
+              <TextInput label='Email Address' name='email' {...formState} />
               <TextInput
                 label='Place of Birth (City/Municipality)'
                 name='pbirth'
+                {...formState}
               />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-2'>
@@ -121,7 +127,7 @@ const Registration = () => {
                 options={IndigentP}
                 name='IndigentP'
                 onChange={handleIndigentChange}
-                key={IndigentP}
+                {...formState}
               />
               {showTextInput && (
                 <TextInput
@@ -129,6 +135,7 @@ const Registration = () => {
                   type='text'
                   name='IndigentPy'
                   className='form-input'
+                  {...formState}
                 />
               )}
             </div>
@@ -146,12 +153,16 @@ const Registration = () => {
                 ]}
                 label='District'
                 name='district'
-                key='district'
+                {...formState}
               />
-              <TextInput label='Barangay' name='barangay' />
-              <TextInput label='City/Municipality' name='cityM' />
-              <TextInput label='Province' name='province' />
-              <TextInput label='Zip Code' name='Zcode' />
+              <TextInput label='Barangay' name='barangay' {...formState} />
+              <TextInput
+                label='City/Municipality'
+                name='cityM'
+                {...formState}
+              />
+              <TextInput label='Province' name='province' {...formState} />
+              <TextInput label='Zip Code' name='Zcode' {...formState} />
             </div>
 
             <div className='p-4'>
@@ -163,7 +174,7 @@ const Registration = () => {
                 name='familyB'
                 onChange={handleFamilyBackgroundChange}
                 className='w-full md:w-auto'
-                key={famBackground}
+                {...formState}
               />
               {showFamilyBackgroundInput && (
                 <TextInput
@@ -176,6 +187,7 @@ const Registration = () => {
               <TextInput
                 label='Number of siblings in the family'
                 name='Nsibling'
+                {...formState}
               />
 
               <TextInput label='Who Will support your study?' name='supstudy' />
@@ -186,7 +198,7 @@ const Registration = () => {
                 onChange={handleOFWChange}
                 name='ofw'
                 className='w-full md:w-auto'
-                key={ofw}
+                {...formState}
               />
               {showOFWInput && (
                 <TextInput
@@ -202,7 +214,7 @@ const Registration = () => {
                 label='Student Category'
                 name='Studenttype'
                 onChange={handleStudentCategoryChange}
-                key={Scategory}
+                {...formState}
               />
               {showWorkingStudentInput && (
                 <TextInput
@@ -219,7 +231,7 @@ const Registration = () => {
                 options={Studenttype}
                 name='StudentCat'
                 onChange={handleStudentTypeChange}
-                key={Studenttype}
+                {...formState}
               />
             </div>
 
@@ -232,24 +244,28 @@ const Registration = () => {
                     type='text'
                     name='F_nameSchool'
                     className='form-input'
+                    {...formState}
                   />
                   <TextInput
                     label='Academic track'
                     type='text'
                     name='F_Atrack'
                     className='form-input'
+                    {...formState}
                   />
                   <TextInput
                     label='Address City/Municipality/Province'
                     type='text'
                     name='F_AMprovince'
                     className='form-input'
+                    {...formState}
                   />
                   <TextInput
                     label='Year Graduate'
                     type='text'
                     name='F_Ygrad'
                     className='form-input'
+                    {...formState}
                   />
                 </div>
               </div>
@@ -264,24 +280,28 @@ const Registration = () => {
                     type='text'
                     name='T_nameSchool'
                     className='form-input'
+                    {...formState}
                   />
                   <TextInput
                     label='Course'
                     type='text'
                     name='T_Atrack'
                     className='form-input'
+                    {...formState}
                   />
                   <TextInput
                     label='Address City/Municipality/Province'
                     type='text'
                     name='T_AMprovince'
                     className='form-input'
+                    {...formState}
                   />
                   <TextInput
                     label='Year Attended'
                     type='text'
                     name='T_Ygrad'
                     className='form-input'
+                    {...formState}
                   />
                 </div>
               </div>
@@ -291,7 +311,7 @@ const Registration = () => {
               <SelectInput
                 options={Scourse}
                 name='selectcourse'
-                key={Scourse}
+                {...formState}
               />
             </div>
 
@@ -325,7 +345,11 @@ const Registration = () => {
                   </div>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button onClick={() => setOpenModal(false)} href='/SubFile'>
+                  <Button
+                    handleSubmit={handleSubmit}
+                    onClick={() => setOpenModal(false)}
+                    href='/SubFile'
+                  >
                     I accept
                   </Button>
                   <Button color='gray' onClick={() => setOpenModal(false)}>
@@ -336,7 +360,9 @@ const Registration = () => {
             </div>
           </div>
           <div>
-            <Button onClick={() => setOpenModal(true)}>Proceed</Button>
+            <Button type='submit' onClick={() => setOpenModal(true)}>
+              Proceed
+            </Button>
           </div>
         </form>
       </Card>
