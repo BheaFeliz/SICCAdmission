@@ -47,9 +47,7 @@ const schema = Yup.object({
     .matches(/^\d{11}$/, 'Invalid contact number'),
   email: Yup.string().email().required(),
   pbirth: Yup.string().nullable(),
-  IndigentP: Yup.string()
-    .required()
-    .oneOf(IndigentP.map((option) => option.value)),
+  IndigentP: Yup.string().oneOf(IndigentP.map((option) => option.value)),
   IndigentPy: Yup.string().nullable(),
   pbs: Yup.string().nullable(),
   district: Yup.string()
@@ -76,13 +74,13 @@ const schema = Yup.object({
     .required()
     .oneOf(Scategory.map((option) => option.value)),
   F_nameSchool: Yup.string().required(),
-  F_Atrack: Yup.string().required(),
+  F_Atrack: Yup.string().required().nullable(),
   F_AMprovince: Yup.string().nullable(),
-  F_Ygrad: Yup.string().required(),
-  T_nameSchool: Yup.string().required(),
-  T_Atrack: Yup.string().required(),
-  T_AMprovince: Yup.string().nullable(),
-  T_Ygrad: Yup.string().required(),
+  F_Ygrad: Yup.string().required().nullable(),
+  T_nameSchool: Yup.string().required().nullable(),
+  T_Atrack: Yup.string().required().nullable(),
+  T_AMprovince: Yup.string().nullable().nullable(),
+  T_Ygrad: Yup.string().required().nullable(),
   selectcourse: Yup.string()
     .required()
     .oneOf(Scourse.map((option) => option.value)),

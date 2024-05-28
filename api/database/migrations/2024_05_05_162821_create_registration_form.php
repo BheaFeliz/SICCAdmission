@@ -13,9 +13,9 @@ class CreateAdmissionFormTable extends Migration
     public function up(): void
     {
         // Define valid choices for selectcourse
-        $validChoices = ['bsab', 'bse', 'bpa', 'bstmt', 'bsc'];
+        
 
-        Schema::create('admissionform', function (Blueprint $table) use ($validChoices) {
+        Schema::create('admissionform', function (Blueprint $table)  {
             $table->id();
             $table->string('fname')->required();
             $table->string('lname')->required();
@@ -61,8 +61,7 @@ class CreateAdmissionFormTable extends Migration
             $table->timestamps();
         });
 
-        // Add a check constraint to ensure selectcourse is one of the valid choices
-        DB::statement("ALTER TABLE admissionform ADD CONSTRAINT check_selectcourse CHECK (selectcourse IN ('" . implode("','", $validChoices) . "'))");
+    
     }
 
     /**

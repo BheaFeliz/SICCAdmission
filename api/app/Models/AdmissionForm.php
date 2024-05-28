@@ -12,7 +12,7 @@ class AdmissionForm extends Model
     protected $guarded = [];
     protected $fillable = [
         'fname', 'lname', 'mname', 'prefix', 'age', 'Monthoption', 'date', 'year',
-        'sex', 'gender', 'civil_status', 'contactnumber', 'email', 'pbirth', 'IndigentP',
+        'sex', 'gender', 'civilstatus', 'contactnumber', 'email', 'pbirth', 'IndigentP', // Changed from civil_status
         'indigentPy', 'pbs', 'district', 'brgy', 'citym', 'province', 'Zcode', 'familyB',
         'sincewhen', 'Nsibling', 'supstudy', 'ofw', 'ofwprofession', 'Studenttype', 
         'studentCat', 'F_nameSchool', 'F_Atrack', 'F_AMprovince', 'F_Ygrad', 'T_nameSchool', 
@@ -21,7 +21,7 @@ class AdmissionForm extends Model
 
     public static $rules = [
         'contactnumber' => 'nullable|digits:11',
-        'email' => 'nullable|email',
+        'email' => 'required|email',
         // Define other validation rules here...
     ];
 }
