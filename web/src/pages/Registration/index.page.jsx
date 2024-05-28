@@ -154,13 +154,8 @@ const Registration = () => {
                 label='District'
                 name='district'
                 {...formState}
-
-              <TextInput label='Barangay' name='barangay' {...formState} />
-              <TextInput
-                label='Barangay'
-                name='barangay'
               />
-                  
+              <TextInput label='Barangay' name='barangay' {...formState} />
               <TextInput
                 label='City/Municipality'
                 name='cityM'
@@ -168,11 +163,6 @@ const Registration = () => {
               />
               <TextInput label='Province' name='province' {...formState} />
               <TextInput label='Zip Code' name='Zcode' {...formState} />
-              <TextInput
-                label='Province'
-                name='province'
-              />
-              <TextInput label='Zip Code' name='Zcode' />
             </div>
 
             <div className='p-4'>
