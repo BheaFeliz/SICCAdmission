@@ -154,13 +154,8 @@ const Registration = () => {
                 label='District'
                 name='district'
                 {...formState}
-
-              <TextInput label='Barangay' name='barangay' {...formState} />
-              <TextInput
-                label='Barangay'
-                name='barangay'
-              />
-                  
+                />
+              <TextInput label='Barangay' name='barangay' {...formState} />                 
               <TextInput
                 label='City/Municipality'
                 name='cityM'

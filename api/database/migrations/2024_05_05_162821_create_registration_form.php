@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdmissionFormTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,8 +17,8 @@ class CreateAdmissionFormTable extends Migration
 
         Schema::create('admissionform', function (Blueprint $table) use ($validChoices) {
             $table->id();
-            $table->string('fname')->required();
-            $table->string('lname')->required();
+            $table->string('fname');
+            $table->string('lname');
             $table->string('mname')->nullable();
             $table->string('prefix')->nullable();
             $table->integer('age')->nullable();
@@ -72,4 +72,4 @@ class CreateAdmissionFormTable extends Migration
     {
         Schema::dropIfExists('admissionform');
     }
-}
+};
