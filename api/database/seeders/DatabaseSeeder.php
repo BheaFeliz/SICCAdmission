@@ -9,10 +9,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            RegionSeeder::class,
-            ProvinceSeeder::class,
-            CitySeeder::class,
-            BarangaySeeder::class,
+            AdminSeeder::class,
+            
         ]);
     }
 }
