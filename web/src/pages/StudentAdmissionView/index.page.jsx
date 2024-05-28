@@ -15,7 +15,7 @@ import Loading from '@/components/atoms/Loading'
 // import PageHeader from '@/components/organisms/PageHeader'
 import Template from '@/components/templates/StudentTemplate'
 
-import useHooks from './hooks'
+//import useHooks from './hooks'
 
 const Dashboard = () => {
   const {

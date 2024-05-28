@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdmissionFormRequest;
 use App\Models\AdmissionForm;
+use Illuminate\Http\Request;
 
 class AdmissionFormController extends Controller
 {

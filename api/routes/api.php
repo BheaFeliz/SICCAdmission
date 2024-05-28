@@ -1,13 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdmissionFormController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\StoreController;
-use App\Http\Controllers\StudentController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +56,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
        
     
     Route::get('/categories', [CategoryController::class, 'index']);
-    Route::post('/admissionform', [StudentController::class, 'store']);
+    // Route::post('/admissionform', [StudentController::class, 'store']);
+    Route::post('/admissionform', [AdmissionFormController::class, 'store']);
+
 });
 

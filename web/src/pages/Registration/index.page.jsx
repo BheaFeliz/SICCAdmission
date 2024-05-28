@@ -11,8 +11,8 @@ import {
   famBackground,
   Gender,
   IndigentP,
-  monthoption,
-  ofw,
+  Monthoption,
+  Ofw,
   Scategory,
   Scourse,
   sex,
@@ -64,7 +64,7 @@ const Registration = () => {
 
   const handleOFWChange = (e) => {
     const value = e.target.value
-    const selectedOption = ofw.find((option) => option.value === value)
+    const selectedOption = Ofw.find((option) => option.value === value)
 
     if (selectedOption && selectedOption.showTextInput) {
       setShowOFWInput(true)
@@ -94,12 +94,12 @@ const Registration = () => {
               <TextInput label='Age' name='age' {...formState} />
               <div className='grid grid-cols-3 gap-1'>
                 <SelectInput
-                  options={monthoption}
+                  options={Monthoption}
                   name='monthoption'
                   {...formState}
                 />
                 <TextInput label='Day' name='date' {...formState} />
-                <TextInput label='Year' name='year' {...formState} />
+                <TextInput label='Year' name='y1ear' {...formState} />
               </div>
               <SelectInput options={sex} name='sex' {...formState} />
               <SelectInput options={Gender} name='gender' {...formState} />
@@ -125,7 +125,7 @@ const Registration = () => {
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-2'>
               <SelectInput
                 options={IndigentP}
-                name='IndigentP'
+                name='indigentP'
                 onChange={handleIndigentChange}
                 {...formState}
               />
@@ -133,7 +133,7 @@ const Registration = () => {
                 <TextInput
                   label='If yes, specify the Indigenous group you belong to.'
                   type='text'
-                  name='IndigentPy'
+                  name='indigentPy'
                   className='form-input'
                   {...formState}
                 />
@@ -163,13 +163,7 @@ const Registration = () => {
               />
               <TextInput label='Province' name='province' {...formState} />
               <TextInput label='Zip Code' name='Zcode' {...formState} />
-              <TextInput
-                label='Province'
-                name='province'
-              />
-              <TextInput label='Zip Code' name='Zcode' />
             </div>
-
             <div className='p-4'>
               <p>Family Background:</p>
             </div>
@@ -194,12 +188,11 @@ const Registration = () => {
                 name='Nsibling'
                 {...formState}
               />
-
               <TextInput label='Who Will support your study?' name='supstudy' />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-2'>
               <SelectInput
-                options={ofw}
+                options={Ofw}
                 onChange={handleOFWChange}
                 name='ofw'
                 className='w-full md:w-auto'
@@ -213,11 +206,10 @@ const Registration = () => {
                   className='form-input'
                 />
               )}
-
               <SelectInput
                 options={Scategory}
                 label='Student Category'
-                name='Studenttype'
+                name='studenttype'
                 onChange={handleStudentCategoryChange}
                 {...formState}
               />
@@ -230,7 +222,6 @@ const Registration = () => {
                 />
               )}
             </div>
-
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
               <SelectInput
                 options={Studenttype}
@@ -239,7 +230,6 @@ const Registration = () => {
                 {...formState}
               />
             </div>
-
             {showFreshmenInput && (
               <div name='Freshmen'>
                 <p>Freshmen:</p>
@@ -275,7 +265,6 @@ const Registration = () => {
                 </div>
               </div>
             )}
-
             {showTransfereeInput && (
               <div>
                 <p>Transferee:</p>
@@ -311,7 +300,6 @@ const Registration = () => {
                 </div>
               </div>
             )}
-
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
               <SelectInput
                 options={Scourse}
@@ -319,7 +307,6 @@ const Registration = () => {
                 {...formState}
               />
             </div>
-
             <div name='modal'>
               <Modal show={openModal} onClose={() => setOpenModal(false)}>
                 <Modal.Header>CONFORME:</Modal.Header>
