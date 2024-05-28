@@ -192,7 +192,6 @@ export const SDistrict = [
     selected: true,
     hidden: true,
   },
-
   {
     value: 'd1',
     label: 'District I',
