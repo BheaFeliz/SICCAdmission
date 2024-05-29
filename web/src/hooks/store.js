@@ -6,7 +6,7 @@ import { userApi } from '@/hooks/api/userApi'
 import authSlice from '@/hooks/redux/authSlice'
 
 import { categoryApi } from './api/categoryApi'
-import { orderApi } from './api/orderApi'
+import { scheduleApi } from './api/scheduleApi'
 import { storeApi } from './api/storeApi'
 
 export const store = configureStore({
@@ -14,8 +14,8 @@ export const store = configureStore({
     authState: authSlice,
     [authApi.reducerPath]: authApi.reducer,
     [categoryApi.reducerPath]: categoryApi.reducer,
-    [orderApi.reducerPath]: orderApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
+    [scheduleApi.reducerPath]: scheduleApi.reducer,
     [storeApi.reducerPath]: storeApi.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
@@ -24,8 +24,8 @@ export const store = configureStore({
     getDefaultMiddleware().concat([
       authApi.middleware,
       categoryApi.middleware,
-      orderApi.middleware,
       userApi.middleware,
+      scheduleApi.middleware,
       storeApi.middleware,
     ]),
 })

@@ -8,6 +8,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ScheduleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,16 +48,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/', 'index');
             Route::get('/{id}', 'show');
             Route::post('/{id}', 'store');
-        });
-
-
-
-    Route::group(['middleware' => ['restrictRole:admin,staff']], function () {
-        Route::resource('orders', OrderController::class);
-    });
-       
+        });       
     
     Route::get('/categories', [CategoryController::class, 'index']);
-    Route::post('/admissionform', [StudentController::class, 'store']);
+
 });
 

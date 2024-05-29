@@ -1,54 +1,68 @@
-import React from 'react'
-import { FaArrowRight, FaRegChartBar } from 'react-icons/fa'
+import React from 'react';
 
-import CardItem from '@/components/organisms/Card'
-import DatePicker from '@/components/organisms/DatePicker'
-import PageHeader from '@/components/organisms/PageHeader'
-import Template from '@/components/templates/Template'
+import Template from "@/components/templates/Template";
 
-const Dashboard = () => {
-  const breadcrumbs = [
-    {
-      href: '#',
-      title: 'Dashboard',
-      icon: FaRegChartBar,
-    },
-  ]
+import useHooks from './hooks';
 
-  const cardData = [
-    { title: '1000', description: 'BS Criminology' },
-    { title: '12500', description: 'BS Tourism Management' },
-    { title: '1000', description: 'BS Agri-Business' },
-    { title: '200', description: 'BS Entrepreneurship' },
-    { title: '3000', description: 'Bachelor of Public Administration' },
-  ]
+const RoomSchedulingForm = () => {
+  const {
+    register,
+    errors,
+    handleSubmit,
+  } = useHooks();
 
   return (
     <Template>
-      <PageHeader breadcrumbs={breadcrumbs} />
-
-      <div className='flex flex-row items-center justify-center mb-4'>
-        <DatePicker />
-
-        <FaArrowRight
-          className='mx-3 text-gray-500'
-          style={{ marginTop: '1px' }}
-        />
-
-        <DatePicker />
+      <div className="flex justify-center items-center mt-4">
+        <h2 className="text-2xl font-bold mb-4">Schedule Room</h2>
       </div>
 
-      <div className='grid grid-cols-3 gap-4'>
-        {cardData.map((card, index) => (
-          <CardItem
-            key={index}
-            title={card.title}
-            description={card.description}
+      <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+        <div className="mb-4">
+          <label htmlFor="date" className="block text-sm font-semibold mb-2">Date</label>
+          <input 
+            type="date" 
+            id="date" 
+            {...register('date')} 
+            className={`w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 ${errors.date ? 'border-red-500' : ''}`} 
           />
-        ))}
-      </div>
+          {errors.date && <p className="text-red-500 text-sm">{errors.date.message}</p>}
+        </div>
+        <div className="mb-4">
+          <label htmlFor="start-time" className="block text-sm font-semibold mb-2">Start Time</label>
+          <input 
+            type="time" 
+            id="start-time" 
+            {...register('startTime')} 
+            className={`w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 ${errors.startTime ? 'border-red-500' : ''}`} 
+          />
+          {errors.startTime && <p className="text-red-500 text-sm">{errors.startTime.message}</p>}
+        </div>
+        <div className="mb-4">
+          <label htmlFor="end-time" className="block text-sm font-semibold mb-2">End Time</label>
+          <input 
+            type="time" 
+            id="end-time" 
+            {...register('endTime')} 
+            className={`w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 ${errors.endTime ? 'border-red-500' : ''}`} 
+          />
+          {errors.endTime && <p className="text-red-500 text-sm">{errors.endTime.message}</p>}
+        </div>
+        <div className="mb-4">
+          <label htmlFor="description" className="block text-sm font-semibold mb-2">Description</label>
+          <textarea 
+            id="description" 
+            {...register('description')} 
+            className={`w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 ${errors.description ? 'border-red-500' : ''}`} 
+          />
+          {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
+        </div>
+        <div className="flex justify-center">
+          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Confirm</button>
+        </div>
+      </form>
     </Template>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default RoomSchedulingForm;

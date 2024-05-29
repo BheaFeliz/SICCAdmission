@@ -1,10 +1,29 @@
+// Schedule.js
 import React, { useState } from 'react';
 
-import CardItem from '@/components/organisms/Card';
-import Datepicker from "@/components/organisms/Datepicker";
+import CardItem from '@/components/organisms/CardItem';
 import Template from "@/components/templates/Template";
+import { useGetScheduleByIdQuery } from '@/hooks/api/scheduleApi';
 
 import useHooks from './hooks';
+
+const CardWithSchedule = ({ card, addSchedule }) => {
+  const { data: scheduling, error, isLoading } = useGetScheduleByIdQuery(card.id);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading schedule</div>;
+
+  return (
+    <CardItem
+      title={card.title}
+      description={card.description}
+      date={scheduling ? scheduling.date : null}
+      startTime={scheduling ? scheduling.startTime : null}
+      endTime={scheduling ? scheduling.endTime : null}
+      onDateSelect={(date) => addSchedule(date)}
+    />
+  );
+};
 
 const Scheduling = () => {
   const {
@@ -18,61 +37,50 @@ const Scheduling = () => {
   } = useHooks();
 
   const [schedulingMode, setSchedulingMode] = useState(false);
-  const [deleteMode, setDeleteMode] = useState(false);
   const [selectedForDeletion, setSelectedForDeletion] = useState(null);
 
   const toggleSchedulingMode = () => {
     setSchedulingMode(!schedulingMode);
-  };
-
-  const toggleDeleteMode = () => {
-    setDeleteMode(!deleteMode);
+    setSelectedForDeletion(null);
   };
 
   const handleCardClick = (cardId) => {
-    if (deleteMode && selectedForDeletion === null) {
-      setSelectedForDeletion(cardId);
-    } else if (deleteMode && selectedForDeletion === cardId) {
-      deleteCard(cardId);
-      setSelectedForDeletion(null);
-    } else if (schedulingMode) {
+    if (schedulingMode) {
       handleSchedule(cardId);
+    } else {
+      setSelectedForDeletion(selectedForDeletion === cardId ? null : cardId);
     }
+  };
+
+  const handleDeleteCard = (cardId) => {
+    deleteCard(cardId);
+    setSelectedForDeletion(null);
   };
 
   return (
     <Template>
       <div className="flex justify-between items-center mt-4 mb-4">
         <div>
-          <Datepicker onDateSelect={(date) => addSchedule(date)} disabled={!selectedRoom || schedulingMode} />
-        </div>
-        <div>
-          <button className={`bg-red-500 text-white px-4 py-2 rounded-md ${deleteMode ? 'bg-opacity-50 cursor-not-allowed' : ''}`} onClick={toggleDeleteMode} disabled={schedulingMode}>
-            {deleteMode ? 'Delete Mode Active' : 'Activate Delete Mode'}
+          <button
+            className={`bg-blue-500 text-white px-4 py-2 rounded-md ${schedulingMode ? 'bg-opacity-50 cursor-not-allowed' : ''}`}
+            onClick={toggleSchedulingMode}
+          >
+            {schedulingMode ? 'Scheduling Mode Active' : 'Schedule'}
           </button>
         </div>
       </div>
 
-      <div className="flex justify-center mb-4">
-        <button
-          className={`bg-blue-500 text-white px-4 py-2 rounded-md ${schedulingMode ? 'bg-opacity-50 cursor-not-allowed' : ''}`}
-          onClick={toggleSchedulingMode}
-          disabled={deleteMode}
-        >
-          {schedulingMode ? 'Scheduling Mode Active' : 'Activate Scheduling Mode'}
-        </button>
-      </div>
-      
       <div className='grid grid-cols-3 gap-4'>
         {cardData.map((card) => (
           <div key={card.id} className={`relative ${selectedRoom === card.id ? 'border border-blue-500 cursor-pointer' : 'cursor-default'}`} onClick={() => handleCardClick(card.id)}>
-            <CardItem
-              title={card.title}
-              schedule={card.schedule} 
-              onDateSelect={(date) => addSchedule(date)}
-            />
+            <CardWithSchedule card={card} addSchedule={addSchedule} />
             {scheduleDate && selectedRoom === card.id && (
-              <div className="text-sm text-gray-500">{scheduleDate.toDateString()}</div>
+              <div className="text-sm text-gray-500">{scheduleDate.toLocaleDateString()}</div>
+            )}
+            {selectedForDeletion === card.id && (
+              <div className="absolute top-0 right-0">
+                <button className="text-red-500 ml-1" onClick={() => handleDeleteCard(card.id)}>X</button>
+              </div>
             )}
           </div>
         ))}
@@ -84,6 +92,6 @@ const Scheduling = () => {
       </div>
     </Template>
   );
-}
+};
 
 export default Scheduling;
