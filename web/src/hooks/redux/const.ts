@@ -36,7 +36,7 @@ export const suffixoption = [
     label: 'IV',
   },
 ]
-export const monthoption = [
+export const Monthoption = [
   {
     value: 0,
     label: 'Month',
@@ -245,7 +245,7 @@ export const famBackground = [
     showTextInput: true, // Added property to indicate if TextInput should be shown
   },
 ]
-export const ofw = [
+export const Ofw = [
   {
     value: 0,
     label: 'Do you have a family member who is an OFW?',

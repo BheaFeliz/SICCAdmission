@@ -5,12 +5,13 @@ export const studentApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getStudents: builder.query({
       query: () => '/admissionform',
-      providesTags: ['admissionform'],
+      providesTags: ['admission_forms'],
     }),
+    
     createStudent: builder.mutation({
-      invalidatesTags: ['admissionform'],
+      invalidatesTags: ['admission_forms'],
       query: (body) => ({
-        url: 'admissionform',
+        url: '/api/admissionform',
         method: 'POST',
         body,
       }),

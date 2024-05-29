@@ -6,28 +6,18 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class AdmissionFormRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
             'fname' => 'required|string',
             'lname' => 'required|string',
             'mname' => 'nullable|string',
-            'prefix' => 'nullable|string',
+            'pref' => 'nullable|string',
             'age' => 'nullable|integer',
             'Monthoption' => 'nullable|string',
             'date' => 'nullable|integer',
@@ -38,11 +28,11 @@ class AdmissionFormRequest extends FormRequest
             'contactnumber' => 'nullable|string|max:11',
             'email' => 'nullable|email',
             'pbirth' => 'nullable|string',
-            'IndigentP' => 'nullable|string',
-            'IndigentPy' => 'nullable|string',
+            'indigentP' => 'nullable|string',
+            'indigentPy' => 'nullable|string',
             'pbs' => 'nullable|string',
             'district' => 'nullable|string',
-            'brgy' => 'nullable|string',
+            'barangay' => 'nullable|string',
             'cityM' => 'nullable|string',
             'province' => 'nullable|string',
             'Zcode' => 'nullable|integer',
@@ -52,7 +42,8 @@ class AdmissionFormRequest extends FormRequest
             'supstudy' => 'nullable|string',
             'ofw' => 'nullable|string',
             'ofwProfession' => 'nullable|string',
-            'Studenttype' => 'nullable|string',
+            'studenttype' => 'nullable|string',
+            'Nwork' => 'nullable|string',
             'StudentCat' => 'nullable|string',
             'F_nameSchool' => 'nullable|string',
             'F_Atrack' => 'nullable|string',
