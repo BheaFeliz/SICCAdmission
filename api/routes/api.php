@@ -5,15 +5,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OrderController;
-<<<<<<< HEAD
-use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
-=======
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\StudentController;
-=========
 use App\Http\Controllers\ScheduleController;
->>>>>>>>> Temporary merge branch 2
+
 
 /*
 |--------------------------------------------------------------------------
@@ -57,9 +52,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
        
     
     Route::get('/categories', [CategoryController::class, 'index']);
-<<<<<<<<< Temporary merge branch 1
     Route::post('/admissionform', [StudentController::class, 'store']);
-=========
     Route::get('/stores', [StoreController::class, 'index']);
 
     // Route::prefix('scheduling')
@@ -73,6 +66,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // });
 
     Route::resource('scheduling', ScheduleController::class);
-
->>>>>>>>> Temporary merge branch 2
 });

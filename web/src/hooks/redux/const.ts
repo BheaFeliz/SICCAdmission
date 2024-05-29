@@ -247,7 +247,7 @@ export const famBackground = [
 ]
 export const Ofw = [
   {
-    value: 0,
+    value: null,
     label: 'Do you have a family member who is an OFW?',
     disabled: true,
     selected: true,
@@ -262,6 +262,26 @@ export const Ofw = [
     value: 'no',
     label: 'No',
     showTextInput: false, // Added property to indicate if TextInput should be shown
+  },
+]
+
+export const Scategory = [
+  {
+    value: 0,
+    label: 'Student Category',
+    disabled: true,
+    selected: false,
+    hidden: true,
+  },
+  {
+    value: 'Ftime',
+    label: 'Full Time',
+    showTextInput: false, // Added property to indicate if TextInput should be shown
+  },
+  {
+    value: 'Wstudent',
+    label: 'Working Student',
+    showTextInput: true, // Added property to indicate if TextInput should be shown
   },
 ]
 
@@ -290,25 +310,7 @@ export const Studenttype = [
     label: 'Cross-enrollee',
   },
 ]
-export const Scategory = [
-  {
-    value: 0,
-    label: 'Student Category',
-    disabled: true,
-    selected: false,
-    hidden: true,
-  },
-  {
-    value: 'Ftime',
-    label: 'Full Time',
-    showTextInput: false, // Added property to indicate if TextInput should be shown
-  },
-  {
-    value: 'Wstudent',
-    label: 'Working Student',
-    showTextInput: true, // Added property to indicate if TextInput should be shown
-  },
-]
+
 export const Scourse = [
   {
     value: 0,

@@ -99,7 +99,7 @@ const Registration = () => {
                   {...formState}
                 />
                 <TextInput label='Day' name='date' {...formState} />
-                <TextInput label='Year' name='y1ear' {...formState} />
+                <TextInput label='Year' name='year' {...formState} />
               </div>
               <SelectInput options={sex} name='sex' {...formState} />
               <SelectInput options={Gender} name='gender' {...formState} />
@@ -211,7 +211,7 @@ const Registration = () => {
               <SelectInput
                 options={Scategory}
                 label='Student Category'
-                name='studenttype'
+                name='StudentCat'
                 onChange={handleStudentCategoryChange}
                 {...formState}
               />
@@ -228,7 +228,7 @@ const Registration = () => {
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
               <SelectInput
                 options={Studenttype}
-                name='StudentCat'
+                name='studenttype'
                 onChange={handleStudentTypeChange}
                 {...formState}
               />
@@ -347,7 +347,7 @@ const Registration = () => {
                   <Button
                     handleSubmit={handleSubmit}
                     onClick={() => setOpenModal(false)}
-                    href='/SubFile'
+                    href='Registration/subfile'
                   >
                     I accept
                   </Button>
