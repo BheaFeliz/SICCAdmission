@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ScheduleController;
 
 /*
@@ -47,25 +48,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/', 'index');
             Route::get('/{id}', 'show');
             Route::post('/{id}', 'store');
-        });
-
-
-       
+        });       
     
     Route::get('/categories', [CategoryController::class, 'index']);
-    Route::get('/stores', [StoreController::class, 'index']);
-
-    // Route::prefix('scheduling')
-    // ->controller(ScheduleController::class)
-    // ->group(function () {
-    //     Route::get('/', 'index');
-    //     Route::get('/', 'show');
-    //     Route::post('/', 'store');
-    //     Route::put('/{id}', 'update');
-    //     Route::delete('/{id}', 'destroy');
-    // });
-
-    Route::resource('scheduling', ScheduleController::class);
 
 });
 
