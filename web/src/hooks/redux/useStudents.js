@@ -5,10 +5,10 @@ import { studentApi } from '../api/studentApi'
 export const useStudents = () => {
   const { data, isError, isLoading } = studentApi.useGetStudentsQuery()
 
-  const admissionform = useMemo(() => data?.admissionform || [], [data])
+  const admissionForms = useMemo(() => data?.admission_forms || [], [data])
 
   return {
-    admissionform,
+    admissionForms,
     isError,
     isLoading,
   }
