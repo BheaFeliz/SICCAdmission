@@ -52,5 +52,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
     Route::get('/categories', [CategoryController::class, 'index']);
 
+    Route::resource('scheduling', ScheduleController::class);
 });
 
