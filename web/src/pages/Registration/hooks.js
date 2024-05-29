@@ -61,11 +61,15 @@ export function useHooks() {
   const [createStudentMutation] = useCreateStudentMutation()
 
   const onSubmit = async (data) => {
-    const { message } = await createStudentMutation(data).unwrap()
-    addToast({
-      message: message,
-    })
-    router.push('/subfile')
+    try {
+      const { message } = await createStudentMutation(data).unwrap();
+      addToast({
+        message: message,
+      });
+      router.push('/subfile');
+    } catch (error) {
+      error('Error creating student:', error);
+    }
   }
 
   return {

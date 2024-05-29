@@ -188,6 +188,7 @@ const Registration = () => {
                 name='Nsibling'
                 {...formState}
               />
+
               <TextInput label='Who Will support your study?' name='supstudy' />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-2'>
@@ -206,6 +207,7 @@ const Registration = () => {
                   className='form-input'
                 />
               )}
+
               <SelectInput
                 options={Scategory}
                 label='Student Category'
@@ -222,6 +224,7 @@ const Registration = () => {
                 />
               )}
             </div>
+
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
               <SelectInput
                 options={Studenttype}
@@ -230,6 +233,7 @@ const Registration = () => {
                 {...formState}
               />
             </div>
+
             {showFreshmenInput && (
               <div name='Freshmen'>
                 <p>Freshmen:</p>
@@ -265,6 +269,7 @@ const Registration = () => {
                 </div>
               </div>
             )}
+
             {showTransfereeInput && (
               <div>
                 <p>Transferee:</p>
@@ -300,6 +305,7 @@ const Registration = () => {
                 </div>
               </div>
             )}
+
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
               <SelectInput
                 options={Scourse}
@@ -307,6 +313,7 @@ const Registration = () => {
                 {...formState}
               />
             </div>
+
             <div name='modal'>
               <Modal show={openModal} onClose={() => setOpenModal(false)}>
                 <Modal.Header>CONFORME:</Modal.Header>

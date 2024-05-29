@@ -56,8 +56,17 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
        
     
     Route::get('/categories', [CategoryController::class, 'index']);
-    // Route::post('/admissionform', [StudentController::class, 'store']);
-    Route::post('/admissionform', [AdmissionFormController::class, 'store']);
+    //Route::post('/admissionform', [AdmissionFormController::class, 'store']);
+    Route::get('/admissionform', [AdmissionFormController::class, 'index']);
+    Route::post('/admission_forms', [AdmissionFormController::class, 'store']);
+
+//     Route::group(['prefix' => 'admission_forms'], function () {
+//     Route::get('/', [AdmissionFormController::class, 'index']);
+//     Route::post('/', [AdmissionFormController::class, 'store']);
+//     Route::get('/{id}', [AdmissionFormController::class, 'show']);
+//     Route::put('/{id}', [AdmissionFormController::class, 'update']);
+//     Route::delete('/{id}', [AdmissionFormController::class, 'destroy']);
+// });
 
 });
 
