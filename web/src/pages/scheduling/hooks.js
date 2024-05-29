@@ -1,61 +1,53 @@
-import { useRouter } from 'next/router'; // Import useRouter from next/router
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-const useHooks = () => {
-    const router = useRouter(); // Initialize useRouter
 
-  // State to store card data and selected room
+const useHooks = () => {
+  const router = useRouter();
   const [cardData, setCardData] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [scheduleDate, setScheduleDate] = useState(null);
 
-  // Function to fetch card data from the backend
-  const fetchCardData = async () => {
-    try {
-      const response = await axios.get('/api/cardData');
-      setCardData(response.data);
-    } catch (error) {
-      console.error('Error fetching card data:', error);
-    }
-  };
-
-  // Fetch card data on component mount
   useEffect(() => {
     fetchCardData();
   }, []);
 
-  // Function to add a new card
+  useEffect(() => {
+    localStorage.setItem('cardData', JSON.stringify(cardData));
+  }, [cardData]);
+
+  const fetchCardData = () => {
+    const storedCardData = JSON.parse(localStorage.getItem('cardData')) || [];
+    setCardData(storedCardData);
+  };
+
+
   const addCard = () => {
     const newCardTitle = prompt("Enter the title for the new card:");
     if (newCardTitle) {
+      const newCardId = cardData.length + 1; // Generate sequential ID
       const newCard = {
-        id: Date.now(),
+        id: newCardId,
         title: newCardTitle,
         schedule: []
       };
       setCardData(prevCardData => [...prevCardData, newCard]);
     }
   };
+  
 
-  // Function to delete a card with confirmation
-  const deleteCard = () => {
-    if (selectedRoom !== null) {
-      const confirmDelete = window.confirm("Are you sure you want to delete this room?");
-      if (confirmDelete) {
-        setCardData(prevCardData => prevCardData.filter(card => card.id !== selectedRoom));
-        setSelectedRoom(null);
-      }
-    } else {
-      alert("Please select a room to delete.");
+  const deleteCard = (cardId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this room?");
+    if (confirmDelete) {
+      setCardData(prevCardData => prevCardData.filter(card => card.id !== cardId));
+      setSelectedRoom(null);
     }
   };
 
-  // Function to handle scheduling
   const handleSchedule = () => {
-    router.push(`/scheduling/new`); // Navigate to the scheduling page with the room ID as a parameter
+    router.push(`/scheduling/new`);
   };
 
-  // Function to add a schedule to the selected room
   const addSchedule = (date) => {
     if (selectedRoom !== null) {
       const updatedCardData = cardData.map(card => {
@@ -73,15 +65,15 @@ const useHooks = () => {
     }
   };
 
-    return {
-        cardData,
-        selectedRoom,
-        scheduleDate,
-        addCard,
-        deleteCard,
-        handleSchedule,
-        addSchedule
-    }
-  }
+  return {
+    cardData,
+    selectedRoom,
+    scheduleDate,
+    addCard,
+    deleteCard,
+    handleSchedule,
+    addSchedule
+  };
+};
 
-  export default useHooks
+export default useHooks;

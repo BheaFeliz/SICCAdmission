@@ -5,8 +5,14 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OrderController;
+<<<<<<< HEAD
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+=======
+use App\Http\Controllers\StoreController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ScheduleController;
+>>>>>>> 65e1852c9ac75c7c84f23c024e9a3fb564d00266
 
 /*
 |--------------------------------------------------------------------------
@@ -46,16 +52,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/', 'index');
             Route::get('/{id}', 'show');
             Route::post('/{id}', 'store');
-        });
-
-
-
-    Route::group(['middleware' => ['restrictRole:admin,staff']], function () {
-        Route::resource('orders', OrderController::class);
-    });
-       
+        });       
     
     Route::get('/categories', [CategoryController::class, 'index']);
+<<<<<<< HEAD
     //Route::post('/admissionform', [AdmissionFormController::class, 'store']);
     Route::get('/admissionform', [AdmissionFormController::class, 'index']);
     Route::post('/admission_forms', [AdmissionFormController::class, 'store']);
@@ -68,5 +68,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 //     Route::delete('/{id}', [AdmissionFormController::class, 'destroy']);
 // });
 
+=======
+
+    Route::resource('scheduling', ScheduleController::class);
+>>>>>>> 65e1852c9ac75c7c84f23c024e9a3fb564d00266
 });
 
