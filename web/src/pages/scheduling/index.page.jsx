@@ -1,4 +1,3 @@
-// Schedule.js
 import React, { useState } from 'react';
 
 import CardItem from '@/components/organisms/CardItem';
@@ -7,11 +6,11 @@ import { useGetScheduleByIdQuery } from '@/hooks/api/scheduleApi';
 
 import useHooks from './hooks';
 
-const CardWithSchedule = ({ card, addSchedule }) => {
+const CardWithSchedule = ({ card }) => {
   const { data: scheduling, error, isLoading } = useGetScheduleByIdQuery(card.id);
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading schedule</div>;
+  if (error) return <div>No schedule available</div>;
 
   return (
     <CardItem
@@ -20,7 +19,6 @@ const CardWithSchedule = ({ card, addSchedule }) => {
       date={scheduling ? scheduling.date : null}
       startTime={scheduling ? scheduling.startTime : null}
       endTime={scheduling ? scheduling.endTime : null}
-      onDateSelect={(date) => addSchedule(date)}
     />
   );
 };

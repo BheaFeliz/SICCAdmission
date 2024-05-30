@@ -4,16 +4,10 @@ use App\Http\Controllers\AdmissionFormController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\OrderController;
-<<<<<<< HEAD
-use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
-=======
-use App\Http\Controllers\StoreController;
 use App\Http\Controllers\StudentController;
-=========
 use App\Http\Controllers\ScheduleController;
->>>>>>>>> Temporary merge branch 2
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route; // Add this line
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +25,6 @@ Route::get('/ping', function () {
 });
 Route::post('/login', [AuthController::class, 'login']);
 
-
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::prefix('auth')
@@ -41,12 +34,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/', 'user');
         });
 
-        Route::group(['middleware' => ['restrictRole:admin'], 'prefix' => 'admin'], function () {
-            Route::resource('users', UserController::class)->only(['index','store', 'destroy']);
-            
-        });
-        
-                                 
+    Route::group(['middleware' => ['restrictRole:admin'], 'prefix' => 'admin'], function () {
+        Route::resource('users', UserController::class)->only(['index','store', 'destroy']);
+    });
+
     Route::prefix('messages')
         ->controller(MessageController::class)
         ->group(function () {
@@ -54,25 +45,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('/{id}', 'show');
             Route::post('/{id}', 'store');
         });
-       
-    
+
     Route::get('/categories', [CategoryController::class, 'index']);
-<<<<<<<<< Temporary merge branch 1
     Route::post('/admissionform', [StudentController::class, 'store']);
-=========
-    Route::get('/stores', [StoreController::class, 'index']);
-
-    // Route::prefix('scheduling')
-    // ->controller(ScheduleController::class)
-    // ->group(function () {
-    //     Route::get('/', 'index');
-    //     Route::get('/', 'show');
-    //     Route::post('/', 'store');
-    //     Route::put('/{id}', 'update');
-    //     Route::delete('/{id}', 'destroy');
-    // });
-
-    Route::resource('scheduling', ScheduleController::class);
-
->>>>>>>>> Temporary merge branch 2
 });
+
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::resource('scheduling', ScheduleController::class);
