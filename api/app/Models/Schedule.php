@@ -10,9 +10,15 @@ class Schedule extends Model
     use HasFactory;
 
     protected $fillable = [
+        'card_id',
         'date',
         'startTime',
         'endTime',
-        'description'
+        'description',
     ];
+
+    public function card()
+    {
+        return $this->belongsTo(Card::class);
+    }
 }

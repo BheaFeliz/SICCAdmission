@@ -1,4 +1,4 @@
-import { Button, Card, Modal } from 'flowbite-react'
+import { Button, Card } from 'flowbite-react'
 import React, { useState } from 'react'
 import { SiGoogleforms } from 'react-icons/si'
 
@@ -21,6 +21,7 @@ import {
 } from '@/hooks/redux/const'
 
 import { useHooks } from './hooks'
+import RegistrationDetails from './RegistrationDetails'
 
 const Registration = () => {
   const breadcrumbs = [
@@ -33,10 +34,10 @@ const Registration = () => {
 
   const { formState, handleSubmit } = useHooks()
   const [openModal, setOpenModal] = useState(false)
+  const [selectedRegistrationId, setSelectedRegistrationId] = useState(null)
 
   const [showTextInput, setShowTextInput] = useState(false)
-  const [showFamilyBackgroundInput, setShowFamilyBackgroundInput] =
-    useState(false)
+  const [showFamilyBackgroundInput, setShowFamilyBackgroundInput] = useState(false)
   const [showOFWInput, setShowOFWInput] = useState(false)
   const [showWorkingStudentInput, setShowWorkingStudentInput] = useState(false)
   const [showFreshmenInput, setShowFreshmenInput] = useState(false)
@@ -76,6 +77,11 @@ const Registration = () => {
   const handleStudentCategoryChange = (e) => {
     const value = e.target.value
     setShowWorkingStudentInput(value === 'Wstudent')
+  }
+
+  const openDetailsModal = (registrationId) => {
+    setSelectedRegistrationId(registrationId)
+    setOpenModal(true)
   }
 
   return (
@@ -253,17 +259,16 @@ const Registration = () => {
                     {...formState}
                   />
                   <TextInput
-                    label='Address City/Municipality/Province'
-                    type='text'
-                    name='F_AMprovince'
-                    className='form-input'
-                    {...formState}
-                  />
-                  <TextInput
-                    label='Year Graduate'
+                    label='Year Graduated'
                     type='text'
                     name='F_Ygrad'
                     className='form-input'
+                    {...formState}
+                  />
+                  <SelectInput
+                    options={Scourse}
+                    name='F_course'
+                    className='w-full md:w-auto'
                     {...formState}
                   />
                 </div>
@@ -271,7 +276,7 @@ const Registration = () => {
             )}
 
             {showTransfereeInput && (
-              <div>
+              <div name='Transferee'>
                 <p>Transferee:</p>
                 <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
                   <TextInput
@@ -282,89 +287,50 @@ const Registration = () => {
                     {...formState}
                   />
                   <TextInput
-                    label='Course'
+                    label='Academic track'
                     type='text'
                     name='T_Atrack'
                     className='form-input'
                     {...formState}
                   />
                   <TextInput
-                    label='Address City/Municipality/Province'
-                    type='text'
-                    name='T_AMprovince'
-                    className='form-input'
-                    {...formState}
-                  />
-                  <TextInput
-                    label='Year Attended'
+                    label='Year Graduated'
                     type='text'
                     name='T_Ygrad'
                     className='form-input'
+                    {...formState}
+                  />
+                  <SelectInput
+                    options={Scourse}
+                    name='T_course'
+                    className='w-full md:w-auto'
                     {...formState}
                   />
                 </div>
               </div>
             )}
 
-            <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
-              <SelectInput
-                options={Scourse}
-                name='selectcourse'
-                {...formState}
-              />
+            <div className='flex justify-center'>
+              <Button type='submit'>Submit</Button>
+              <Button
+                type='button'
+                color='gray'
+                onClick={() => openDetailsModal(1)} // replace with actual registration ID
+              >
+                View Registration Details
+              </Button>
             </div>
-
-            <div name='modal'>
-              <Modal show={openModal} onClose={() => setOpenModal(false)}>
-                <Modal.Header>CONFORME:</Modal.Header>
-                <Modal.Body>
-                  <div className='space-y-6'>
-                    <p className='text-base leading-relaxed text-gray-500 dark:text-gray-400'>
-                      By signing below, I hereby certify that all the
-                      information written in this application are complete and
-                      accurate. I agree to update the Office of Admissions and
-                      the Registrar Office for any changes. I acknowledge that I
-                      have read and understood the Samal Island City College
-                      (SICC) Admissions Privacy Notice posted in the office
-                      premises. I understand that by applying for
-                      admission/registering as a student of this institutuion, I
-                      allow SICC through the Office of Admissions to collect,
-                      record, organize, update or modify, retrieve, consult,
-                      utilize, consolidate, block, erase or delete any
-                      information which are a part of my personal data for
-                      historical, statistical, research and evaluation purposes
-                      pursuant to the provisions of the Republic Act No. 10173
-                      of the Philippines, Data Privacy Act of 2012 and its
-                      corresponding Implementing Rules and Regulations. I also
-                      agree, if accepted as a student, that my odmission,
-                      matriculation, legibility for any assistance/grant, and
-                      graduation are subject to the rules and regulations of
-                      this institution.
-                    </p>
-                  </div>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button
-                    handleSubmit={handleSubmit}
-                    onClick={() => setOpenModal(false)}
-                    href='registration/subfile'
-                  >
-                    I accept
-                  </Button>
-                  <Button color='gray' onClick={() => setOpenModal(false)}>
-                    Decline
-                  </Button>
-                </Modal.Footer>
-              </Modal>
-            </div>
-          </div>
-          <div>
-            <Button type='submit' onClick={() => setOpenModal(true)}>
-              Proceed
-            </Button>
           </div>
         </form>
       </Card>
+
+      {selectedRegistrationId && (
+        <RegistrationDetails
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          registrationId={selectedRegistrationId}
+        />
+      )}
     </Template>
   )
 }
