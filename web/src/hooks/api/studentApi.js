@@ -1,13 +1,12 @@
-import { baseApi } from './baseApi'
+import { baseApi } from './baseApi';
 
 export const studentApi = baseApi.injectEndpoints({
-  tagTypes: ['admission_form'],
+  tagTypes: ['admission_form', 'registration'],
   endpoints: (builder) => ({
     getStudents: builder.query({
       query: () => '/registration',
       providesTags: ['registration'],
     }),
-    
     createStudent: builder.mutation({
       invalidatesTags: ['registration'],
       query: (body) => ({
@@ -16,7 +15,23 @@ export const studentApi = baseApi.injectEndpoints({
         body,
       }),
     }),
+    getRegistrationById: builder.query({
+      query: (id) => `/registrations/${id}`,
+      providesTags: ['registration'],
+    }),
+    deleteRegistration: builder.mutation({
+      invalidatesTags: ['registration'],
+      query: (id) => ({
+        url: `/registrations/${id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
-})
+});
 
-export const { useGetStudentsQuery, useCreateStudentMutation } = studentApi
+export const {
+  useGetStudentsQuery,
+  useCreateStudentMutation,
+  useGetRegistrationByIdQuery,
+  useDeleteRegistrationMutation,
+} = studentApi;

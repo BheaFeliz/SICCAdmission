@@ -21,7 +21,7 @@ import {
 } from '@/hooks/redux/const'
 
 import { useHooks } from './hooks'
-import RegistrationDetails from './RegistrationDetails'
+//import RegistrationDetails from './RegistrationDetails'
 
 const Registration = () => {
   const breadcrumbs = [
@@ -311,14 +311,7 @@ const Registration = () => {
             )}
 
             <div className='flex justify-center'>
-              <Button type='submit'>Submit</Button>
-              <Button
-                type='button'
-                color='gray'
-                onClick={() => openDetailsModal(1)} // replace with actual registration ID
-              >
-                View Registration Details
-              </Button>
+              <Button type='submit' onClick={() => openDetailsModal(1)}>Submit</Button>
             </div>
           </div>
         </form>
