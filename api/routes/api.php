@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\AdmissionFormController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\OrderController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ScheduleController;
@@ -23,8 +25,9 @@ use App\Http\Controllers\ScheduleController;
 
 Route::get('/ping', function () {
     return 'ping test';
-});
-Route::post('/login', [AuthController::class, 'login']);
+})->name('ping');
+
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -32,38 +35,26 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('auth')
         ->controller(AuthController::class)
         ->group(function () {
-            Route::post('/logout', 'logout');
-            Route::get('/', 'user');
+            Route::post('/logout', 'logout')->name('logout');
+            Route::get('/', 'user')->name('user');
         });
 
-        Route::group(['middleware' => ['restrictRole:admin'], 'prefix' => 'admin'], function () {
-            Route::resource('users', UserController::class)->only(['index','store', 'destroy']);
-            
-        });
-        
-                                 
+    Route::group(['middleware' => ['restrictRole:admin'], 'prefix' => 'admin'], function () {
+        Route::resource('users', UserController::class)->only(['index','store', 'destroy'])->names('admin.users');
+        Route::resource('categories', CategoryController::class)->only(['index', 'store', 'destroy'])->names('admin.categories');
+        Route::resource('admissionforms', AdmissionFormController::class)->only(['index', 'store', 'destroy'])->names('admin.admissionforms');
+        Route::resource('stores', StoreController::class)->only(['index', 'store', 'destroy'])->names('admin.stores');
+        Route::resource('students', StudentController::class)->only(['index', 'store', 'destroy'])->names('admin.students');
+        Route::resource('schedules', ScheduleController::class)->only(['index', 'store', 'destroy'])->names('admin.schedules');
+    });
+
     Route::prefix('messages')
         ->controller(MessageController::class)
         ->group(function () {
-            Route::get('/', 'index');
-            Route::get('/{id}', 'show');
-            Route::post('/{id}', 'store');
+            Route::get('/', 'index')->name('messages.index');
+            Route::get('/{id}', 'show')->name('messages.show');
+            Route::post('/{id}', 'store')->name('messages.store');
         });
-       
-    
-    Route::get('/categories', [CategoryController::class, 'index']);
-    Route::post('/admissionform', [StudentController::class, 'store']);
-    Route::get('/stores', [StoreController::class, 'index']);
 
-    // Route::prefix('scheduling')
-    // ->controller(ScheduleController::class)
-    // ->group(function () {
-    //     Route::get('/', 'index');
-    //     Route::get('/', 'show');
-    //     Route::post('/', 'store');
-    //     Route::put('/{id}', 'update');
-    //     Route::delete('/{id}', 'destroy');
-    // });
-
-    Route::resource('scheduling', ScheduleController::class);
+    Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard.show');
 });
