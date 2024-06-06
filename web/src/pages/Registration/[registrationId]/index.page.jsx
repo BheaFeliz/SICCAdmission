@@ -20,7 +20,7 @@ const Registration = () => {
 
   const breadcrumbs = [
     {
-      href: '/registrations',
+      href: '/registration',
       title: 'Registrations',
       icon: FaUser,
     },
@@ -37,7 +37,7 @@ const Registration = () => {
         right={
           <div className='flex pb-4 space-x-4'>
             <DeleteModal handleDelete={() => handleDelete(registrationId)} />
-            <Link href={`/registrations/${registrationId}/edit`}>
+            <Link href={`/registration/${registrationId}/edit`}>
               <Button size='xs' color='warning' className='m-w-20'>
                 Edit
               </Button>

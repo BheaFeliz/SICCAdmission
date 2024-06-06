@@ -13,7 +13,7 @@ const useHooks = (registrationId) => {
   const handleDelete = async () => {
     try {
       await deleteRegistration(registrationId);
-      router.push(`/registrations`);
+      router.push(`/registration`);
     } catch (error) {
       addToast({ message: 'Error deleting registration', type: 'error' });
     }

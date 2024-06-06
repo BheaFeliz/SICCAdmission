@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 
-import { useCreateStudentMutation } from '@/hooks/api/studentApi';
+import { useCreateRegistrationMutation } from '@/hooks/api/studentApi';
 import { useToast} from '@/hooks/useToast';
 
 
@@ -59,11 +59,11 @@ export function useHooks() {
     formState: { errors },
     handleSubmit,
   } = useForm({ defaultValues: {}, resolver: yupResolver(registrationSchema) })
-  const [createStudentMutation] = useCreateStudentMutation()
+  const [CreateRegistrationMutation] = useCreateRegistrationMutation()
 
   const onSubmit = async (data) => {
     try {
-      const { message } = await createStudentMutation(data).unwrap();
+      const { message } = await CreateRegistrationMutation(data).unwrap();
       addToast({
         message: message,
       });
