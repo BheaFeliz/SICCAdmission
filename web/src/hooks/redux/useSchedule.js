@@ -14,16 +14,3 @@ export const useSchedules = () => {
     }
   }
   
-  export const useSchedule = (cardId) => {
-    const { data, error, isError, isLoading } =
-      orderApi.useGetScheduleByIdQuery(cardId)
-  
-    const order = useMemo(() => data?.order || null, [data])
-  
-    return {
-      order,
-      error,
-      isError,
-      isLoading,
-    }
-  }

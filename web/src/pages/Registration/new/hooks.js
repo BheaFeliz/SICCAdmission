@@ -67,7 +67,7 @@ export function useHooks() {
       addToast({
         message: message,
       });
-      router.push('/subfile');
+      router.push('/students');
     } catch (error) {
       error('Error creating student:', error);
     }

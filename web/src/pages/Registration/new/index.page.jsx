@@ -347,7 +347,7 @@ const Registration = () => {
                   <Button
                     handleSubmit={handleSubmit}
                     onClick={() => setOpenModal(false)}
-                    href='registration/subfile'
+                    href='/students'
                   >
                     I accept
                   </Button>
