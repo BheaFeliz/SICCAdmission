@@ -4,6 +4,8 @@ import CardItem from '@/components/organisms/Card'
 import PageHeader from '@/components/organisms/PageHeader'
 import Template from '@/components/templates/Template'
 import { dashboardApi } from '@/hooks/api/dashboardApi'
+import { Scourse } from '@/hooks/redux/const'
+
 
 const Dashboard = () => {
   const { data, isLoading } = dashboardApi.useGetDashboardQuery()
@@ -20,11 +22,16 @@ const Dashboard = () => {
     },
   ]
 
+  // Create a mapping from course codes to labels
+  const courseLabelMap = Scourse.reduce((acc, course) => {
+    acc[course.value] = course.label
+    return acc
+  }, {})
+
   const cardData = Object.entries(data?.course_counts ?? {}).map(([course, count]) => ({
     title: count,
-    description: course,
+    description: courseLabelMap[course] || course,
   }))
-  
 
   return (
     <Template>
@@ -40,7 +47,7 @@ const Dashboard = () => {
             />
           ))}
         </div>
-        </div>
+      </div>
     </Template>
   )
 }
