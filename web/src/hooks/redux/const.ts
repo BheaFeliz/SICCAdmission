@@ -148,7 +148,7 @@ export const Civilstatus = [
   },
   {
     value: 'married',
-    label: 'Maried',
+    label: 'Married',
   },
   {
     value: 'widowed',

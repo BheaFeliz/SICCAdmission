@@ -3,15 +3,14 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 
-import { useCreateRegistrationMutation } from '@/hooks/api/studentApi';
-import { useToast} from '@/hooks/useToast';
-
+import { studentApi } from '@/hooks/api/studentApi';
+import { useToast } from '@/hooks/useToast';
 
 const registrationSchema = Yup.object().shape({
   fname: Yup.string().required('Required'),
   lname: Yup.string().required('Required'),
   mname: Yup.string().required('Required'),
-  pref: Yup.string().required('Required').nullable().oneOf([,'Jr.', 'Sr.', 'I', 'II', 'III', 'IV', "null"]),
+  pref: Yup.string().required('Required').nullable().oneOf(['Jr.', 'Sr.', 'I', 'II', 'III', 'IV', null]),
   age: Yup.number().integer().required().typeError('Required'),
   Monthoption: Yup.string().required().oneOf(['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']),
   date: Yup.number().integer().required().typeError('Required'),
@@ -23,7 +22,7 @@ const registrationSchema = Yup.object().shape({
   email: Yup.string().email().required('Required'),
   pbirth: Yup.string().nullable().required('Required'),
   indigentP: Yup.string().required('Required').oneOf(['yes', 'no']),
-  indigentPy: Yup.string().nullable().required('Required') ,
+  indigentPy: Yup.string().nullable().required('Required'),
   pbs: Yup.string().nullable().required('Required'),
   district: Yup.string().required().oneOf(['d1', 'd2', 'd3']),
   barangay: Yup.string().required('Required'),
@@ -34,9 +33,9 @@ const registrationSchema = Yup.object().shape({
   sincewhen: Yup.string().nullable().required('Required'),
   Nsibling: Yup.string().nullable().required('Required'),
   supstudy: Yup.string().nullable().required('Required'),
-  ofw: Yup.string().nullable().oneOf([,'yes', 'no']),
+  ofw: Yup.string().nullable().oneOf(['yes', 'no']),
   ofwProfession: Yup.string().nullable().required(),
-  StudentCat: Yup.string().required().oneOf(['Ftime', 'Wstudent,']),
+  StudentCat: Yup.string().required().oneOf(['Ftime', 'Wstudent']),
   Nwork: Yup.string().nullable().required('Required'),
   studenttype: Yup.string().required().oneOf(['college1', 'trans', 'returnee', 'crossenrolle']),
   F_nameSchool: Yup.string().required('Required'),
@@ -52,26 +51,26 @@ const registrationSchema = Yup.object().shape({
 });
 
 export function useHooks() {
-  const router = useRouter()
-  const { addToast } = useToast()
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm({ defaultValues: {}, resolver: yupResolver(registrationSchema) })
-  const [CreateRegistrationMutation] = useCreateRegistrationMutation()
+  const router = useRouter();
+  const { addToast } = useToast();
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(registrationSchema),
+  });
+
+  const [CreateRegistrationMutation] = studentApi.useCreateRegistrationMutation();
 
   const onSubmit = async (data) => {
+    console.log('Submitting form with data:', data); // Log the form data being submitted
     try {
       const { message } = await CreateRegistrationMutation(data).unwrap();
-      addToast({
-        message: message,
-      });
-      router.push('/students');
+      console.log('Form submission successful:', message); // Log success message
+      addToast({ message });
+      router.push('/registration/subfile');
     } catch (error) {
-      error('Error creating student:', error);
+      console.error('Error creating student:', error); // Log any errors that occur
+      // Handle error appropriately
     }
-  }
+  };
 
   return {
     handleSubmit: handleSubmit(onSubmit),
@@ -79,5 +78,5 @@ export function useHooks() {
       errors,
       register,
     },
-  }
+  };
 }

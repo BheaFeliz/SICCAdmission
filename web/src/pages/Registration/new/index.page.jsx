@@ -85,57 +85,51 @@ const Registration = () => {
         <form onSubmit={handleSubmit}>
           <div className=' style=min-height: 140px;'>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-              <TextInput label='First Name' name='fname' {...formState} />
-              <TextInput label='Last Name' name='lname' {...formState} />
-              <TextInput label='Middle Name' name='mname' {...formState} />
-              <SelectInput options={suffixoption} name='pref' {...formState} />
+              <TextInput label='First Name' {...formState.register('fname')} />
+              <TextInput label='Last Name' {...formState.register('lname')} />
+              <TextInput label='Middle Name' {...formState.register('mname')} />
+              <SelectInput options={suffixoption} {...formState.register('pref')} />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-              <TextInput label='Age' name='age' {...formState} />
+              <TextInput label='Age' {...formState.register('age')} />
               <div className='grid grid-cols-3 gap-1'>
                 <SelectInput
                   options={Monthoption}
-                  name='monthoption'
-                  {...formState}
+                  {...formState.register('monthoption')}
                 />
-                <TextInput label='Day' name='date' {...formState} />
-                <TextInput label='Year' name='year' {...formState} />
+                <TextInput label='Day' {...formState.register('date')} />
+                <TextInput label='Year' {...formState.register('year')} />
               </div>
-              <SelectInput options={sex} name='sex' {...formState} />
-              <SelectInput options={Gender} name='gender' {...formState} />
+              <SelectInput options={sex} {...formState.register('sex')} />
+              <SelectInput options={Gender} {...formState.register('gender')} />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
               <SelectInput
                 options={Civilstatus}
-                name='civilstatus'
-                {...formState}
+                {...formState.register('civilstatus')}
               />
               <TextInput
                 label='Mobile Number'
-                name='contactnumber'
-                {...formState}
+                {...formState.register('contactnumber')}
               />
-              <TextInput label='Email Address' name='email' {...formState} />
+              <TextInput label='Email Address' {...formState.register('email')} />
               <TextInput
                 label='Place of Birth (City/Municipality)'
-                name='pbirth'
-                {...formState}
+                {...formState.register('pbirth')}
               />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-2'>
               <SelectInput
                 options={IndigentP}
-                name='indigentP'
                 onChange={handleIndigentChange}
-                {...formState}
+                {...formState.register('indigentP')}
               />
               {showTextInput && (
                 <TextInput
                   label='If yes, specify the Indigenous group you belong to.'
                   type='text'
-                  name='indigentPy'
                   className='form-input'
-                  {...formState}
+                  {...formState.register('indigentPy')}
                 />
               )}
             </div>
@@ -152,17 +146,15 @@ const Registration = () => {
                   { value: 'd3', label: 'District III' },
                 ]}
                 label='District'
-                name='district'
-                {...formState}
+                {...formState.register('district')}
                 />
-              <TextInput label='Barangay' name='barangay' {...formState} />                 
+              <TextInput label='Barangay' {...formState.register('barangay')} />                 
               <TextInput
                 label='City/Municipality'
-                name='cityM'
-                {...formState}
+                {...formState.register('cityM')}
               />
-              <TextInput label='Province' name='province' {...formState} />
-              <TextInput label='Zip Code' name='Zcode' {...formState} />
+              <TextInput label='Province' {...formState.register('province')} />
+              <TextInput label='Zip Code' {...formState.register('Zcode')} />
             </div>
             <div className='p-4'>
               <p>Family Background:</p>
@@ -170,23 +162,21 @@ const Registration = () => {
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-3 '>
               <SelectInput
                 options={famBackground}
-                name='familyB'
                 onChange={handleFamilyBackgroundChange}
                 className='w-full md:w-auto'
-                {...formState}
+                {...formState.register('familyB')}
               />
               {showFamilyBackgroundInput && (
                 <TextInput
                   label='Specify since when?(Year Only)'
                   type='text'
-                  name='sincewhen'
                   className='form-input'
+                  {...formState.register('sincewhen')}
                 />
               )}
               <TextInput
                 label='Number of siblings in the family'
-                name='Nsibling'
-                {...formState}
+                {...formState.register('Nsibling')}
               />
 
               <TextInput label='Who Will support your study?' name='supstudy' />
@@ -195,32 +185,30 @@ const Registration = () => {
               <SelectInput
                 options={Ofw}
                 onChange={handleOFWChange}
-                name='ofw'
                 className='w-full md:w-auto'
-                {...formState}
+                {...formState.register('ofw')}
               />
               {showOFWInput && (
                 <TextInput
                   label='Specify the job/profession of a family member abroad.'
                   type='text'
-                  name='ofwprofession'
                   className='form-input'
+                  {...formState.register('ofwprofession')}
                 />
               )}
 
               <SelectInput
                 options={Scategory}
                 label='Student Category'
-                name='StudentCat'
                 onChange={handleStudentCategoryChange}
-                {...formState}
+                {...formState.register('StudentCat')}
               />
               {showWorkingStudentInput && (
                 <TextInput
                   label='Nature of work'
                   type='text'
-                  name='Nwork'
                   className='form-input'
+                  {...formState.register('Nwork')}
                 />
               )}
             </div>
@@ -228,9 +216,8 @@ const Registration = () => {
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
               <SelectInput
                 options={Studenttype}
-                name='studenttype'
                 onChange={handleStudentTypeChange}
-                {...formState}
+                {...formState.register('studenttype')}
               />
             </div>
 
@@ -241,30 +228,26 @@ const Registration = () => {
                   <TextInput
                     label='Last School Attended'
                     type='text'
-                    name='F_nameSchool'
                     className='form-input'
-                    {...formState}
+                    {...formState.register('F_nameSchool')}
                   />
                   <TextInput
                     label='Academic track'
                     type='text'
-                    name='F_Atrack'
                     className='form-input'
-                    {...formState}
+                    {...formState.register('F_Atrack')}
                   />
                   <TextInput
                     label='Address City/Municipality/Province'
                     type='text'
-                    name='F_AMprovince'
                     className='form-input'
-                    {...formState}
+                    {...formState.register('F_AMprovince')}
                   />
                   <TextInput
                     label='Year Graduate'
                     type='text'
-                    name='F_Ygrad'
                     className='form-input'
-                    {...formState}
+                    {...formState.register('F_Vgrad')}
                   />
                 </div>
               </div>
@@ -277,30 +260,26 @@ const Registration = () => {
                   <TextInput
                     label='Last School Attended'
                     type='text'
-                    name='T_nameSchool'
                     className='form-input'
-                    {...formState}
+                    {...formState.register('T_nameSchool')}
                   />
                   <TextInput
                     label='Course'
                     type='text'
-                    name='T_Atrack'
                     className='form-input'
-                    {...formState}
+                    {...formState.register('T_Atrack')}
                   />
                   <TextInput
                     label='Address City/Municipality/Province'
                     type='text'
-                    name='T_AMprovince'
                     className='form-input'
-                    {...formState}
+                    {...formState.register('T_AMprovince')}
                   />
                   <TextInput
                     label='Year Attended'
                     type='text'
-                    name='T_Ygrad'
                     className='form-input'
-                    {...formState}
+                    {...formState.register('T_Vgrad')}
                   />
                 </div>
               </div>
@@ -309,11 +288,9 @@ const Registration = () => {
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
               <SelectInput
                 options={Scourse}
-                name='selectcourse'
-                {...formState}
+                {...formState.register('selectcourse')}
               />
             </div>
-
             <div name='modal'>
               <Modal show={openModal} onClose={() => setOpenModal(false)}>
                 <Modal.Header>CONFORME:</Modal.Header>
@@ -345,9 +322,8 @@ const Registration = () => {
                 </Modal.Body>
                 <Modal.Footer>
                   <Button
-                    handleSubmit={handleSubmit}
                     onClick={() => setOpenModal(false)}
-                    href='/students'
+                    href='/registration/subfile'
                   >
                     I accept
                   </Button>

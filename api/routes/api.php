@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdmissionFormController;
+use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MessageController;
@@ -53,7 +53,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
        
     
     Route::get('/categories', [CategoryController::class, 'index']);
-    Route::post('/registration', [AdmissionFormController::class, 'store']);
+    Route::resource('/registration/new', RegistrationController::class);
     Route::get('/stores', [StoreController::class, 'index']);
 
     // Route::prefix('scheduling')

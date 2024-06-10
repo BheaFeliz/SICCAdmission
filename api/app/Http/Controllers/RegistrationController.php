@@ -14,17 +14,62 @@ class RegistrationController extends Controller
         return response()->json(['registrations' => $registrations], 200);
     }
 
-    public function store(AdmissionFormRequest $request)
-    {
-        // Validate the request data
-        $validatedData = $request->validated();
+    public function store(Request $request)
+{
+    // Validate the request data
+    $validatedData = $request->validate([
+        'fname' => 'required|string|max:255',
+        'lname' => 'required|string|max:255',
+        'mname' => 'nullable|string|max:255',
+        'pref' => 'nullable|string|max:255',
+        'age' => 'nullable|integer',
+        'Monthoption' => 'nullable|string|max:255',
+        'date' => 'nullable|integer',
+        'year' => 'nullable|integer',
+        'sex' => 'nullable|string|max:255',
+        'gender' => 'nullable|string|max:255',
+        'civilstatus' => 'nullable|string|max:255',
+        'contactnumber' => 'nullable|string|max:255',
+        'email' => 'nullable|email|max:255',
+        'pbirth' => 'nullable|string|max:255',
+        'IndigentP' => 'nullable|string|max:255',
+        'IndigentPy' => 'nullable|string|max:255',
+        'pbs' => 'nullable|string|max:255',
+        'district' => 'nullable|string|max:255',
+        'barangay' => 'nullable|string|max:255',
+        'cityM' => 'nullable|string|max:255',
+        'province' => 'nullable|string|max:255',
+        'Zcode' => 'nullable|integer',
+        'familyB' => 'nullable|string|max:255',
+        'sincewhen' => 'nullable|string|max:255',
+        'Nsibling' => 'nullable|string|max:255',
+        'supstudy' => 'nullable|string|max:255',
+        'ofw' => 'nullable|string|max:255',
+        'ofwProfession' => 'nullable|string|max:255',
+        'studenttype' => 'nullable|string|max:255',
+        'Nwork' => 'nullable|string|max:255',
+        'StudentCat' => 'nullable|string|max:255',
+        'F_nameSchool' => 'nullable|string|max:255',
+        'F_Atrack' => 'nullable|string|max:255',
+        'F_AMprovince' => 'nullable|string|max:255',
+        'F_Ygrad' => 'nullable|string|max:255',
+        'T_nameSchool' => 'nullable|string|max:255',
+        'T_Atrack' => 'nullable|string|max:255',
+        'T_AMprovince' => 'nullable|string|max:255',
+        'T_Ygrad' => 'nullable|string|max:255',
+        'selectcourse' => 'nullable|string|max:255',
+        // Add validation rules for other fields as per your requirements
+    ]);
 
-        // Create a new registration record in the database
-        $registration = Registration::create($validatedData);
+    $registration = new Registration();
+        $registration->fill($validatedData);
+        $registration->save();
 
-        // Return a JSON response indicating success
-        return response()->json(['message' => 'Registration created successfully', 'data' => $registration], 201);
-    }
+        // Return a response indicating success
+        return response()->json(['message' => 'Registration successful'], 201);
+}
+
+
 
     public function show($id)
     {
