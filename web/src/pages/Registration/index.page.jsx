@@ -154,8 +154,8 @@ const Registration = () => {
                 label='District'
                 name='district'
                 {...formState}
-                />
-              <TextInput label='Barangay' name='barangay' {...formState} />                 
+              />
+              <TextInput label='Barangay' name='barangay' {...formState} />
               <TextInput
                 label='City/Municipality'
                 name='cityM'
@@ -346,7 +346,9 @@ const Registration = () => {
                 <Modal.Footer>
                   <Button
                     handleSubmit={handleSubmit}
-                    onClick={() => setOpenModal(false)}
+                    onClick={() => {
+                      handleSubmit()
+                    }}
                     href='Registration/subfile'
                   >
                     I accept

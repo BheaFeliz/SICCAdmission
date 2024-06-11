@@ -29,7 +29,7 @@ class AdmissionFormController extends Controller
     public function show($id)
     {
         $admissionForm = AdmissionForm::findOrFail($id);
-        return response()->json(['admission_form' => $admissionForm], 200);
+        return response()->json(['admission_forms' => $admissionForm], 200);
     }
 
     public function update(AdmissionFormRequest $request, $id)

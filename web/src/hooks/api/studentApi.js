@@ -7,11 +7,11 @@ export const studentApi = baseApi.injectEndpoints({
       query: () => '/admissionform',
       providesTags: ['admission_forms'],
     }),
-    
+
     createStudent: builder.mutation({
       invalidatesTags: ['admission_forms'],
       query: (body) => ({
-        url: '/api/admissionform',
+        url: '/admissionform',
         method: 'POST',
         body,
       }),
