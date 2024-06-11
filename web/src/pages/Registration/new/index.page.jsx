@@ -1,4 +1,4 @@
-import { Button, Card, Modal } from 'flowbite-react'
+import { Button, Card } from 'flowbite-react'
 import React, { useState } from 'react'
 import { SiGoogleforms } from 'react-icons/si'
 
@@ -32,51 +32,50 @@ const Registration = () => {
   ]
 
   const { formState, handleSubmit } = useHooks()
-  const [openModal, setOpenModal] = useState(false)
 
-  const [showTextInput, setShowTextInput] = useState(false)
-  const [showFamilyBackgroundInput, setShowFamilyBackgroundInput] =
-    useState(false)
-  const [showOFWInput, setShowOFWInput] = useState(false)
-  const [showWorkingStudentInput, setShowWorkingStudentInput] = useState(false)
-  const [showFreshmenInput, setShowFreshmenInput] = useState(false)
-  const [showTransfereeInput, setShowTransfereeInput] = useState(false)
+  // const [showTextInput, setShowTextInput] = useState(false)
+  // const [showFamilyBackgroundInput, setShowFamilyBackgroundInput] =
+  //   useState(false)
+  // const [showOFWInput, setShowOFWInput] = useState(false)
+  // const [showWorkingStudentInput, setShowWorkingStudentInput] = useState(false)
+  // const [showFreshmenInput, setShowFreshmenInput] = useState(false)
+  // const [showTransfereeInput, setShowTransfereeInput] = useState(false)
 
-  const handleStudentTypeChange = (e) => {
-    const value = e.target.value
-    setShowFreshmenInput(value === 'college1')
-    setShowTransfereeInput(value === 'trans')
-  }
+  // const handleStudentTypeChange = (e) => {
+  //   const value = e.target.value
+  //   setShowFreshmenInput(value === 'college1')
+  //   setShowTransfereeInput(value === 'trans')
+  // }
 
-  const handleIndigentChange = (e) => {
-    const value = e.target.value
-    const selectedOption = IndigentP.find((option) => option.value === value)
-    setShowTextInput(selectedOption && selectedOption.showTextInput)
-  }
+  // const handleIndigentChange = (e) => {
+  //   const value = e.target.value
+  //   const selectedOption = IndigentP.find((option) => option.value === value)
+  //   setShowTextInput(selectedOption && selectedOption.showTextInput)
+  // }
 
-  const handleFamilyBackgroundChange = (e) => {
-    const value = e.target.value
-    const selectedOption = famBackground.find(
-      (option) => option.value === value,
-    )
-    setShowFamilyBackgroundInput(selectedOption && selectedOption.showTextInput)
-  }
+  // const handleFamilyBackgroundChange = (e) => {
+  //   const value = e.target.value
+  //   const selectedOption = famBackground.find(
+  //     (option) => option.value === value,
+  //   )
+  //   setShowFamilyBackgroundInput(selectedOption && selectedOption.showTextInput)
+  // }
 
-  const handleOFWChange = (e) => {
-    const value = e.target.value
-    const selectedOption = Ofw.find((option) => option.value === value)
+  // const handleOFWChange = (e) => {
+  //   const value = e.target.value
+  //   const selectedOption = Ofw.find((option) => option.value === value)
 
-    if (selectedOption && selectedOption.showTextInput) {
-      setShowOFWInput(true)
-    } else {
-      setShowOFWInput(false)
-    }
-  }
+  //   if (selectedOption && selectedOption.showTextInput) {
+  //     setShowOFWInput(true)
+  //   } else {
+  //     setShowOFWInput(false)
+  //   }
+  // }
 
-  const handleStudentCategoryChange = (e) => {
-    const value = e.target.value
-    setShowWorkingStudentInput(value === 'Wstudent')
-  }
+  // const handleStudentCategoryChange = (e) => {
+  //   const value = e.target.value
+  //   setShowWorkingStudentInput(value === 'Wstudent')
+  // }
 
   return (
     <Template>
@@ -85,53 +84,59 @@ const Registration = () => {
         <form onSubmit={handleSubmit}>
           <div className=' style=min-height: 140px;'>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-              <TextInput label='First Name' {...formState.register('fname')} />
-              <TextInput label='Last Name' {...formState.register('lname')} />
-              <TextInput label='Middle Name' {...formState.register('mname')} />
-              <SelectInput options={suffixoption} {...formState.register('pref')} />
+              <TextInput label='First Name' name='fname' {...formState} />
+              <TextInput label='Last Name' name='lname' {...formState} />
+              <TextInput label='Middle Name' name='mname' {...formState} />
+              <SelectInput options={suffixoption} name='pref' {...formState} />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-              <TextInput label='Age' {...formState.register('age')} />
+              <TextInput label='Age' name='age' {...formState} />
               <div className='grid grid-cols-3 gap-1'>
                 <SelectInput
                   options={Monthoption}
-                  {...formState.register('monthoption')}
+                  name='monthoption'
+                  {...formState}
                 />
-                <TextInput label='Day' {...formState.register('date')} />
-                <TextInput label='Year' {...formState.register('year')} />
+                <TextInput label='Day' name='date' {...formState} />
+                <TextInput label='Year' name='year' {...formState} />
               </div>
-              <SelectInput options={sex} {...formState.register('sex')} />
-              <SelectInput options={Gender} {...formState.register('gender')} />
+              <SelectInput options={sex} name='sex' {...formState} />
+              <SelectInput options={Gender} name='gender' {...formState} />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
               <SelectInput
                 options={Civilstatus}
-                {...formState.register('civilstatus')}
+                name='civilstatus'
+                {...formState}
               />
               <TextInput
                 label='Mobile Number'
-                {...formState.register('contactnumber')}
+                name='contactnumber'
+                {...formState}
               />
-              <TextInput label='Email Address' {...formState.register('email')} />
+              <TextInput label='Email Address' name='email' {...formState} />
               <TextInput
                 label='Place of Birth (City/Municipality)'
-                {...formState.register('pbirth')}
+                name='pbirth'
+                {...formState}
               />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-2'>
               <SelectInput
                 options={IndigentP}
-                onChange={handleIndigentChange}
-                {...formState.register('indigentP')}
+                name='indigentP'
+                // onChange={handleIndigentChange}
+                {...formState}
               />
-              {showTextInput && (
+              {/* {showTextInput && ( */}
                 <TextInput
                   label='If yes, specify the Indigenous group you belong to.'
                   type='text'
+                  name='indigentPy'
                   className='form-input'
-                  {...formState.register('indigentPy')}
+                  {...formState}
                 />
-              )}
+              {/* )} */}
             </div>
 
             <div className='p-4'>
@@ -146,15 +151,17 @@ const Registration = () => {
                   { value: 'd3', label: 'District III' },
                 ]}
                 label='District'
-                {...formState.register('district')}
+                name='district'
+                {...formState}
                 />
-              <TextInput label='Barangay' {...formState.register('barangay')} />                 
+              <TextInput label='Barangay' name='barangay' {...formState} />                 
               <TextInput
                 label='City/Municipality'
-                {...formState.register('cityM')}
+                name='cityM'
+                {...formState}
               />
-              <TextInput label='Province' {...formState.register('province')} />
-              <TextInput label='Zip Code' {...formState.register('Zcode')} />
+              <TextInput label='Province' name='province' {...formState} />
+              <TextInput label='Zip Code' name='Zcode' {...formState} />
             </div>
             <div className='p-4'>
               <p>Family Background:</p>
@@ -162,21 +169,23 @@ const Registration = () => {
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-3 '>
               <SelectInput
                 options={famBackground}
-                onChange={handleFamilyBackgroundChange}
+                name='familyB'
+                // onChange={handleFamilyBackgroundChange}
                 className='w-full md:w-auto'
-                {...formState.register('familyB')}
+                {...formState}
               />
-              {showFamilyBackgroundInput && (
+              {/* {showFamilyBackgroundInput && ( */}
                 <TextInput
                   label='Specify since when?(Year Only)'
                   type='text'
+                  name='sincewhen'
                   className='form-input'
-                  {...formState.register('sincewhen')}
                 />
-              )}
+              {/* )} */}
               <TextInput
                 label='Number of siblings in the family'
-                {...formState.register('Nsibling')}
+                name='Nsibling'
+                {...formState}
               />
 
               <TextInput label='Who Will support your study?' name='supstudy' />
@@ -184,160 +193,128 @@ const Registration = () => {
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-2'>
               <SelectInput
                 options={Ofw}
-                onChange={handleOFWChange}
+                // onChange={handleOFWChange}
+                name='ofw'
                 className='w-full md:w-auto'
-                {...formState.register('ofw')}
+                {...formState}
               />
-              {showOFWInput && (
+              {/* {showOFWInput && ( */}
                 <TextInput
                   label='Specify the job/profession of a family member abroad.'
                   type='text'
+                  name='ofwprofession'
                   className='form-input'
-                  {...formState.register('ofwprofession')}
                 />
-              )}
+              {/* )} */}
 
               <SelectInput
                 options={Scategory}
                 label='Student Category'
-                onChange={handleStudentCategoryChange}
-                {...formState.register('StudentCat')}
+                name='StudentCat'
+                // onChange={handleStudentCategoryChange}
+                {...formState}
               />
-              {showWorkingStudentInput && (
+              {/* {showWorkingStudentInput && ( */}
                 <TextInput
                   label='Nature of work'
                   type='text'
+                  name='Nwork'
                   className='form-input'
-                  {...formState.register('Nwork')}
                 />
-              )}
+              {/* )} */}
             </div>
 
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
               <SelectInput
                 options={Studenttype}
-                onChange={handleStudentTypeChange}
-                {...formState.register('studenttype')}
+                name='studenttype'
+                // onChange={handleStudentTypeChange}
+                {...formState}
               />
             </div>
 
-            {showFreshmenInput && (
+            {/* {showFreshmenInput && ( */}
               <div name='Freshmen'>
                 <p>Freshmen:</p>
                 <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
                   <TextInput
                     label='Last School Attended'
                     type='text'
+                    name='F_nameSchool'
                     className='form-input'
-                    {...formState.register('F_nameSchool')}
+                    {...formState}
                   />
                   <TextInput
                     label='Academic track'
                     type='text'
+                    name='F_Atrack'
                     className='form-input'
-                    {...formState.register('F_Atrack')}
+                    {...formState}
                   />
                   <TextInput
                     label='Address City/Municipality/Province'
                     type='text'
+                    name='F_AMprovince'
                     className='form-input'
-                    {...formState.register('F_AMprovince')}
+                    {...formState}
                   />
                   <TextInput
                     label='Year Graduate'
                     type='text'
+                    name='F_Ygrad'
                     className='form-input'
-                    {...formState.register('F_Vgrad')}
+                    {...formState}
                   />
                 </div>
               </div>
-            )}
+            {/* )} */}
 
-            {showTransfereeInput && (
+            {/* {showTransfereeInput && ( */}
               <div>
                 <p>Transferee:</p>
                 <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
                   <TextInput
                     label='Last School Attended'
                     type='text'
+                    name='T_nameSchool'
                     className='form-input'
-                    {...formState.register('T_nameSchool')}
+                    {...formState}
                   />
                   <TextInput
                     label='Course'
                     type='text'
+                    name='T_Atrack'
                     className='form-input'
-                    {...formState.register('T_Atrack')}
+                    {...formState}
                   />
                   <TextInput
                     label='Address City/Municipality/Province'
                     type='text'
+                    name='T_AMprovince'
                     className='form-input'
-                    {...formState.register('T_AMprovince')}
+                    {...formState}
                   />
                   <TextInput
                     label='Year Attended'
                     type='text'
+                    name='T_Ygrad'
                     className='form-input'
-                    {...formState.register('T_Vgrad')}
+                    {...formState}
                   />
                 </div>
               </div>
-            )}
+            {/* )} */}
 
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
               <SelectInput
                 options={Scourse}
-                {...formState.register('selectcourse')}
+                name='selectcourse'
+                {...formState}
               />
             </div>
-            <div name='modal'>
-              <Modal show={openModal} onClose={() => setOpenModal(false)}>
-                <Modal.Header>CONFORME:</Modal.Header>
-                <Modal.Body>
-                  <div className='space-y-6'>
-                    <p className='text-base leading-relaxed text-gray-500 dark:text-gray-400'>
-                      By signing below, I hereby certify that all the
-                      information written in this application are complete and
-                      accurate. I agree to update the Office of Admissions and
-                      the Registrar Office for any changes. I acknowledge that I
-                      have read and understood the Samal Island City College
-                      (SICC) Admissions Privacy Notice posted in the office
-                      premises. I understand that by applying for
-                      admission/registering as a student of this institutuion, I
-                      allow SICC through the Office of Admissions to collect,
-                      record, organize, update or modify, retrieve, consult,
-                      utilize, consolidate, block, erase or delete any
-                      information which are a part of my personal data for
-                      historical, statistical, research and evaluation purposes
-                      pursuant to the provisions of the Republic Act No. 10173
-                      of the Philippines, Data Privacy Act of 2012 and its
-                      corresponding Implementing Rules and Regulations. I also
-                      agree, if accepted as a student, that my odmission,
-                      matriculation, legibility for any assistance/grant, and
-                      graduation are subject to the rules and regulations of
-                      this institution.
-                    </p>
-                  </div>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button
-                    onClick={() => setOpenModal(false)}
-                    href='/registration/subfile'
-                  >
-                    I accept
-                  </Button>
-                  <Button color='gray' onClick={() => setOpenModal(false)}>
-                    Decline
-                  </Button>
-                </Modal.Footer>
-              </Modal>
-            </div>
-          </div>
-          <div>
-            <Button type='submit' onClick={() => setOpenModal(true)}>
+            <Button type='submit'>
               Proceed
-            </Button>
+            </Button>   
           </div>
         </form>
       </Card>

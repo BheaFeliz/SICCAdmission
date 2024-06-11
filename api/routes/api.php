@@ -53,7 +53,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
        
     
     Route::get('/categories', [CategoryController::class, 'index']);
-    Route::resource('/registration/new', RegistrationController::class);
+
+    Route::resource('/registration', RegistrationController::class);
+    
     Route::get('/stores', [StoreController::class, 'index']);
 
     // Route::prefix('scheduling')
