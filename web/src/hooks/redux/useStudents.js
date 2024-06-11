@@ -1,15 +1,15 @@
-import { useMemo } from 'react'
+import { useMemo } from 'react';
 
-import { studentApi } from '../api/studentApi'
+import { useGetRegistrationsQuery } from '../api/studentApi';
 
 export const useStudents = () => {
-  const { data, isError, isLoading } = studentApi.useGetRegistrationsQuery()
+  const { data, isError, isLoading } = useGetRegistrationsQuery();
 
-  const registration = useMemo(() => data?.registration || [], [data])
+  const registrations = useMemo(() => data?.registrations || [], [data]);
 
   return {
-    registration,
+    registrations,
     isError,
     isLoading,
-  }
-}
+  };
+};

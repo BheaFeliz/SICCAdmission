@@ -1,5 +1,6 @@
 import { FaRegChartBar } from 'react-icons/fa'
 
+import Loading from '@/components/atoms/Loading'
 import CardItem from '@/components/organisms/Card'
 import PageHeader from '@/components/organisms/PageHeader'
 import Template from '@/components/templates/Template'
@@ -11,7 +12,7 @@ const Dashboard = () => {
   const { data, isLoading } = dashboardApi.useGetDashboardQuery()
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Loading/>
   }
 
   const breadcrumbs = [
@@ -36,11 +37,13 @@ const Dashboard = () => {
   return (
     <Template>
       <PageHeader breadcrumbs={breadcrumbs} />
+      
 
       <div className='mx-auto max-w-screen-lg mt-12'>
         <div className='grid grid-cols-3 gap-2'>
           {cardData.map((card, index) => (
-            <CardItem
+            <CardItem 
+            
               key={index}
               title={card.title}
               description={card.description}

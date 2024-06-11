@@ -1,10 +1,10 @@
-import { useState } from 'react'
-import { FaUserFriends } from 'react-icons/fa'
+import { useState } from 'react';
+import { FaUserFriends } from 'react-icons/fa';
 
-import { useUsers } from '@/hooks/redux/useUsers'
+import { useStudents } from '@/hooks/redux/useStudents';
 
 const useHooks = () => {
-  const { users, isLoading } = useUsers()
+  const { registrations, isLoading } = useStudents();
 
   const breadcrumbs = [
     {
@@ -12,20 +12,20 @@ const useHooks = () => {
       title: 'Students',
       icon: FaUserFriends,
     },
-  ]
+  ];
 
-  const totalPages = 100
-  const [currentPage, setCurrentPage] = useState(1)
-  const onPageChange = (page) => setCurrentPage(page)
+  const totalPages = 5; // This should be dynamically set based on your API response
+  const [currentPage, setCurrentPage] = useState(1);
+  const onPageChange = (page) => setCurrentPage(page);
 
   return {
     totalPages,
     currentPage,
     onPageChange,
-    users,
+    registrations,
     isLoading,
     breadcrumbs,
-  }
-}
+  };
+};
 
-export default useHooks
+export default useHooks;
