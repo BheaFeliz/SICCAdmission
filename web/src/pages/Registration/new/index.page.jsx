@@ -1,4 +1,4 @@
-import { Button, Card, Modal } from 'flowbite-react'
+import { Button, Card } from 'flowbite-react'
 import React, { useState } from 'react'
 import { SiGoogleforms } from 'react-icons/si'
 
@@ -32,51 +32,50 @@ const Registration = () => {
   ]
 
   const { formState, handleSubmit } = useHooks()
-  const [openModal, setOpenModal] = useState(false)
 
-  const [showTextInput, setShowTextInput] = useState(false)
-  const [showFamilyBackgroundInput, setShowFamilyBackgroundInput] =
-    useState(false)
-  const [showOFWInput, setShowOFWInput] = useState(false)
-  const [showWorkingStudentInput, setShowWorkingStudentInput] = useState(false)
-  const [showFreshmenInput, setShowFreshmenInput] = useState(false)
-  const [showTransfereeInput, setShowTransfereeInput] = useState(false)
+  // const [showTextInput, setShowTextInput] = useState(false)
+  // const [showFamilyBackgroundInput, setShowFamilyBackgroundInput] =
+  //   useState(false)
+  // const [showOFWInput, setShowOFWInput] = useState(false)
+  // const [showWorkingStudentInput, setShowWorkingStudentInput] = useState(false)
+  // const [showFreshmenInput, setShowFreshmenInput] = useState(false)
+  // const [showTransfereeInput, setShowTransfereeInput] = useState(false)
 
-  const handleStudentTypeChange = (e) => {
-    const value = e.target.value
-    setShowFreshmenInput(value === 'college1')
-    setShowTransfereeInput(value === 'trans')
-  }
+  // const handleStudentTypeChange = (e) => {
+  //   const value = e.target.value
+  //   setShowFreshmenInput(value === 'college1')
+  //   setShowTransfereeInput(value === 'trans')
+  // }
 
-  const handleIndigentChange = (e) => {
-    const value = e.target.value
-    const selectedOption = IndigentP.find((option) => option.value === value)
-    setShowTextInput(selectedOption && selectedOption.showTextInput)
-  }
+  // const handleIndigentChange = (e) => {
+  //   const value = e.target.value
+  //   const selectedOption = IndigentP.find((option) => option.value === value)
+  //   setShowTextInput(selectedOption && selectedOption.showTextInput)
+  // }
 
-  const handleFamilyBackgroundChange = (e) => {
-    const value = e.target.value
-    const selectedOption = famBackground.find(
-      (option) => option.value === value,
-    )
-    setShowFamilyBackgroundInput(selectedOption && selectedOption.showTextInput)
-  }
+  // const handleFamilyBackgroundChange = (e) => {
+  //   const value = e.target.value
+  //   const selectedOption = famBackground.find(
+  //     (option) => option.value === value,
+  //   )
+  //   setShowFamilyBackgroundInput(selectedOption && selectedOption.showTextInput)
+  // }
 
-  const handleOFWChange = (e) => {
-    const value = e.target.value
-    const selectedOption = Ofw.find((option) => option.value === value)
+  // const handleOFWChange = (e) => {
+  //   const value = e.target.value
+  //   const selectedOption = Ofw.find((option) => option.value === value)
 
-    if (selectedOption && selectedOption.showTextInput) {
-      setShowOFWInput(true)
-    } else {
-      setShowOFWInput(false)
-    }
-  }
+  //   if (selectedOption && selectedOption.showTextInput) {
+  //     setShowOFWInput(true)
+  //   } else {
+  //     setShowOFWInput(false)
+  //   }
+  // }
 
-  const handleStudentCategoryChange = (e) => {
-    const value = e.target.value
-    setShowWorkingStudentInput(value === 'Wstudent')
-  }
+  // const handleStudentCategoryChange = (e) => {
+  //   const value = e.target.value
+  //   setShowWorkingStudentInput(value === 'Wstudent')
+  // }
 
   return (
     <Template>
@@ -126,10 +125,10 @@ const Registration = () => {
               <SelectInput
                 options={IndigentP}
                 name='indigentP'
-                onChange={handleIndigentChange}
+                // onChange={handleIndigentChange}
                 {...formState}
               />
-              {showTextInput && (
+              {/* {showTextInput && ( */}
                 <TextInput
                   label='If yes, specify the Indigenous group you belong to.'
                   type='text'
@@ -137,7 +136,7 @@ const Registration = () => {
                   className='form-input'
                   {...formState}
                 />
-              )}
+              {/* )} */}
             </div>
 
             <div className='p-4'>
@@ -154,8 +153,8 @@ const Registration = () => {
                 label='District'
                 name='district'
                 {...formState}
-              />
-              <TextInput label='Barangay' name='barangay' {...formState} />
+                />
+              <TextInput label='Barangay' name='barangay' {...formState} />                 
               <TextInput
                 label='City/Municipality'
                 name='cityM'
@@ -171,18 +170,18 @@ const Registration = () => {
               <SelectInput
                 options={famBackground}
                 name='familyB'
-                onChange={handleFamilyBackgroundChange}
+                // onChange={handleFamilyBackgroundChange}
                 className='w-full md:w-auto'
                 {...formState}
               />
-              {showFamilyBackgroundInput && (
+              {/* {showFamilyBackgroundInput && ( */}
                 <TextInput
                   label='Specify since when?(Year Only)'
                   type='text'
                   name='sincewhen'
                   className='form-input'
                 />
-              )}
+              {/* )} */}
               <TextInput
                 label='Number of siblings in the family'
                 name='Nsibling'
@@ -194,47 +193,47 @@ const Registration = () => {
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-2'>
               <SelectInput
                 options={Ofw}
-                onChange={handleOFWChange}
+                // onChange={handleOFWChange}
                 name='ofw'
                 className='w-full md:w-auto'
                 {...formState}
               />
-              {showOFWInput && (
+              {/* {showOFWInput && ( */}
                 <TextInput
                   label='Specify the job/profession of a family member abroad.'
                   type='text'
                   name='ofwprofession'
                   className='form-input'
                 />
-              )}
+              {/* )} */}
 
               <SelectInput
                 options={Scategory}
                 label='Student Category'
                 name='StudentCat'
-                onChange={handleStudentCategoryChange}
+                // onChange={handleStudentCategoryChange}
                 {...formState}
               />
-              {showWorkingStudentInput && (
+              {/* {showWorkingStudentInput && ( */}
                 <TextInput
                   label='Nature of work'
                   type='text'
                   name='Nwork'
                   className='form-input'
                 />
-              )}
+              {/* )} */}
             </div>
 
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
               <SelectInput
                 options={Studenttype}
                 name='studenttype'
-                onChange={handleStudentTypeChange}
+                // onChange={handleStudentTypeChange}
                 {...formState}
               />
             </div>
 
-            {showFreshmenInput && (
+            {/* {showFreshmenInput && ( */}
               <div name='Freshmen'>
                 <p>Freshmen:</p>
                 <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
@@ -268,9 +267,9 @@ const Registration = () => {
                   />
                 </div>
               </div>
-            )}
+            {/* )} */}
 
-            {showTransfereeInput && (
+            {/* {showTransfereeInput && ( */}
               <div>
                 <p>Transferee:</p>
                 <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
@@ -304,7 +303,7 @@ const Registration = () => {
                   />
                 </div>
               </div>
-            )}
+            {/* )} */}
 
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
               <SelectInput
@@ -313,62 +312,9 @@ const Registration = () => {
                 {...formState}
               />
             </div>
-
-            <div name='modal'>
-              <Modal show={openModal} onClose={() => setOpenModal(false)}>
-                <Modal.Header>CONFORME:</Modal.Header>
-                <Modal.Body>
-                  <div className='space-y-6'>
-                    <p className='text-base leading-relaxed text-gray-500 dark:text-gray-400'>
-                      By signing below, I hereby certify that all the
-                      information written in this application are complete and
-                      accurate. I agree to update the Office of Admissions and
-                      the Registrar Office for any changes. I acknowledge that I
-                      have read and understood the Samal Island City College
-                      (SICC) Admissions Privacy Notice posted in the office
-                      premises. I understand that by applying for
-                      admission/registering as a student of this institutuion, I
-                      allow SICC through the Office of Admissions to collect,
-                      record, organize, update or modify, retrieve, consult,
-                      utilize, consolidate, block, erase or delete any
-                      information which are a part of my personal data for
-                      historical, statistical, research and evaluation purposes
-                      pursuant to the provisions of the Republic Act No. 10173
-                      of the Philippines, Data Privacy Act of 2012 and its
-                      corresponding Implementing Rules and Regulations. I also
-                      agree, if accepted as a student, that my odmission,
-                      matriculation, legibility for any assistance/grant, and
-                      graduation are subject to the rules and regulations of
-                      this institution.
-                    </p>
-                  </div>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button
-                    handleSubmit={handleSubmit}
-<<<<<<< HEAD
-                    onClick={() => {
-                      handleSubmit()
-                    }}
-                    href='Registration/subfile'
-=======
-                    onClick={() => setOpenModal(false)}
-                    href='registration/subfile'
->>>>>>> main
-                  >
-                    I accept
-                  </Button>
-                  <Button color='gray' onClick={() => setOpenModal(false)}>
-                    Decline
-                  </Button>
-                </Modal.Footer>
-              </Modal>
-            </div>
-          </div>
-          <div>
-            <Button type='submit' onClick={() => setOpenModal(true)}>
+            <Button type='submit'>
               Proceed
-            </Button>
+            </Button>   
           </div>
         </form>
       </Card>

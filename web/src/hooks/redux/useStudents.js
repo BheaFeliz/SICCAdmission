@@ -3,12 +3,12 @@ import { useMemo } from 'react'
 import { studentApi } from '../api/studentApi'
 
 export const useStudents = () => {
-  const { data, isError, isLoading } = studentApi.useGetStudentsQuery()
+  const { data, isError, isLoading } = studentApi.useGetRegistrationsQuery()
 
-  const admissionForms = useMemo(() => data?.admission_forms || [], [data])
+  const registration = useMemo(() => data?.registration || [], [data])
 
   return {
-    admissionForms,
+    registration,
     isError,
     isLoading,
   }

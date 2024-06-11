@@ -15,7 +15,7 @@ class CreateRegistrationForm extends Migration
         // Define valid choices for selectcourse
         $validChoices = ['bsab', 'bse', 'bpa', 'bstmt', 'bsc'];
 
-        Schema::create('admission_forms', function (Blueprint $table) use ($validChoices) {
+        Schema::create('registrations', function (Blueprint $table) use ($validChoices) {
             $table->id();
             $table->string('fname');
             $table->string('lname');
@@ -63,7 +63,7 @@ class CreateRegistrationForm extends Migration
         });
 
         // Add a check constraint to ensure selectcourse is one of the valid choices
-        DB::statement("ALTER TABLE admission_forms ADD CONSTRAINT check_selectcourse CHECK (selectcourse IN ('" . implode("','", $validChoices) . "'))");
+        DB::statement("ALTER TABLE registrations ADD CONSTRAINT check_selectcourse CHECK (selectcourse IN ('" . implode("','", $validChoices) . "'))");
     }
 
     /**
@@ -71,6 +71,6 @@ class CreateRegistrationForm extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admission_forms');
+        Schema::dropIfExists('registrations');
     }
-};
+}
