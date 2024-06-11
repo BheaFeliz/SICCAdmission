@@ -7,7 +7,7 @@ import PageHeader from '@/components/organisms/PageHeader';
 import Template from '@/components/templates/Template';
 import { formatDate, formatTime } from '@/hooks/lib/util';
 
-import useCardDetailsHooks from './useCardDetailsHooks'; // Adjust the path as needed
+import useHooks from './hooks';
 
 const CardDetails = () => {
   const {
@@ -16,7 +16,7 @@ const CardDetails = () => {
     error,
     breadcrumbs,
     handleDeleteCard,
-  } = useCardDetailsHooks();
+  } = useHooks();
 
   if (isLoading) {
     return (
