@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AdmissionForm;
+use App\Models\Registration;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -10,14 +10,14 @@ class DashboardController extends Controller
     public function show(Request $request)
     {
         try {
-            $query = AdmissionForm::query();
+            $query = Registration::query();
 
             if ($request->filled(['start_date', 'end_date'])) {
                 $query->whereBetween('created_at', [$request->start_date, $request->end_date]);
             }
 
-            $admissionForms = $query->get();
-            $courseCounts = $admissionForms->groupBy('selectcourse')->map->count();
+            $registrations = $query->get();
+            $courseCounts = $registrations->groupBy('selectcourse')->map->count();
 
             return [
                 'course_counts' => $courseCounts,
