@@ -10,7 +10,7 @@ const registrationSchema = Yup.object().shape({
   fname: Yup.string().required('First Name is Required'),
   lname: Yup.string().required('Last Name is Required'),
   mname: Yup.string().nullable(),
-  pref: Yup.string().nullable().oneOf(['Jr.', 'Sr.', 'I', 'II', 'III', 'IV', null]),
+  pref: Yup.string().nullable().oneOf(['Jr.', 'Sr.', 'I', 'II', 'III', 'IV', "N/A"]),
   age: Yup.number().integer().nullable().typeError('Number is Required'),
   Monthoption: Yup.string().nullable().oneOf(['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']),
   date: Yup.number().integer().nullable().typeError('Date is Required'),
@@ -57,7 +57,7 @@ const registrationSchema = Yup.object().shape({
   T_nameSchool: Yup.string().nullable(),
   T_Atrack: Yup.string().nullable(),
   T_AMprovince: Yup.string().nullable('Required'),
-  T_Ygrad: Yup.string().required('Required'),
+  T_Ygrad: Yup.string().nullable(),
   selectcourse: Yup.string().required().oneOf(['bsab', 'bse', 'bpa', 'bstmt', 'bsc']),
   email_verified_at: Yup.date().nullable(),
 });
