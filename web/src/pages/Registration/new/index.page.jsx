@@ -1,5 +1,5 @@
 import { Button, Card } from 'flowbite-react'
-import React, { useState } from 'react'
+// import React, { useState } from 'react'
 import { SiGoogleforms } from 'react-icons/si'
 
 import PageHeader from '@/components/organisms/PageHeader'
@@ -129,13 +129,13 @@ const Registration = () => {
                 {...formState}
               />
               {/* {showTextInput && ( */}
-                <TextInput
-                  label='If yes, specify the Indigenous group you belong to.'
-                  type='text'
-                  name='indigentPy'
-                  className='form-input'
-                  {...formState}
-                />
+              <TextInput
+                label='If yes, specify the Indigenous group you belong to.'
+                type='text'
+                name='indigentPy'
+                className='form-input'
+                {...formState}
+              />
               {/* )} */}
             </div>
 
@@ -153,8 +153,8 @@ const Registration = () => {
                 label='District'
                 name='district'
                 {...formState}
-                />
-              <TextInput label='Barangay' name='barangay' {...formState} />                 
+              />
+              <TextInput label='Barangay' name='barangay' {...formState} />
               <TextInput
                 label='City/Municipality'
                 name='cityM'
@@ -175,12 +175,12 @@ const Registration = () => {
                 {...formState}
               />
               {/* {showFamilyBackgroundInput && ( */}
-                <TextInput
-                  label='Specify since when?(Year Only)'
-                  type='text'
-                  name='sincewhen'
-                  className='form-input'
-                />
+              <TextInput
+                label='Specify since when?(Year Only)'
+                type='text'
+                name='sincewhen'
+                className='form-input'
+              />
               {/* )} */}
               <TextInput
                 label='Number of siblings in the family'
@@ -199,12 +199,12 @@ const Registration = () => {
                 {...formState}
               />
               {/* {showOFWInput && ( */}
-                <TextInput
-                  label='Specify the job/profession of a family member abroad.'
-                  type='text'
-                  name='ofwprofession'
-                  className='form-input'
-                />
+              <TextInput
+                label='Specify the job/profession of a family member abroad.'
+                type='text'
+                name='ofwprofession'
+                className='form-input'
+              />
               {/* )} */}
 
               <SelectInput
@@ -215,12 +215,12 @@ const Registration = () => {
                 {...formState}
               />
               {/* {showWorkingStudentInput && ( */}
-                <TextInput
-                  label='Nature of work'
-                  type='text'
-                  name='Nwork'
-                  className='form-input'
-                />
+              <TextInput
+                label='Nature of work'
+                type='text'
+                name='Nwork'
+                className='form-input'
+              />
               {/* )} */}
             </div>
 
@@ -234,75 +234,75 @@ const Registration = () => {
             </div>
 
             {/* {showFreshmenInput && ( */}
-              <div name='Freshmen'>
-                <p>Freshmen:</p>
-                <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-                  <TextInput
-                    label='Last School Attended'
-                    type='text'
-                    name='F_nameSchool'
-                    className='form-input'
-                    {...formState}
-                  />
-                  <TextInput
-                    label='Academic track'
-                    type='text'
-                    name='F_Atrack'
-                    className='form-input'
-                    {...formState}
-                  />
-                  <TextInput
-                    label='Address City/Municipality/Province'
-                    type='text'
-                    name='F_AMprovince'
-                    className='form-input'
-                    {...formState}
-                  />
-                  <TextInput
-                    label='Year Graduate'
-                    type='text'
-                    name='F_Ygrad'
-                    className='form-input'
-                    {...formState}
-                  />
-                </div>
+            <div name='Freshmen'>
+              <p>Freshmen:</p>
+              <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
+                <TextInput
+                  label='Last School Attended'
+                  type='text'
+                  name='F_nameSchool'
+                  className='form-input'
+                  {...formState}
+                />
+                <TextInput
+                  label='Academic track'
+                  type='text'
+                  name='F_Atrack'
+                  className='form-input'
+                  {...formState}
+                />
+                <TextInput
+                  label='Address City/Municipality/Province'
+                  type='text'
+                  name='F_AMprovince'
+                  className='form-input'
+                  {...formState}
+                />
+                <TextInput
+                  label='Year Graduate'
+                  type='text'
+                  name='F_Ygrad'
+                  className='form-input'
+                  {...formState}
+                />
               </div>
+            </div>
             {/* )} */}
 
             {/* {showTransfereeInput && ( */}
-              <div>
-                <p>Transferee:</p>
-                <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-                  <TextInput
-                    label='Last School Attended'
-                    type='text'
-                    name='T_nameSchool'
-                    className='form-input'
-                    {...formState}
-                  />
-                  <TextInput
-                    label='Course'
-                    type='text'
-                    name='T_Atrack'
-                    className='form-input'
-                    {...formState}
-                  />
-                  <TextInput
-                    label='Address City/Municipality/Province'
-                    type='text'
-                    name='T_AMprovince'
-                    className='form-input'
-                    {...formState}
-                  />
-                  <TextInput
-                    label='Year Attended'
-                    type='text'
-                    name='T_Ygrad'
-                    className='form-input'
-                    {...formState}
-                  />
-                </div>
+            <div>
+              <p>Transferee:</p>
+              <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
+                <TextInput
+                  label='Last School Attended'
+                  type='text'
+                  name='T_nameSchool'
+                  className='form-input'
+                  {...formState}
+                />
+                <TextInput
+                  label='Course'
+                  type='text'
+                  name='T_Atrack'
+                  className='form-input'
+                  {...formState}
+                />
+                <TextInput
+                  label='Address City/Municipality/Province'
+                  type='text'
+                  name='T_AMprovince'
+                  className='form-input'
+                  {...formState}
+                />
+                <TextInput
+                  label='Year Attended'
+                  type='text'
+                  name='T_Ygrad'
+                  className='form-input'
+                  {...formState}
+                />
               </div>
+            </div>
             {/* )} */}
 
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
@@ -312,9 +312,7 @@ const Registration = () => {
                 {...formState}
               />
             </div>
-            <Button type='submit'>
-              Proceed
-            </Button>   
+            <Button type='submit'>Proceed</Button>
           </div>
         </form>
       </Card>

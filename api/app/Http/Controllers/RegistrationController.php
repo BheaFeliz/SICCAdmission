@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdmissionFormRequest;
 use App\Models\Registration;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
+
 
 class RegistrationController extends Controller
 {
@@ -61,13 +63,20 @@ class RegistrationController extends Controller
         // Add validation rules for other fields as per your requirements
     ]);
 
-    $registration = new Registration();
-        $registration->fill($validatedData);
-        $registration->save();
+     // Create the registration
+     $registration = Registration::create($validatedData);
 
-        // Return a response indicating success
-        return response()->json(['message' => 'Registration successful'], 201);
-}
+     // Retrieve the schedule ID to use as the Classnum
+     $schedule = Schedule::where('description', 'like', '%class%')->first(); // Adjust the condition based on your requirement
+
+     if ($schedule) {
+         $registration->Classnum = $schedule->id;
+         $registration->save();
+     }
+
+     // Return a response indicating success
+     return response()->json(['message' => 'Registration successful', 'data' => $registration], 201);
+ }
 
 
 
