@@ -7,7 +7,7 @@ export const suffixoption = [
     hidden: true,
   },
   {
-    value: 'null',
+    value: 'N/A',
     label: 'N/A',
   },
 
