@@ -7,7 +7,7 @@ export const suffixoption = [
     hidden: true,
   },
   {
-    value: 'null',
+    value: 'N/A',
     label: 'N/A',
   },
 
@@ -209,7 +209,7 @@ export const SDistrict = [
 export const famBackground = [
   {
     value: 0,
-    label: '-select-',
+    label: 'Family Background',
     disabled: true,
     selected: true,
     hidden: true,

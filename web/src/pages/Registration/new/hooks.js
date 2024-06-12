@@ -12,7 +12,7 @@ const registrationSchema = Yup.object().shape({
   mname: Yup.string().nullable(),
   pref: Yup.string()
     .nullable()
-    .oneOf(['Jr.', 'Sr.', 'I', 'II', 'III', 'IV', null]),
+    .oneOf(['Jr.', 'Sr.', 'I', 'II', 'III', 'IV', 'N/A']),
   age: Yup.number().integer().nullable().typeError('Number is Required'),
   Monthoption: Yup.string()
     .nullable()
@@ -44,7 +44,14 @@ const registrationSchema = Yup.object().shape({
   email: Yup.string().email().required('E-mail is Required'),
   pbirth: Yup.string().nullable(),
   indigentP: Yup.string().nullable().oneOf(['yes', 'no']),
-  indigentPy: Yup.string().nullable(),
+  indigentPy: Yup.string()
+    .nullable()
+    .when('indigentP', {
+      is: 'yes',
+      then: (schema) =>
+        schema.required('Please specify the Indigenous group you belong to.'),
+      otherwise: (schema) => schema.nullable(),
+    }),
   pbs: Yup.string().nullable(),
   district: Yup.string().nullable().oneOf(['d1', 'd2', 'd3']),
   barangay: Yup.string().nullable(),
@@ -54,11 +61,26 @@ const registrationSchema = Yup.object().shape({
   familyB: Yup.string()
     .nullable()
     .oneOf(['plt', 'df', 'dm', 'dr', 'mr', 'pssw']),
-  sincewhen: Yup.string().nullable(),
+  sincewhen: Yup.string()
+    .nullable()
+    .when('familyB', {
+      is: 'pssw',
+      then: (schema) => schema.required('Please specify since when.'),
+      otherwise: (schema) => schema.nullable(),
+    }),
   Nsibling: Yup.string().nullable(),
   supstudy: Yup.string().nullable(),
   ofw: Yup.string().nullable().oneOf(['yes', 'no']),
-  ofwProfession: Yup.string().nullable(),
+  ofwProfession: Yup.string()
+    .nullable()
+    .when('ofw', {
+      is: 'yes',
+      then: (schema) =>
+        schema.required(
+          'Please specify the job/profession of a family member abroad.',
+        ),
+      otherwise: (schema) => schema.nullable(),
+    }),
   StudentCat: Yup.string().nullable().oneOf(['Ftime', 'Wstudent']),
   Nwork: Yup.string().nullable(),
   studenttype: Yup.string()
@@ -71,7 +93,7 @@ const registrationSchema = Yup.object().shape({
   T_nameSchool: Yup.string().nullable(),
   T_Atrack: Yup.string().nullable(),
   T_AMprovince: Yup.string().nullable('Required'),
-  T_Ygrad: Yup.string().required('Required'),
+  T_Ygrad: Yup.string().nullable(),
   selectcourse: Yup.string()
     .required()
     .oneOf(['bsab', 'bse', 'bpa', 'bstmt', 'bsc']),

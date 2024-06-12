@@ -33,11 +33,11 @@ const Registration = () => {
 
   const { formState, handleSubmit } = useHooks()
 
-  // const [showTextInput, setShowTextInput] = useState(false)
-  // const [showFamilyBackgroundInput, setShowFamilyBackgroundInput] =
-  //   useState(false)
-  // const [showOFWInput, setShowOFWInput] = useState(false)
-  // const [showWorkingStudentInput, setShowWorkingStudentInput] = useState(false)
+  const [showTextInput, setShowTextInput] = useState(false)
+  const [showFamilyBackgroundInput, setShowFamilyBackgroundInput] =
+    useState(false)
+  const [showOFWInput, setShowOFWInput] = useState(false)
+  const [showWorkingStudentInput, setShowWorkingStudentInput] = useState(false)
   // const [showFreshmenInput, setShowFreshmenInput] = useState(false)
   // const [showTransfereeInput, setShowTransfereeInput] = useState(false)
 
@@ -47,35 +47,35 @@ const Registration = () => {
   //   setShowTransfereeInput(value === 'trans')
   // }
 
-  // const handleIndigentChange = (e) => {
-  //   const value = e.target.value
-  //   const selectedOption = IndigentP.find((option) => option.value === value)
-  //   setShowTextInput(selectedOption && selectedOption.showTextInput)
-  // }
+  const handleIndigentChange = (e) => {
+    const value = e.target.value
+    const selectedOption = IndigentP.find((option) => option.value === value)
+    setShowTextInput(selectedOption && selectedOption.showTextInput)
+  }
 
-  // const handleFamilyBackgroundChange = (e) => {
-  //   const value = e.target.value
-  //   const selectedOption = famBackground.find(
-  //     (option) => option.value === value,
-  //   )
-  //   setShowFamilyBackgroundInput(selectedOption && selectedOption.showTextInput)
-  // }
+  const handleFamilyBackgroundChange = (e) => {
+    const value = e.target.value
+    const selectedOption = famBackground.find(
+      (option) => option.value === value,
+    )
+    setShowFamilyBackgroundInput(selectedOption && selectedOption.showTextInput)
+  }
 
-  // const handleOFWChange = (e) => {
-  //   const value = e.target.value
-  //   const selectedOption = Ofw.find((option) => option.value === value)
+  const handleOFWChange = (e) => {
+    const value = e.target.value
+    const selectedOption = Ofw.find((option) => option.value === value)
 
-  //   if (selectedOption && selectedOption.showTextInput) {
-  //     setShowOFWInput(true)
-  //   } else {
-  //     setShowOFWInput(false)
-  //   }
-  // }
+    if (selectedOption && selectedOption.showTextInput) {
+      setShowOFWInput(true)
+    } else {
+      setShowOFWInput(false)
+    }
+  }
 
-  // const handleStudentCategoryChange = (e) => {
-  //   const value = e.target.value
-  //   setShowWorkingStudentInput(value === 'Wstudent')
-  // }
+  const handleStudentCategoryChange = (e) => {
+    const value = e.target.value
+    setShowWorkingStudentInput(value === 'Wstudent')
+  }
 
   return (
     <Template>
@@ -125,18 +125,18 @@ const Registration = () => {
               <SelectInput
                 options={IndigentP}
                 name='indigentP'
-                // onChange={handleIndigentChange}
+                onChange={handleIndigentChange}
                 {...formState}
               />
-              {/* {showTextInput && ( */}
-              <TextInput
-                label='If yes, specify the Indigenous group you belong to.'
-                type='text'
-                name='indigentPy'
-                className='form-input'
-                {...formState}
-              />
-              {/* )} */}
+              {showTextInput && (
+                <TextInput
+                  label='If yes, specify the Indigenous group you belong to.'
+                  type='text'
+                  name='indigentPy'
+                  className='form-input'
+                  {...formState}
+                />
+              )}
             </div>
 
             <div className='p-4'>
@@ -170,18 +170,18 @@ const Registration = () => {
               <SelectInput
                 options={famBackground}
                 name='familyB'
-                // onChange={handleFamilyBackgroundChange}
+                onChange={handleFamilyBackgroundChange}
                 className='w-full md:w-auto'
                 {...formState}
               />
-              {/* {showFamilyBackgroundInput && ( */}
-              <TextInput
-                label='Specify since when?(Year Only)'
-                type='text'
-                name='sincewhen'
-                className='form-input'
-              />
-              {/* )} */}
+              {showFamilyBackgroundInput && (
+                <TextInput
+                  label='Specify since when?(Year Only)'
+                  type='text'
+                  name='sincewhen'
+                  className='form-input'
+                />
+              )}
               <TextInput
                 label='Number of siblings in the family'
                 name='Nsibling'
@@ -193,35 +193,35 @@ const Registration = () => {
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-2'>
               <SelectInput
                 options={Ofw}
-                // onChange={handleOFWChange}
+                onChange={handleOFWChange}
                 name='ofw'
                 className='w-full md:w-auto'
                 {...formState}
               />
-              {/* {showOFWInput && ( */}
-              <TextInput
-                label='Specify the job/profession of a family member abroad.'
-                type='text'
-                name='ofwprofession'
-                className='form-input'
-              />
-              {/* )} */}
+              {showOFWInput && (
+                <TextInput
+                  label='Specify the job/profession of a family member abroad.'
+                  type='text'
+                  name='ofwprofession'
+                  className='form-input'
+                />
+              )}
 
               <SelectInput
                 options={Scategory}
                 label='Student Category'
                 name='StudentCat'
-                // onChange={handleStudentCategoryChange}
+                onChange={handleStudentCategoryChange}
                 {...formState}
               />
-              {/* {showWorkingStudentInput && ( */}
-              <TextInput
-                label='Nature of work'
-                type='text'
-                name='Nwork'
-                className='form-input'
-              />
-              {/* )} */}
+              {showWorkingStudentInput && (
+                <TextInput
+                  label='Nature of work'
+                  type='text'
+                  name='Nwork'
+                  className='form-input'
+                />
+              )}
             </div>
 
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
