@@ -1,29 +1,9 @@
-// Schedule.js
 import React, { useState } from 'react';
 
 import CardItem from '@/components/organisms/CardItem';
-import Template from "@/components/templates/Template";
-import { useGetScheduleByIdQuery } from '@/hooks/api/scheduleApi';
+import Template from '@/components/templates/Template';
 
 import useHooks from './hooks';
-
-const CardWithSchedule = ({ card, addSchedule }) => {
-  const { data: scheduling, error, isLoading } = useGetScheduleByIdQuery(card.id);
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading schedule</div>;
-
-  return (
-    <CardItem
-      title={card.title}
-      description={card.description}
-      date={scheduling ? scheduling.date : null}
-      startTime={scheduling ? scheduling.startTime : null}
-      endTime={scheduling ? scheduling.endTime : null}
-      onDateSelect={(date) => addSchedule(date)}
-    />
-  );
-};
 
 const Scheduling = () => {
   const {
@@ -57,23 +37,38 @@ const Scheduling = () => {
     setSelectedForDeletion(null);
   };
 
+  const viewDetails = (cardId) => {
+    const url = `${window.location.origin}/scheduling/${cardId}/details`;
+    window.open(url, '_blank');
+  };
+
   return (
     <Template>
       <div className="flex justify-between items-center mt-4 mb-4">
-        <div>
-          <button
-            className={`bg-blue-500 text-white px-4 py-2 rounded-md ${schedulingMode ? 'bg-opacity-50 cursor-not-allowed' : ''}`}
-            onClick={toggleSchedulingMode}
-          >
-            {schedulingMode ? 'Scheduling Mode Active' : 'Schedule'}
-          </button>
-        </div>
+        <button
+          className={`bg-blue-500 text-white px-4 py-2 rounded-md ${schedulingMode ? 'bg-opacity-50 cursor-not-allowed' : ''}`}
+          onClick={toggleSchedulingMode}
+        >
+          {schedulingMode ? 'Scheduling Mode Active' : 'Schedule'}
+        </button>
       </div>
 
       <div className='grid grid-cols-3 gap-4'>
-        {cardData.map((card) => (
-          <div key={card.id} className={`relative ${selectedRoom === card.id ? 'border border-blue-500 cursor-pointer' : 'cursor-default'}`} onClick={() => handleCardClick(card.id)}>
-            <CardWithSchedule card={card} addSchedule={addSchedule} />
+        {cardData && cardData.map((card) => (
+          <div
+            key={card.id}
+            className={`relative ${selectedRoom === card.id ? 'border border-blue-500 cursor-pointer' : 'cursor-default'}`}
+            onClick={() => handleCardClick(card.id)}
+          >
+            <CardItem
+              title={card.title}
+              description={card.description}
+              date={card.date}
+              startTime={card.startTime}
+              endTime={card.endTime}
+              onDateSelect={(date) => addSchedule(date)}
+              onDetailsClick={() => viewDetails(card.id)}
+            />
             {scheduleDate && selectedRoom === card.id && (
               <div className="text-sm text-gray-500">{scheduleDate.toLocaleDateString()}</div>
             )}

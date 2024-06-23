@@ -1,10 +1,8 @@
-// cardIdHooks.js
-
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
 import { useGetRegistrationsQuery } from '@/hooks/api/studentApi';
-import { useSchedule } from '@/hooks/redux/useSchedule'; // Adjust the path as needed
+import { useSchedule } from '@/hooks/redux/useSchedule';
 
 const useCardDetailsHooks = () => {
   const router = useRouter();
@@ -25,9 +23,7 @@ const useCardDetailsHooks = () => {
   const handleDeleteCard = (cardId) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this card?");
     if (confirmDelete) {
-      // Implement delete functionality here
       console.log('Deleting card:', cardId);
-      // You might need to dispatch a Redux action to delete the card
     }
   };
 

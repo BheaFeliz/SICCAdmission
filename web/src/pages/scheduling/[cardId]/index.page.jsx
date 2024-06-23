@@ -1,3 +1,5 @@
+// cardId.js
+
 import { Button } from 'flowbite-react';
 import Link from 'next/link';
 import { FaEdit, FaTrash } from 'react-icons/fa';
@@ -12,6 +14,7 @@ import useHooks from './hooks';
 const CardDetails = () => {
   const {
     cardData: schedule,
+    students,
     isLoading,
     error,
     breadcrumbs,
@@ -61,6 +64,17 @@ const CardDetails = () => {
             <div>
               <p>Start Time: {formatTime(schedule.startTime)}</p>
               <p>End Time: {formatTime(schedule.endTime)}</p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mt-4 mb-2">Students in Room:</h3>
+              <ul className="list-disc pl-5">
+                {students?.map((student) => (
+                  <li key={student.id}>{student.name}</li>
+                ))}
+              </ul>
+              <p className="text-sm text-gray-500 mt-2">
+                {students?.length} of 30 occupied
+              </p>
             </div>
             <div className="flex justify-end space-x-2">
               <Link href={`/cards/${schedule.id}/edit`}>
