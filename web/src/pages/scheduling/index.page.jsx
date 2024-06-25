@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
+import { AiFillSchedule } from "react-icons/ai";
 
 import CardItem from '@/components/organisms/CardItem';
+import PageHeader from '@/components/organisms/PageHeader';
 import Template from '@/components/templates/Template';
 
 import useHooks from './hooks';
+
+const breadcrumbs = [
+  {
+    href: '#',
+    title: 'Scheduling',
+    icon: AiFillSchedule,
+  },
+];
 
 const Scheduling = () => {
   const {
@@ -44,6 +54,8 @@ const Scheduling = () => {
 
   return (
     <Template>
+      <PageHeader breadcrumbs={breadcrumbs} />
+
       <div className="flex justify-between items-center mt-4 mb-4">
         <button
           className={`bg-blue-500 text-white px-4 py-2 rounded-md ${schedulingMode ? 'bg-opacity-50 cursor-not-allowed' : ''}`}

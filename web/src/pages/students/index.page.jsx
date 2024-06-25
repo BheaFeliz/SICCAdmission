@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { IoAccessibilitySharp } from "react-icons/io5";
 
 import Loading from '@/components/atoms/Loading';
 import Paginations from '@/components/atoms/Pagination';
+import PageHeader from '@/components/organisms/PageHeader';
 import SelectInput from '@/components/organisms/SelectInput';
 import Table from '@/components/organisms/Table';
 import Template from '@/components/templates/Template';
@@ -17,6 +19,14 @@ const Dashboard = () => {
     currentPage,
     onPageChange,
   } = useHooks();
+
+  const breadcrumbs = [
+    {
+      href: '#',
+      title: 'Student Admission',
+      icon: IoAccessibilitySharp,
+    },
+  ];
 
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('');
@@ -81,37 +91,36 @@ const Dashboard = () => {
 
   return (
     <Template>
-      <div className="container mx-auto p-4">
-        <div className="mb-4">
-          <h1 className="text-2xl font-semibold">Student Registrations</h1>
-        </div>
+      <PageHeader breadcrumbs={breadcrumbs} />
+
+      <div className="container mx-auto p-2">
         <div className="flex flex-wrap justify-start items-center mb-8 space-x-4">
           <SelectInput
-            options={[{ value: '', label: 'All Courses' }, ...Scourse]}
+            options={[{ value: '', label: 'Course' }, ...Scourse]}
             name='course'
             value={selectedCourse}
             onChange={(e) => setSelectedCourse(e.target.value)}
           />
           <SelectInput
-            options={[{ value: '', label: 'All Districts' }, ...SDistrict]}
+            options={[{ value: '', label: 'District' }, ...SDistrict]}
             name='district'
             value={selectedDistrict}
             onChange={(e) => setSelectedDistrict(e.target.value)}
           />
           <SelectInput
-            options={[{ value: '', label: 'All Ages' }, ...uniqueAges]}
+            options={[{ value: '', label: 'Age' }, ...uniqueAges]}
             name='age'
             value={selectedAge}
             onChange={(e) => setSelectedAge(e.target.value)}
           />
           <SelectInput
-            options={[{ value: '', label: 'All Sexes' }, ...uniqueSexes]}
+            options={[{ value: '', label: 'Sex' }, ...uniqueSexes]}
             name='sex'
             value={selectedSex}
             onChange={(e) => setSelectedSex(e.target.value)}
           />
           <SelectInput
-            options={[{ value: '', label: 'All Genders' }, ...uniqueGenders]}
+            options={[{ value: '', label: 'Gender' }, ...uniqueGenders]}
             name='gender'
             value={selectedGender}
             onChange={(e) => setSelectedGender(e.target.value)}

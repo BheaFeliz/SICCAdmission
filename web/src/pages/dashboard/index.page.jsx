@@ -1,4 +1,4 @@
-import { FaRegChartBar } from 'react-icons/fa';
+import { TbLayoutDashboard } from "react-icons/tb";
 
 import Loading from '@/components/atoms/Loading';
 import CardItem from '@/components/organisms/Card';
@@ -14,7 +14,7 @@ const Dashboard = () => {
     {
       href: '#',
       title: 'Dashboard',
-      icon: FaRegChartBar,
+      icon: TbLayoutDashboard,
     },
   ];
 
