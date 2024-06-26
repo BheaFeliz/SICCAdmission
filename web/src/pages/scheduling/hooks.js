@@ -6,7 +6,11 @@ import { useGetRegistrationsQuery } from '@/hooks/api/studentApi';
 
 const useHooks = () => {
   const router = useRouter();
-  const [cardData, setCardData] = useState([]); // Initialize as an empty array
+  const [cardData, setCardData] = useState(() => {
+    // Initialize cardData from localStorage or as an empty array
+    const storedData = localStorage.getItem('cardData');
+    return storedData ? JSON.parse(storedData) : [];
+  });
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [scheduleDate, setScheduleDate] = useState(null);
 
@@ -15,18 +19,28 @@ const useHooks = () => {
   const [createSchedule] = useCreateScheduleMutation();
 
   useEffect(() => {
-    if (schedules) {
-      setCardData(schedules.data || []); // Ensure schedules.data is an array
+    if (schedules && schedules.data) {
+      const storedData = localStorage.getItem('cardData');
+      if (!storedData) { // Only set if there is no data in localStorage
+        setCardData(schedules.data);
+      }
+    } else {
+      console.error('Schedules data is not available:', schedules);
     }
   }, [schedules]);
 
   useEffect(() => {
-    if (registrations && cardData.length > 0) {
+    // Debug log to check the content of registrations
+    console.log('Registrations:', registrations);
+    
+    if (Array.isArray(registrations) && cardData.length > 0) {
       const updatedCardData = cardData.map(card => {
         const roomStudents = registrations.filter(reg => reg.roomId === card.id).slice(0, 30);
         return { ...card, students: roomStudents };
       });
       setCardData(updatedCardData);
+    } else {
+      console.warn('Registrations is not an array or cardData is empty:', registrations);
     }
   }, [registrations, cardData]);
 
@@ -37,7 +51,7 @@ const useHooks = () => {
   const addCard = () => {
     const newCardTitle = prompt("Enter the title for the new card:");
     if (newCardTitle) {
-      const newCardId = cardData.length > 0 ? Math.max(cardData.map(card => card.id)) + 1 : 1;
+      const newCardId = cardData.length > 0 ? Math.max(...cardData.map(card => card.id)) + 1 : 1;
       const newCard = {
         id: newCardId,
         title: newCardTitle,
