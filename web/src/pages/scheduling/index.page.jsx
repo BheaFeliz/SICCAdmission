@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { AiFillSchedule } from "react-icons/ai";
 
@@ -16,6 +17,7 @@ const breadcrumbs = [
 ];
 
 const Scheduling = () => {
+  const router = useRouter();
   const {
     cardData,
     selectedRoom,
@@ -48,9 +50,7 @@ const Scheduling = () => {
   };
 
   const viewDetails = (cardId) => {
-    // Construct the URL based on your new file structure
-    const url = `${window.location.origin}/scheduling/${cardId}`;
-    window.open(url, '_blank');
+    router.push(`/scheduling/${cardId}/roomdetails`);
   };
   
   

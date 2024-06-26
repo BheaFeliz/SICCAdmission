@@ -1,5 +1,3 @@
-// cardId.js
-
 import { Button } from 'flowbite-react';
 import Link from 'next/link';
 import { FaEdit, FaTrash } from 'react-icons/fa';
