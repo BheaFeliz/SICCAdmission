@@ -60,9 +60,9 @@ class RegistrationController extends Controller
         'T_AMprovince' => 'nullable|string|max:255',
         'T_Ygrad' => 'nullable|string|max:255',
         'selectcourse' => 'nullable|string|max:255',
-        'fileinput' => 'required|array',
+        'fileinput' => 'nullable|array',
         'fileinput.*' => [
-            'required',
+            'nullable',
             'image',
             'mimes:jpeg,png,jpg',
             'max:2048', // Adjust max file size as per your requirement
