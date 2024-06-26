@@ -58,6 +58,7 @@ class CreateRegistrationForm extends Migration
             $table->string('T_Ygrad')->nullable();
             $table->string('selectcourse')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->jsonb('image_paths')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

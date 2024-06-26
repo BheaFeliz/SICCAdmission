@@ -24,4 +24,9 @@ class Registration extends Model
         'email' => 'nullable|email',
         // Define other validation rules here...
     ];
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
 }
