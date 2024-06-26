@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AdmissionFormRequest;
 use App\Models\Registration;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class RegistrationController extends Controller
 {
@@ -58,18 +60,33 @@ class RegistrationController extends Controller
         'T_AMprovince' => 'nullable|string|max:255',
         'T_Ygrad' => 'nullable|string|max:255',
         'selectcourse' => 'nullable|string|max:255',
-        // Add validation rules for other fields as per your requirements
+        'fileinput' => 'required|array',
+        'fileinput.*' => [
+            'required',
+            'image',
+            'mimes:jpeg,png,jpg',
+            'max:2048', // Adjust max file size as per your requirement
+        ],
     ]);
 
+    // Create a new registration instance
     $registration = new Registration();
-        $registration->fill($validatedData);
-        $registration->save();
+    $registration->fill($validatedData);
+    $registration->save();
 
-        // Return a response indicating success
-        return response()->json(['message' => 'Registration successful'], 201);
+    // Handle image uploads
+    if ($request->hasFile('fileinput')) {
+        foreach ($request->file('fileinput') as $file) {
+            $path = Storage::put('registrations', $file); // Use putFile instead of put
+
+            $url = Storage::url($path);
+            $registration->images()->create(['path' => $url]);
+        }
+    }
+
+    // Return a response indicating success
+    return response()->json(['message' => 'Registration successful'], 201);
 }
-
-
 
     public function show($id)
     {
