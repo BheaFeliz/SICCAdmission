@@ -48,30 +48,31 @@ const Scheduling = () => {
   };
 
   const viewDetails = (cardId) => {
-    const url = `${window.location.origin}/scheduling/${cardId}/details`;
+    // Construct the URL based on your new file structure
+    const url = `${window.location.origin}/scheduling/${cardId}`;
     window.open(url, '_blank');
   };
+  
+  
 
   return (
     <Template>
       <PageHeader breadcrumbs={breadcrumbs} />
 
       <div className="flex justify-between items-center mt-4 mb-4">
-        <button
-          className={`bg-blue-500 text-white px-4 py-2 rounded-md ${schedulingMode ? 'bg-opacity-50 cursor-not-allowed' : ''}`}
-          onClick={toggleSchedulingMode}
-        >
-          {schedulingMode ? 'Scheduling Mode Active' : 'Schedule'}
-        </button>
+        <div>
+          <button
+            className={`bg-blue-500 text-white px-4 py-2 rounded-md ${schedulingMode ? 'bg-opacity-50 cursor-not-allowed' : ''}`}
+            onClick={toggleSchedulingMode}
+          >
+            {schedulingMode ? 'Scheduling Mode Active' : 'Schedule'}
+          </button>
+        </div>
       </div>
 
       <div className='grid grid-cols-3 gap-4'>
-        {cardData && cardData.map((card) => (
-          <div
-            key={card.id}
-            className={`relative ${selectedRoom === card.id ? 'border border-blue-500 cursor-pointer' : 'cursor-default'}`}
-            onClick={() => handleCardClick(card.id)}
-          >
+        {cardData.map((card) => (
+          <div key={card.id} className={`relative ${selectedRoom === card.id ? 'border border-blue-500 cursor-pointer' : 'cursor-default'}`} onClick={() => handleCardClick(card.id)}>
             <CardItem
               title={card.title}
               description={card.description}

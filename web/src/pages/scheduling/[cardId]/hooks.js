@@ -1,17 +1,16 @@
 // cardIdHooks.js
-
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
-import { useGetRegistrationsQuery } from '@/hooks/api/studentApi';
-import { useSchedule } from '@/hooks/redux/useSchedule'; // Adjust the path as needed
+import { useGetScheduleByIdQuery } from '@/hooks/api/scheduleApi';
+import { useGetRegistrationByIdQuery } from '@/hooks/api/studentApi';
 
 const useCardDetailsHooks = () => {
   const router = useRouter();
   const { cardId } = router.query;
 
-  const { schedule: cardData, error, isLoading } = useSchedule(cardId);
-  const { data: studentsData, error: studentsError, isLoading: studentsLoading } = useGetRegistrationsQuery(cardId);
+  const { data: cardData, error: scheduleError, isLoading: scheduleLoading } = useGetScheduleByIdQuery(cardId);
+  const { data: studentsData, error: studentsError, isLoading: studentsLoading } = useGetRegistrationByIdQuery(cardId);
 
   const students = useMemo(() => {
     return studentsData ? studentsData.filter(student => student.roomId === cardId) : [];
@@ -25,17 +24,15 @@ const useCardDetailsHooks = () => {
   const handleDeleteCard = (cardId) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this card?");
     if (confirmDelete) {
-      // Implement delete functionality here
       console.log('Deleting card:', cardId);
-      // You might need to dispatch a Redux action to delete the card
     }
   };
 
   return {
     cardData,
     students,
-    isLoading: isLoading || studentsLoading,
-    error: error || studentsError,
+    isLoading: scheduleLoading || studentsLoading,
+    error: scheduleError || studentsError,
     breadcrumbs,
     handleDeleteCard,
   };
