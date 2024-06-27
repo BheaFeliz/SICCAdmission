@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { AiFillEdit,AiFillFilePdf } from "react-icons/ai";
 import { IoAccessibilitySharp } from "react-icons/io5";
 
 import Loading from '@/components/atoms/Loading';
@@ -67,6 +68,23 @@ const Dashboard = () => {
       header: 'District', 
       render: (item) => districtLabelMap[item.district] || item.district 
     },
+    { 
+      key: 'action', 
+      header: 'Action', 
+      render: (item) => (
+        <div className="flex space-x-2">
+          <button
+            onClick={() => handleEdit(item.id)}
+            className="bg-blue-500 text-white p-2 rounded"
+          >
+            <AiFillEdit size={24} />
+          </button>
+          <a href={`/path/to/pdf/${item.id}`} target="_blank" rel="noopener noreferrer">
+            <AiFillFilePdf size={24} />
+          </a>
+        </div>
+      )
+    },
   ];
 
   const applyFilters = (registrations) => {
@@ -79,6 +97,11 @@ const Dashboard = () => {
         (!selectedGender || reg.gender.toLowerCase() === selectedGender.toLowerCase())
       );
     });
+  };
+
+  const handleEdit = (id) => {
+    // Handle edit logic here
+    console.log("Edit item with id:", id);
   };
 
   const filteredRegistrations = applyFilters(registrations);
