@@ -195,14 +195,22 @@ export const SDistrict = [
   {
     value: 'd1',
     label: 'District I',
+    showTextInput: false, // Added property to indicate if TextInput should be shown
   },
   {
     value: 'd2',
     label: 'District II',
+    showTextInput: false, // Added property to indicate if TextInput should be shown
   },
   {
     value: 'd3',
     label: 'District III',
+    showTextInput: false, // Added property to indicate if TextInput should be shown
+  },
+  {
+    value: 'd4',
+    label: 'Please Specify',
+    showTextInput: true, // Added property to indicate if TextInput should be shown
   },
 ]
 
@@ -276,12 +284,12 @@ export const Scategory = [
   {
     value: 'Ftime',
     label: 'Full Time',
-    showTextInput: false, // Added property to indicate if TextInput should be shown
+    showTextInput: true, // Added property to indicate if TextInput should be shown
   },
   {
     value: 'Wstudent',
     label: 'Working Student',
-    showTextInput: true, // Added property to indicate if TextInput should be shown
+    showTextInput: false, // Added property to indicate if TextInput should be shown
   },
 ]
 
