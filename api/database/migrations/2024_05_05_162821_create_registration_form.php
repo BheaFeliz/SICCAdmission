@@ -22,7 +22,7 @@ class CreateRegistrationForm extends Migration
             $table->string('mname')->nullable();
             $table->string('pref')->nullable();
             $table->integer('age')->nullable();
-            $table->string('Monthoption')->nullable();
+            $table->string('monthoption')->nullable();
             $table->integer('date')->nullable();
             $table->integer('year')->nullable();
             $table->string('sex')->nullable();
@@ -31,8 +31,8 @@ class CreateRegistrationForm extends Migration
             $table->string('contactnumber', 11)->nullable();
             $table->string('email')->nullable();
             $table->string('pbirth')->nullable();
-            $table->string('IndigentP')->nullable();
-            $table->string('IndigentPy')->nullable();
+            $table->string('indigentP')->nullable();
+            $table->string('indigentPy')->nullable();
             $table->string('pbs')->nullable();
             $table->string('district')->nullable();
             $table->string('barangay')->nullable();
@@ -44,7 +44,7 @@ class CreateRegistrationForm extends Migration
             $table->string('Nsibling')->nullable();
             $table->string('supstudy')->nullable();
             $table->string('ofw')->nullable();
-            $table->string('ofwProfession')->nullable();
+            $table->string('ofwprofession')->nullable();
             $table->string('studenttype')->nullable();
             $table->string('Nwork')->nullable();
             $table->string('StudentCat')->nullable();

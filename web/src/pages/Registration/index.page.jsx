@@ -1,7 +1,8 @@
-import { Button, Card, Modal } from 'flowbite-react'
+import { Button, Card } from 'flowbite-react'
 import React, { useState } from 'react'
 import { SiGoogleforms } from 'react-icons/si'
 
+import FilePickerInput from '@/components/organisms/FilePickerInput '
 import PageHeader from '@/components/organisms/PageHeader'
 import SelectInput from '@/components/organisms/SelectInput'
 import TextInput from '@/components/organisms/TextInput'
@@ -15,6 +16,7 @@ import {
   Ofw,
   Scategory,
   Scourse,
+  SDistrict,
   sex,
   Studenttype,
   suffixoption,
@@ -32,7 +34,6 @@ const Registration = () => {
   ]
 
   const { formState, handleSubmit } = useHooks()
-  const [openModal, setOpenModal] = useState(false)
 
   const [showTextInput, setShowTextInput] = useState(false)
   const [showFamilyBackgroundInput, setShowFamilyBackgroundInput] =
@@ -41,6 +42,7 @@ const Registration = () => {
   const [showWorkingStudentInput, setShowWorkingStudentInput] = useState(false)
   const [showFreshmenInput, setShowFreshmenInput] = useState(false)
   const [showTransfereeInput, setShowTransfereeInput] = useState(false)
+  const [showDistrictTextInput, setShowDistrictTextInput] = useState(false)
 
   const handleStudentTypeChange = (e) => {
     const value = e.target.value
@@ -52,6 +54,12 @@ const Registration = () => {
     const value = e.target.value
     const selectedOption = IndigentP.find((option) => option.value === value)
     setShowTextInput(selectedOption && selectedOption.showTextInput)
+  }
+
+  const handleDistrictChange = (e) => {
+    const value = e.target.value
+    const selectedOption = SDistrict.find((option) => option.value === value)
+    setShowDistrictTextInput(selectedOption && selectedOption.showTextInput)
   }
 
   const handleFamilyBackgroundChange = (e) => {
@@ -83,7 +91,17 @@ const Registration = () => {
       <PageHeader breadcrumbs={breadcrumbs} />
       <Card>
         <form onSubmit={handleSubmit}>
-          <div className=' style=min-height: 140px;'>
+          <div className='m-2'>
+            <Card>
+              <p>
+                Fill out this form carefully abd PRINT or TYPE all the
+                information requested. Select the appropriate choices. if the
+                item is not applicable indicate select or type N/A. INCOMPLETE
+                FORMS WILL BE NOT PROCESSED.
+              </p>
+            </Card>
+          </div>
+          <div className='style=min-height: 140px;'>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
               <TextInput label='First Name' name='fname' {...formState} />
               <TextInput label='Last Name' name='lname' {...formState} />
@@ -139,23 +157,28 @@ const Registration = () => {
                 />
               )}
             </div>
-
             <div className='p-4'>
               <p>Demographic Data:</p>
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-3'>
-              <TextInput label='Purok/Block/Sitio' name='pbs' />
+              <TextInput label='Purok/Block/Sitio' name='pbs' {...formState} />
               <SelectInput
-                options={[
-                  { value: 'd1', label: 'District I' },
-                  { value: 'd2', label: 'District II' },
-                  { value: 'd3', label: 'District III' },
-                ]}
+                options={SDistrict}
                 label='District'
                 name='district'
+                onChange={handleDistrictChange}
                 {...formState}
+              />
+              {showDistrictTextInput && (
+                <TextInput
+                  label='Type N/A'
+                  type='text'
+                  name='districtwhy'
+                  className='form-input'
+                  {...formState}
                 />
-              <TextInput label='Barangay' name='barangay' {...formState} />                 
+              )}
+              <TextInput label='Barangay' name='barangay' {...formState} />
               <TextInput
                 label='City/Municipality'
                 name='cityM'
@@ -167,20 +190,20 @@ const Registration = () => {
             <div className='p-4'>
               <p>Family Background:</p>
             </div>
-            <div className='m-5 grid gap-5 mb-6 md:grid-cols-3 '>
+            <div className='m-5 grid gap-5 mb-6 md:grid-cols-3'>
               <SelectInput
                 options={famBackground}
                 name='familyB'
                 onChange={handleFamilyBackgroundChange}
-                className='w-full md:w-auto'
                 {...formState}
               />
               {showFamilyBackgroundInput && (
                 <TextInput
-                  label='Specify since when?(Year Only)'
+                  label='Specify since when? (Year Only)'
                   type='text'
                   name='sincewhen'
                   className='form-input'
+                  {...formState}
                 />
               )}
               <TextInput
@@ -188,15 +211,17 @@ const Registration = () => {
                 name='Nsibling'
                 {...formState}
               />
-
-              <TextInput label='Who Will support your study?' name='supstudy' />
+              <TextInput
+                label='Who will support your study?'
+                name='supstudy'
+                {...formState}
+              />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-2'>
               <SelectInput
                 options={Ofw}
                 onChange={handleOFWChange}
                 name='ofw'
-                className='w-full md:w-auto'
                 {...formState}
               />
               {showOFWInput && (
@@ -205,9 +230,9 @@ const Registration = () => {
                   type='text'
                   name='ofwprofession'
                   className='form-input'
+                  {...formState}
                 />
               )}
-
               <SelectInput
                 options={Scategory}
                 label='Student Category'
@@ -221,10 +246,10 @@ const Registration = () => {
                   type='text'
                   name='Nwork'
                   className='form-input'
+                  {...formState}
                 />
               )}
             </div>
-
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
               <SelectInput
                 options={Studenttype}
@@ -233,7 +258,6 @@ const Registration = () => {
                 {...formState}
               />
             </div>
-
             {showFreshmenInput && (
               <div name='Freshmen'>
                 <p>Freshmen:</p>
@@ -269,7 +293,6 @@ const Registration = () => {
                 </div>
               </div>
             )}
-
             {showTransfereeInput && (
               <div>
                 <p>Transferee:</p>
@@ -305,7 +328,6 @@ const Registration = () => {
                 </div>
               </div>
             )}
-
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
               <SelectInput
                 options={Scourse}
@@ -314,54 +336,41 @@ const Registration = () => {
               />
             </div>
 
-            <div name='modal'>
-              <Modal show={openModal} onClose={() => setOpenModal(false)}>
-                <Modal.Header>CONFORME:</Modal.Header>
-                <Modal.Body>
-                  <div className='space-y-6'>
-                    <p className='text-base leading-relaxed text-gray-500 dark:text-gray-400'>
-                      By signing below, I hereby certify that all the
-                      information written in this application are complete and
-                      accurate. I agree to update the Office of Admissions and
-                      the Registrar Office for any changes. I acknowledge that I
-                      have read and understood the Samal Island City College
-                      (SICC) Admissions Privacy Notice posted in the office
-                      premises. I understand that by applying for
-                      admission/registering as a student of this institutuion, I
-                      allow SICC through the Office of Admissions to collect,
-                      record, organize, update or modify, retrieve, consult,
-                      utilize, consolidate, block, erase or delete any
-                      information which are a part of my personal data for
-                      historical, statistical, research and evaluation purposes
-                      pursuant to the provisions of the Republic Act No. 10173
-                      of the Philippines, Data Privacy Act of 2012 and its
-                      corresponding Implementing Rules and Regulations. I also
-                      agree, if accepted as a student, that my odmission,
-                      matriculation, legibility for any assistance/grant, and
-                      graduation are subject to the rules and regulations of
-                      this institution.
-                    </p>
-                  </div>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button
-                    handleSubmit={handleSubmit}
-                    onClick={() => setOpenModal(false)}
-                    href='registration/subfile'
-                  >
-                    I accept
-                  </Button>
-                  <Button color='gray' onClick={() => setOpenModal(false)}>
-                    Decline
-                  </Button>
-                </Modal.Footer>
-              </Modal>
+            <div className='m-2'>
+              <Card>
+                <p>
+                  CONFORME: By signing below, I hereby certify that all the
+                  information written in this application are complete and
+                  accurate. I agree to update the Office of Admissions and the
+                  Registrars Office for any changes. I acknowledge that I have
+                  read and understood the Samal Island City College (SICC)
+                  Admissions Privacy Notice posted in the office premises
+                  understand that by applying for admission/registering as a
+                  student of this institutuion, I allow SICC through the Office
+                  of Admissions to collect, record, organize, update or modif
+                  retrieve, consult, utilize, consolidate, block, erase or
+                  delete any information which are a part of my personal data
+                  for historical, statistical, research and evaluation purposes
+                  pursuant to the provisions of the Republic Act No. 10173 of
+                  the Philippines, Data Privacy Act of 2012 and its
+                  corresponding Implementing Rules and Regulations. I also
+                  agree. accepted
+                </p>
+              </Card>
             </div>
-          </div>
-          <div>
-            <Button type='submit' onClick={() => setOpenModal(true)}>
-              Proceed
-            </Button>
+
+            <div className='m-5'>
+              <Card>
+                <FilePickerInput
+                  name='fileinput'
+                  label='Upload Picture'
+                  multiple
+                  {...formState}
+                />
+              </Card>
+            </div>
+
+            <Button type='submit'>Proceed</Button>
           </div>
         </form>
       </Card>
