@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { useGetRegistrationsQuery } from '../api/studentApi';
+import { useGetRegistrationByIdQuery, useGetRegistrationsQuery } from '../api/studentApi';
 
 export const useStudents = () => {
   const { data, isError, isLoading } = useGetRegistrationsQuery();
@@ -13,3 +13,14 @@ export const useStudents = () => {
     isLoading,
   };
 };
+
+export const useStudent = (registrationId) => {
+  const { data, isError, isLoading } = useGetRegistrationByIdQuery(registrationId)
+  const registration = useMemo(() => data?.registration || [], [data]);
+
+  return {
+    registration,
+    isError,
+    isLoading,
+  }
+}
