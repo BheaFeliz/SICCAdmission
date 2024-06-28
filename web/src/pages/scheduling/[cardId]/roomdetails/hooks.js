@@ -1,20 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 
-import { useGetScheduleByIdQuery } from '@/hooks/api/scheduleApi';
-import { useGetRegistrationByIdQuery } from '@/hooks/api/studentApi';
-import { capitalizeFirstLetter } from '@/hooks/lib/util';
-import { Scourse, SDistrict } from '@/hooks/redux/const';
+import Paginations from '@/components/atoms/Pagination';
+import { useGetSchedulesQuery } from '@/hooks/api/scheduleApi'; // Corrected import
+import { useGetRegistrationsQuery } from '@/hooks/api/studentApi';
 
 const useRoomDetails = (cardId) => {
-  const { id } = useParams();
-  const actualCardId = cardId || id;
-
-  // Fetch scheduling data
-  const { data: scheduling, error: scheduleError, isLoading: scheduleLoading } = useGetScheduleByIdQuery(actualCardId);
-  // Fetch student data
-  const { data: students, error: studentsError, isLoading: studentsLoading } = useGetRegistrationByIdQuery(actualCardId);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('');
@@ -22,50 +12,37 @@ const useRoomDetails = (cardId) => {
   const [selectedSex, setSelectedSex] = useState('');
   const [selectedGender, setSelectedGender] = useState('');
 
-  // Label mapping for courses and districts
-  const courseLabelMap = Scourse.reduce((acc, course) => {
-    acc[course.value] = course.label;
-    return acc;
-  }, {});
+  // Corrected useGetSchedulesQuery instead of useGetSchedulesByIdQuery
+  const { data: scheduling, error: scheduleError, isLoading: scheduleLoading } = useGetSchedulesQuery(cardId);
+  const { data: students, error: studentsError, isLoading: studentsLoading } = useGetRegistrationsQuery();
 
-  const districtLabelMap = SDistrict.reduce((acc, district) => {
-    acc[district.value] = district.label;
-    return acc;
-  }, {});
+  const courseLabelMap = students ? students.reduce((map, student) => {
+    map[student.course] = student.course;
+    return map;
+  }, {}) : {};
+
+  const districtLabelMap = students ? students.reduce((map, student) => {
+    map[student.district] = student.district;
+    return map;
+  }, {}) : {};
+
+  const uniqueAges = students ? [...new Set(students.map(student => student.age))].map(age => ({ label: age, value: age })) : [];
+  const uniqueSexes = students ? [...new Set(students.map(student => student.sex))].map(sex => ({ label: sex, value: sex })) : [];
+  const uniqueGenders = students ? [...new Set(students.map(student => student.gender))].map(gender => ({ label: gender, value: gender })) : [];
+
+  const filteredRegistrations = Array.isArray(students) ? students.filter(student => {
+    return (!selectedCourse || student.course === selectedCourse) &&
+           (!selectedDistrict || student.district === selectedDistrict) &&
+           (!selectedAge || student.age === selectedAge) &&
+           (!selectedSex || student.sex === selectedSex) &&
+           (!selectedGender || student.gender === selectedGender);
+  }) : [];
+
+  const { paginatedData: paginatedStudents, totalPages } = Paginations(filteredRegistrations, 10, currentPage);
 
   useEffect(() => {
-    if (scheduleError || studentsError) {
-      console.error('Error fetching data', { scheduleError, studentsError });
-    }
-  }, [scheduleError, studentsError]);
-
-  // Student list processing
-  const studentList = students?.registrations || [];
-
-  // Apply filters to the student list
-  const applyFilters = (registrations) => {
-    return registrations.filter((reg) => {
-      return (
-        (!selectedCourse || reg.selectcourse === selectedCourse) &&
-        (!selectedDistrict || reg.district === selectedDistrict) &&
-        (!selectedAge || reg.age.toString() === selectedAge) &&
-        (!selectedSex || reg.sex.toLowerCase() === selectedSex.toLowerCase()) &&
-        (!selectedGender || reg.gender.toLowerCase() === selectedGender.toLowerCase())
-      );
-    });
-  };
-
-  const filteredRegistrations = applyFilters(studentList);
-
-  // Pagination logic
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(filteredRegistrations.length / itemsPerPage);
-  const paginatedStudents = filteredRegistrations.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
-  // Extract unique values for filtering options
-  const uniqueAges = [...new Set(studentList.map((reg) => reg.age))].map((age) => ({ value: age, label: age }));
-  const uniqueSexes = [...new Set(studentList.map((reg) => reg.sex))].map((sex) => ({ value: sex, label: capitalizeFirstLetter(sex) }));
-  const uniqueGenders = [...new Set(studentList.map((reg) => reg.gender))].map((gender) => ({ value: gender, label: capitalizeFirstLetter(gender) }));
+    setCurrentPage(1); // Reset to first page on filter change
+  }, [selectedCourse, selectedDistrict, selectedAge, selectedSex, selectedGender]);
 
   return {
     scheduling,
