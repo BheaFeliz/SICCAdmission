@@ -67,11 +67,17 @@ class RegistrationController extends Controller
             'mimes:jpeg,png,jpg',
             'max:2048', // Adjust max file size as per your requirement
         ],
+        'schedule_id' => 'integer|exists:schedules,id'
     ]);
 
     // Create a new registration instance
     $registration = new Registration();
     $registration->fill($validatedData);
+    $registration->save();
+
+    // Generate and save the reference number
+    $referenceNumber = $registration->generateReferenceNumber($request->schedule_id);
+    $registration->reference_number = $referenceNumber;
     $registration->save();
 
     // Handle image uploads
