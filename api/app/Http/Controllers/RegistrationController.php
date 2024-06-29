@@ -94,11 +94,11 @@ class RegistrationController extends Controller
     return response()->json(['message' => 'Registration successful'], 201);
 }
 
-    public function show($id)
-    {
-        $registration = Registration::findOrFail($id);
-        return response()->json(['registration' => $registration], 200);
-    }
+public function show($id)
+{
+    $registration = Registration::findOrFail($id);
+    return response()->json(['registration' => $registration], 200);
+}
 
     public function update(AdmissionFormRequest $request, $id)
     {
