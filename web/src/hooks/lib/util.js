@@ -20,3 +20,12 @@ export const formatDate = (date) => {
     year: 'numeric',
   })
 }
+
+export const formatTime = (date) => {
+  return new Date(date).toLocaleString('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: true,
+  })
+}
