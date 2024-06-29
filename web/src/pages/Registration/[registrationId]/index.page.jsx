@@ -1,6 +1,7 @@
-import dayjs from 'dayjs';
+//import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import { FaCalendarAlt, FaMapMarkerAlt, FaUser } from 'react-icons/fa';
+import {  FaUser } from 'react-icons/fa';
+// FaCalendarAlt, FaMapMarkerAlt,
 
 import Loading from '@/components/atoms/Loading';
 import PageHeader from '@/components/organisms/PageHeader';
@@ -34,7 +35,7 @@ const Registration = () => {
         <Loading />
       ) : (
         <section className='p-8 flex flex-col space-x-4 space-y-6'>
-          <div className='flex space-x-8'>
+          {/* <div className='flex space-x-8'>
             <RowItem
               label='Date'
               value={dayjs(registration.created_at).format('MMM DD, YYYY')}
@@ -45,7 +46,7 @@ const Registration = () => {
               value={registration.branch}
               icon={<FaMapMarkerAlt />}
             />
-          </div>
+          </div> */}
           <RowItem label='First Name' value={registration.fname} />
 <RowItem label='Last Name' value={registration.lname} />
 <RowItem label='Middle Name' value={registration.mname || 'N/A'} />
