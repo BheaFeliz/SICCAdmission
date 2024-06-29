@@ -195,14 +195,22 @@ export const SDistrict = [
   {
     value: 'd1',
     label: 'District I',
+    showTextInput: false, // Added property to indicate if TextInput should be shown
   },
   {
     value: 'd2',
     label: 'District II',
+    showTextInput: false, // Added property to indicate if TextInput should be shown
   },
   {
     value: 'd3',
     label: 'District III',
+    showTextInput: false, // Added property to indicate if TextInput should be shown
+  },
+  {
+    value: 'other',
+    label: 'Outside IGACOS',
+    showTextInput: true, // Added property to indicate if TextInput should be shown
   },
 ]
 
