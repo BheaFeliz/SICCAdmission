@@ -1,8 +1,11 @@
 import dayjs from 'dayjs'
+import { Button } from 'flowbite-react'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { FaCalendarAlt, FaMapMarkerAlt, FaUser } from 'react-icons/fa'
 
 import Loading from '@/components/atoms/Loading'
+import DeleteModal from '@/components/organisms/DeleteModal'
 import PageHeader from '@/components/organisms/PageHeader'
 import RowItem from '@/components/organisms/RowItem'
 import Template from '@/components/templates/Template'
@@ -13,7 +16,7 @@ const Registration = () => {
   const router = useRouter()
   const { registrationId } = router.query
 
-  const { registration, isLoading } = useHooks(registrationId)
+  const { registration, isLoading, handleDelete } = useHooks(registrationId)
 
   const breadcrumbs = [
     {
@@ -29,7 +32,19 @@ const Registration = () => {
 
   return (
     <Template>
-      <PageHeader breadcrumbs={breadcrumbs} />
+      <PageHeader
+        breadcrumbs={breadcrumbs}
+        right={
+          <div className='flex pb-4 space-x-4'>
+            <DeleteModal handleDelete={() => handleDelete(registrationId)} />
+            <Link href={`/registration/${registrationId}/edit`}>
+              <Button size='xs' color='warning' className='m-w-20'>
+                Edit
+              </Button>
+            </Link>
+          </div>
+        }
+      />
       {isLoading || !registration ?
         <Loading />
       : <section className='p-8 flex flex-col space-x-4 space-y-6'>
@@ -47,8 +62,8 @@ const Registration = () => {
           </div>
           <RowItem label='First Name' value={registration.fname} />
           <RowItem label='Last Name' value={registration.lname} />
-          <RowItem label='Middle Name' value={registration.mname || 'N/A'} />
-          <RowItem label='Suffix' value={registration.pref || 'N/A'} />
+          <RowItem label='Middle Name' value={registration.mname} />
+          <RowItem label='Suffix' value={registration.pref} />
           <RowItem label='Age' value={registration.age} />
           <RowItem
             label='Birthdate'
@@ -77,10 +92,10 @@ const Registration = () => {
           <RowItem label='Number of Siblings' value={registration.Nsibling} />
           <RowItem label='Support for Study' value={registration.supstudy} />
           <RowItem label='OFW' value={registration.ofw} />
-          {registration.ofwprofession && (
+          {registration.ofwProfession && (
             <RowItem
               label='OFW Profession'
-              value={registration.ofwprofession}
+              value={registration.ofwProfession}
             />
           )}
           <RowItem label='Student Category' value={registration.StudentCat} />
@@ -88,33 +103,31 @@ const Registration = () => {
             <RowItem label='Nature of Work' value={registration.Nwork} />
           )}
           <RowItem label='Student Type' value={registration.studenttype} />
-
-          <RowItem label='FRESHMEN' />
-          <RowItem
-            label='Last School Attended'
-            value={registration.F_nameSchool || 'N/A'}
-          />
-          <RowItem
-            label='Academic Track'
-            value={registration.F_Atrack || 'N/A'}
-          />
-          <RowItem label='Address' value={registration.F_AMprovince || 'N/A'} />
-          <RowItem
-            label='Year Graduated'
-            value={registration.F_Ygrad || 'N/A'}
-          />
-          <RowItem label='TRANSFEREE' />
-
-          <RowItem
-            label='Last School Attended'
-            value={registration.T_nameSchool || 'N/A'}
-          />
-          <RowItem label='Course' value={registration.T_Atrack || 'N/A'} />
-          <RowItem label='Address' value={registration.T_AMprovince || 'N/A'} />
-          <RowItem
-            label='Year Attended'
-            value={registration.T_Ygrad || 'N/A'}
-          />
+          {registration.F_nameSchool && (
+            <div>
+              <p>Freshmen:</p>
+              <RowItem
+                label='Last School Attended'
+                value={registration.F_nameSchool}
+              />
+              <RowItem label='Academic Track' value={registration.F_Atrack} />
+              <RowItem label='Address' value={registration.F_AMprovince} />
+              <RowItem label='Year Graduated' value={registration.F_Ygrad} />
+            </div>
+          )}
+          {registration.T_nameSchool && (
+            <div>
+              <p>Transferee:</p>
+              <RowItem
+                label='Last School Attended'
+                value={registration.T_nameSchool}
+              />
+              <RowItem label='Course' value={registration.T_Atrack} />
+              <RowItem label='Address' value={registration.T_AMprovince} />
+              <RowItem label='Year Attended' value={registration.T_Ygrad} />
+            </div>
+          )}
+          <RowItem label='Course' value={registration.selectcourse} />
         </section>
       }
     </Template>
