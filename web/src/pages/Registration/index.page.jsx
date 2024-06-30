@@ -103,8 +103,8 @@ const Registration = () => {
           </div>
           <div className='style=min-height: 140px;'>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-              <TextInput label='First Name' name='fname' {...formState} />
               <TextInput label='Last Name' name='lname' {...formState} />
+              <TextInput label='First Name' name='fname' {...formState} />
               <TextInput label='Middle Name' name='mname' {...formState} />
               <SelectInput options={suffixoption} name='pref' {...formState} />
             </div>
