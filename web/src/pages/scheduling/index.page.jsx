@@ -1,21 +1,33 @@
+// Schedule.js
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { AiFillSchedule } from "react-icons/ai";
 
 import CardItem from '@/components/organisms/CardItem';
-import PageHeader from '@/components/organisms/PageHeader';
-import Template from '@/components/templates/Template';
+import Template from "@/components/templates/Template";
+import { useGetScheduleByIdQuery } from '@/hooks/api/scheduleApi';
 
 import useHooks from './hooks';
 
-const breadcrumbs = [
-  {
-    href: '#',
-    title: 'Scheduling',
-    icon: AiFillSchedule,
-  },
-];
+const CardWithSchedule = ({ card, addSchedule, onDetailsClick }) => {
+  const { data: scheduling, error, isLoading } = useGetScheduleByIdQuery(card.id);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading schedule</div>;
+
+  return (
+    <CardItem
+      title={card.title}
+      description={card.description}
+      date={scheduling ? scheduling.date : null}
+      startTime={scheduling ? scheduling.startTime : null}
+      endTime={scheduling ? scheduling.endTime : null}
+      onDetailsClick={onDetailsClick}
+    />
+  );
+};
 
 const Scheduling = () => {
+  const router = useRouter();
   const {
     cardData,
     selectedRoom,
@@ -47,18 +59,12 @@ const Scheduling = () => {
     setSelectedForDeletion(null);
   };
 
-  const viewDetails = (cardId) => {
-    // Construct the URL based on your new file structure
-    const url = `${window.location.origin}/scheduling/${cardId}`;
-    window.open(url, '_blank');
+  const handleDetailsClick = (cardId) => {
+    router.push(`/scheduling/${cardId}/roomdetails`);
   };
-  
-  
 
   return (
     <Template>
-      <PageHeader breadcrumbs={breadcrumbs} />
-
       <div className="flex justify-between items-center mt-4 mb-4">
         <div>
           <button
@@ -73,15 +79,7 @@ const Scheduling = () => {
       <div className='grid grid-cols-3 gap-4'>
         {cardData.map((card) => (
           <div key={card.id} className={`relative ${selectedRoom === card.id ? 'border border-blue-500 cursor-pointer' : 'cursor-default'}`} onClick={() => handleCardClick(card.id)}>
-            <CardItem
-              title={card.title}
-              description={card.description}
-              date={card.date}
-              startTime={card.startTime}
-              endTime={card.endTime}
-              onDateSelect={(date) => addSchedule(date)}
-              onDetailsClick={() => viewDetails(card.id)}
-            />
+            <CardWithSchedule card={card} addSchedule={addSchedule} onDetailsClick={() => handleDetailsClick(card.id)} />
             {scheduleDate && selectedRoom === card.id && (
               <div className="text-sm text-gray-500">{scheduleDate.toLocaleDateString()}</div>
             )}
