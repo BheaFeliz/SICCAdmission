@@ -51,8 +51,8 @@ const Dashboard = () => {
 
   const rows = [
     { key: 'id', header: 'ID', render: (item) => item.id },
-    { key: 'fname', header: 'First Name', render: (item) => item.fname },
     { key: 'lname', header: 'Last Name', render: (item) => item.lname },
+    { key: 'fname', header: 'First Name', render: (item) => item.fname },
     { key: 'age', header: 'Age', render: (item) => item.age },
     { key: 'sex', header: 'Sex', render: (item) => capitalizeFirstLetter(item.sex) },
     { key: 'gender', header: 'Gender', render: (item) => capitalizeFirstLetter(item.gender) },
