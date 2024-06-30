@@ -7,7 +7,6 @@ import SelectInput from '@/components/organisms/SelectInput';
 import Table from '@/components/organisms/Table';
 import Template from '@/components/templates/Template';
 
-// import { useGetSchedulesQuery } from '@/hooks/api/scheduleApi'; // Corrected import
 import useRoomDetails from './hooks';
 
 const RoomDetails = ({ cardId }) => {
@@ -29,19 +28,23 @@ const RoomDetails = ({ cardId }) => {
     setSelectedSex,
     selectedGender,
     setSelectedGender,
-    courseLabelMap,
-    districtLabelMap,
-    paginatedStudents,
-    totalPages,
-    uniqueAges,
-    uniqueSexes,
-    uniqueGenders,
+    courseLabelMap = {},
+    districtLabelMap = {},
+    paginatedStudents = [],
+    totalPages = 0,
+    uniqueAges = [],
+    uniqueSexes = [],
+    uniqueGenders = []
   } = useRoomDetails(actualCardId);
 
-  // Use correct function name: useGetSchedulesQuery instead of useGetSchedulesByIdQuery
-  // const { data: scheduling, error: scheduleErrorData, isLoading: scheduleLoadingData } = useGetSchedulesQuery(actualCardId);
+  const rows = [
+    { key: 'name', header: 'Name', render: (item) => item.name },
+    { key: 'age', header: 'Age', render: (item) => item.age },
+    { key: 'course', header: 'Course', render: (item) => item.course },
+    // Add more row configurations as needed
+  ];
 
-  if (scheduleLoadingData || studentsLoading) {
+  if (studentsLoading) {
     return (
       <Template>
         <div className="flex items-center justify-center">
@@ -51,7 +54,7 @@ const RoomDetails = ({ cardId }) => {
     );
   }
 
-  if (scheduleErrorData || studentsError) {
+  if (studentsError) {
     return (
       <Template>
         <div className="flex items-center justify-center">
@@ -69,13 +72,13 @@ const RoomDetails = ({ cardId }) => {
           <SelectInput
             value={selectedCourse}
             onChange={(e) => setSelectedCourse(e.target.value)}
-            options={courseLabelMap}
+            options={Object.values(courseLabelMap)}
             placeholder="Filter by Course"
           />
           <SelectInput
             value={selectedDistrict}
             onChange={(e) => setSelectedDistrict(e.target.value)}
-            options={districtLabelMap}
+            options={Object.values(districtLabelMap)}
             placeholder="Filter by District"
           />
           <SelectInput
@@ -97,13 +100,14 @@ const RoomDetails = ({ cardId }) => {
             placeholder="Filter by Gender"
           />
         </div>
-        <Table data={Array.isArray(paginatedStudents) ? paginatedStudents : []} />
-
-        <Paginations
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={(page) => setCurrentPage(page)}
-        />
+        <Table rows={rows} data={paginatedStudents} />
+        {totalPages > 1 && (
+          <Paginations
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        )}
       </div>
     </Template>
   );

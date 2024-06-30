@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
+
 const useHooks = () => {
   const router = useRouter();
   const [cardData, setCardData] = useState([]);
@@ -20,8 +21,9 @@ const useHooks = () => {
     setCardData(storedCardData);
   };
 
+
   const addCard = () => {
-    const newCardTitle = prompt('Enter the title for the new card:');
+    const newCardTitle = prompt("Enter the title for the new card:");
     if (newCardTitle) {
       const newCardId = cardData.length + 1; // Generate sequential ID
       const newCard = {
@@ -32,17 +34,18 @@ const useHooks = () => {
       setCardData(prevCardData => [...prevCardData, newCard]);
     }
   };
+  
 
   const deleteCard = (cardId) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this room?');
+    const confirmDelete = window.confirm("Are you sure you want to delete this room?");
     if (confirmDelete) {
       setCardData(prevCardData => prevCardData.filter(card => card.id !== cardId));
       setSelectedRoom(null);
     }
   };
 
-  const handleSchedule = (cardId) => {
-    router.push(`/scheduling/${cardId}/roomdetails`);
+  const handleSchedule = () => {
+    router.push(`/scheduling/new`);
   };
 
   const addSchedule = (date) => {

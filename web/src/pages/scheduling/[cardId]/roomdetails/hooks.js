@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import Paginations from '@/components/atoms/Pagination';
-import { useGetSchedulesQuery } from '@/hooks/api/scheduleApi'; // Corrected import
+import { useGetSchedulesQuery } from '@/hooks/api/scheduleApi';
 import { useGetRegistrationsQuery } from '@/hooks/api/studentApi';
 
 const useRoomDetails = (cardId) => {
@@ -12,33 +12,34 @@ const useRoomDetails = (cardId) => {
   const [selectedSex, setSelectedSex] = useState('');
   const [selectedGender, setSelectedGender] = useState('');
 
-  // Corrected useGetSchedulesQuery instead of useGetSchedulesByIdQuery
   const { data: scheduling, error: scheduleError, isLoading: scheduleLoading } = useGetSchedulesQuery(cardId);
-  const { data: students, error: studentsError, isLoading: studentsLoading } = useGetRegistrationsQuery();
+  const { data: studentsData, error: studentsError, isLoading: studentsLoading } = useGetRegistrationsQuery();
 
-  const courseLabelMap = students ? students.reduce((map, student) => {
-    map[student.course] = student.course;
+  const students = Array.isArray(studentsData) ? studentsData : [];
+
+  const courseLabelMap = students.reduce((map, student) => {
+    if (student.course) map[student.course] = student.course;
     return map;
-  }, {}) : {};
+  }, {});
 
-  const districtLabelMap = students ? students.reduce((map, student) => {
-    map[student.district] = student.district;
+  const districtLabelMap = students.reduce((map, student) => {
+    if (student.district) map[student.district] = student.district;
     return map;
-  }, {}) : {};
+  }, {});
 
-  const uniqueAges = students ? [...new Set(students.map(student => student.age))].map(age => ({ label: age, value: age })) : [];
-  const uniqueSexes = students ? [...new Set(students.map(student => student.sex))].map(sex => ({ label: sex, value: sex })) : [];
-  const uniqueGenders = students ? [...new Set(students.map(student => student.gender))].map(gender => ({ label: gender, value: gender })) : [];
+  const uniqueAges = [...new Set(students.map(student => student.age))].map(age => ({ label: age, value: age }));
+  const uniqueSexes = [...new Set(students.map(student => student.sex))].map(sex => ({ label: sex, value: sex }));
+  const uniqueGenders = [...new Set(students.map(student => student.gender))].map(gender => ({ label: gender, value: gender }));
 
-  const filteredRegistrations = Array.isArray(students) ? students.filter(student => {
+  const filteredRegistrations = students.filter(student => {
     return (!selectedCourse || student.course === selectedCourse) &&
            (!selectedDistrict || student.district === selectedDistrict) &&
            (!selectedAge || student.age === selectedAge) &&
            (!selectedSex || student.sex === selectedSex) &&
            (!selectedGender || student.gender === selectedGender);
-  }) : [];
+  });
 
-  const { paginatedData: paginatedStudents, totalPages } = Paginations(filteredRegistrations, 10, currentPage);
+  const { paginatedData: paginatedStudents, totalPages } = Paginations(filteredRegistrations, 30, currentPage);
 
   useEffect(() => {
     setCurrentPage(1); // Reset to first page on filter change
