@@ -16,7 +16,7 @@ class Registration extends Model
         'indigentPy', 'pbs', 'district', 'barangay', 'cityM', 'province', 'Zcode', 'familyB',
         'sincewhen', 'Nsibling', 'supstudy', 'ofw', 'ofwprofession', 'studenttype',
         'Nwork', 'StudentCat', 'F_nameSchool', 'F_Atrack', 'F_AMprovince', 'F_Ygrad',
-        'T_nameSchool', 'T_Atrack', 'T_AMprovince', 'T_Ygrad', 'selectcourse'
+        'T_nameSchool', 'T_Atrack', 'T_AMprovince', 'T_Ygrad', 'selectcourse', 'schedule_id'
     ];
 
     public static $rules = [
