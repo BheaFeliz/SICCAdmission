@@ -18,12 +18,11 @@ asd
 
       <div className="container mx-auto mt-8">
       <Card className='w-full mb-2'>
-        <p>We have succesfully recieved your Admission Application . Your Reference No. 104507
-         . the date of birth you have entered is Febuary 14 2001. </p>
+        <p>We have succesfully recieved your Admission Application . Your Reference No. 104507</p>
          <p>The Documents you submitted, if any, will be verified by the Registrars office. 
           incase you did not upload documments kindly bring them to the scheduled date of your 
           admission test and give it to the Admission Officer.   </p>
-         <p>Important Notice : Monitor your provided email address or Contact number for your scheduled date of admission test. </p>
+         <p>Important Notice : Monitor the Contact number you&lsquo;ve given for the scheduled date of admission test. </p>
 
          <div className='w-full px-1 mt-2 flex justify-end'>
             <Link
