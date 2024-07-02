@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdmissionFormRequest;
 use App\Models\Registration;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -80,6 +81,7 @@ class RegistrationController extends Controller
     $registration->reference_number = $referenceNumber;
     $registration->save();
 
+
     // Handle image uploads
     if ($request->hasFile('fileinput')) {
         foreach ($request->file('fileinput') as $file) {
@@ -91,7 +93,8 @@ class RegistrationController extends Controller
     }
 
     // Return a response indicating success
-    return response()->json(['message' => 'Registration successful'], 201);
+    // return response()->json(['message' => 'Registration successful'], 201);
+    return response()->json(['message' => 'Registration successful', 'reference_number' => $referenceNumber], 201);
 }
 
 public function show($id)
@@ -112,6 +115,7 @@ public function show($id)
 
         // Return a JSON response indicating success
         return response()->json(['message' => 'Registration updated successfully', 'data' => $registration], 200);
+        
     }
 
     public function destroy($id)
@@ -121,5 +125,19 @@ public function show($id)
 
         // Return a JSON response indicating success
         return response()->json(['message' => 'Registration deleted successfully'], 200);
+    }
+
+    public function generateReferenceNumber(Request $request, $registrationId, $scheduleId)
+    {
+        $registration = Registration::find($registrationId);
+        $schedule = Schedule::find($scheduleId);
+
+        if (!$registration || !$schedule) {
+            return response()->json(['error' => 'Registration or Schedule not found'], 404);
+        }
+
+        $referenceNumber = $registration->generateReferenceNumber($schedule->id);
+
+        return response()->json(['referenceNumber' => $referenceNumber], 200);
     }
 }

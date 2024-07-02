@@ -35,9 +35,12 @@ class Registration extends Model
     return $this->belongsTo(Schedule::class);
 }
 
-    public function generateReferenceNumber($scheduleId)
-    {
-        $monthDate = $this->created_at->format('md'); // Format the creation date to month and date (e.g., 0628)
+public function generateReferenceNumber($scheduleId)
+{
+    // Format the creation date to month and date (e.g., 0628)
+    $monthDate = $this->created_at->format('md');
+    
+    // Generate the reference number
     return sprintf('%d-%s-%d', $this->id, $monthDate, $scheduleId);
-    }
+}
 }
