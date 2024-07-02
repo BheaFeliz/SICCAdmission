@@ -1,4 +1,3 @@
-// Schedule.js
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
@@ -8,7 +7,7 @@ import { useGetScheduleByIdQuery } from '@/hooks/api/scheduleApi';
 
 import useHooks from './hooks';
 
-const CardWithSchedule = ({ card, addSchedule, onDetailsClick }) => {
+const CardWithSchedule = ({ card, onDetailsClick }) => {
   const { data: scheduling, error, isLoading } = useGetScheduleByIdQuery(card.id);
 
   if (isLoading) return <div>Loading...</div>;

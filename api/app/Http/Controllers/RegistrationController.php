@@ -71,6 +71,8 @@ class RegistrationController extends Controller
         'schedule_id' => 'integer|exists:schedules,id'
     ]);
 
+    $validatedData['schedule_id'] = 1;
+
     // Create a new registration instance
     $registration = new Registration();
     $registration->fill($validatedData);

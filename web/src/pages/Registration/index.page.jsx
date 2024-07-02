@@ -42,7 +42,6 @@ const Registration = () => {
   const [showWorkingStudentInput, setShowWorkingStudentInput] = useState(false)
   const [showFreshmenInput, setShowFreshmenInput] = useState(false)
   const [showTransfereeInput, setShowTransfereeInput] = useState(false)
-  const [showDistrictTextInput, setShowDistrictTextInput] = useState(false)
 
   const handleStudentTypeChange = (e) => {
     const value = e.target.value
@@ -54,12 +53,6 @@ const Registration = () => {
     const value = e.target.value
     const selectedOption = IndigentP.find((option) => option.value === value)
     setShowTextInput(selectedOption && selectedOption.showTextInput)
-  }
-
-  const handleDistrictChange = (e) => {
-    const value = e.target.value
-    const selectedOption = SDistrict.find((option) => option.value === value)
-    setShowDistrictTextInput(selectedOption && selectedOption.showTextInput)
   }
 
   const handleFamilyBackgroundChange = (e) => {
@@ -94,7 +87,7 @@ const Registration = () => {
           <div className='m-2'>
             <Card>
               <p>
-                Fill out this form carefully abd PRINT or TYPE all the
+                Fill out this form carefully and TYPE all the
                 information requested. Select the appropriate choices. if the
                 item is not applicable indicate select or type N/A. INCOMPLETE
                 FORMS WILL BE NOT PROCESSED.
@@ -103,8 +96,8 @@ const Registration = () => {
           </div>
           <div className='style=min-height: 140px;'>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-              <TextInput label='First Name' name='fname' {...formState} />
               <TextInput label='Last Name' name='lname' {...formState} />
+              <TextInput label='First Name' name='fname' {...formState} />
               <TextInput label='Middle Name' name='mname' {...formState} />
               <SelectInput options={suffixoption} name='pref' {...formState} />
             </div>
@@ -166,18 +159,8 @@ const Registration = () => {
                 options={SDistrict}
                 label='District'
                 name='district'
-                onChange={handleDistrictChange}
                 {...formState}
               />
-              {showDistrictTextInput && (
-                <TextInput
-                  label='Type N/A'
-                  type='text'
-                  name='districtwhy'
-                  className='form-input'
-                  {...formState}
-                />
-              )}
               <TextInput label='Barangay' name='barangay' {...formState} />
               <TextInput
                 label='City/Municipality'
@@ -353,8 +336,7 @@ const Registration = () => {
                   for historical, statistical, research and evaluation purposes
                   pursuant to the provisions of the Republic Act No. 10173 of
                   the Philippines, Data Privacy Act of 2012 and its
-                  corresponding Implementing Rules and Regulations. I also
-                  agree. accepted
+                  corresponding Implementing Rules and Regulations.
                 </p>
               </Card>
             </div>
