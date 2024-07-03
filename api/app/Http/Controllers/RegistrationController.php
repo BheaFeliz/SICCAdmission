@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdmissionFormRequest;
 use App\Models\Registration;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -67,6 +68,7 @@ class RegistrationController extends Controller
             'mimes:jpeg,png,jpg',
             'max:2048', // Adjust max file size as per your requirement
         ],
+        'schedule_id' => 'integer|exists:schedules,id'
     ]);
 
     $studentCount = Registration::count();
@@ -74,9 +76,15 @@ class RegistrationController extends Controller
 
     $validatedData['room_id'] = $roomNumber;
 
+    
     // Create a new registration instance
     $registration = new Registration();
     $registration->fill($validatedData);
+    $registration->save();
+
+    // Generate and save the reference number
+    $referenceNumber = $registration->generateReferenceNumber($registration->schedule_id);
+    $registration->reference_number = $referenceNumber;
     $registration->save();
 
     // Handle image uploads
@@ -90,35 +98,6 @@ class RegistrationController extends Controller
     }
 
     // Return a response indicating success
-    return response()->json(['message' => 'Registration successful'], 201);
+    return response()->json(['message' => 'Registration successful', 'reference_number' => $referenceNumber], 201);
 }
-
-public function show($id)
-{
-    $registration = Registration::findOrFail($id);
-    return response()->json(['registration' => $registration], 200);
-}
-
-    public function update(AdmissionFormRequest $request, $id)
-    {
-        $registration = Registration::findOrFail($id);
-
-        // Validate the request data
-        $validatedData = $request->validated();
-
-        // Update the registration record in the database
-        $registration->update($validatedData);
-
-        // Return a JSON response indicating success
-        return response()->json(['message' => 'Registration updated successfully', 'data' => $registration], 200);
-    }
-
-    public function destroy($id)
-    {
-        $registration = Registration::findOrFail($id);
-        $registration->delete();
-
-        // Return a JSON response indicating success
-        return response()->json(['message' => 'Registration deleted successfully'], 200);
-    }
 }

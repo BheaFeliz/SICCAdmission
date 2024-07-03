@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Registration extends Model
 {
@@ -29,4 +30,22 @@ class Registration extends Model
     {
         return $this->hasMany(Image::class);
     }
+
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class);
+    }
+
+    public function generateReferenceNumber($scheduleId)
+{
+    // Format the creation date to month and date (e.g., 0628)
+    $monthDate = $this->created_at->format('md');
+    
+    // Log schedule ID
+    Log::info('Generating reference number', ['schedule_id' => $scheduleId]);
+
+    // Generate the reference number
+    return sprintf('%d-%s-%d', $this->id, $monthDate, $scheduleId);
+}
+
 }
