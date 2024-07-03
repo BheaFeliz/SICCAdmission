@@ -1,26 +1,35 @@
-// roomdetailsHooks.js
-
-import { useState } from 'react';
+import { useEffect,useState } from 'react';
 
 import { useGetSchedulesQuery } from '@/hooks/api/scheduleApi';
-import { useStudents } from '@/hooks/redux/useStudents';
+import { useGetRegistrationsQuery } from '@/hooks/api/studentApi';
 
 const useRoomDetails = (cardId) => {
-  const { data: scheduling, error: scheduleError, isLoading: scheduleLoading } = useGetSchedulesQuery(cardId);
-  const { registrations, isLoading: studentsLoading } = useStudents();
+    const { data: scheduling, error: scheduleError, isLoading: scheduleLoading } = useGetSchedulesQuery(cardId);
+    const { data: registrations, error: studentsError, isLoading: studentsLoading, refetch } = useGetRegistrationsQuery({ schedule_id: cardId });
 
-  const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
 
-  return {
-    scheduling,
-    scheduleError,
-    scheduleLoading,
-    studentsError: null, // Assuming no separate error state for students in the given code
-    studentsLoading,
-    registrations,
-    currentPage,
-    setCurrentPage,
-  };
+    useEffect(() => {
+        refetch();
+    }, [cardId, refetch]);
+
+    // Console logging
+    useEffect(() => {
+        console.log('Scheduling data:', scheduling);
+        console.log('Registrations data:', registrations);
+        console.log('Errors:', { scheduleError, studentsError });
+    }, [scheduling, registrations, scheduleError, studentsError]);
+
+    return {
+        scheduling,
+        scheduleError,
+        scheduleLoading,
+        studentsError,
+        studentsLoading,
+        registrations: registrations?.registrations || [],
+        currentPage,
+        setCurrentPage,
+    };
 };
 
 export default useRoomDetails;
