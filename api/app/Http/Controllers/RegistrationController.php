@@ -71,7 +71,10 @@ class RegistrationController extends Controller
         'schedule_id' => 'integer|exists:schedules,id'
     ]);
 
-    $validatedData['schedule_id'] = 1;
+    $studentCount = Registration::count();
+    $roomNumber = intdiv($studentCount, 30) + 1;
+
+    $validatedData['room_id'] = $roomNumber;
 
     
     // Create a new registration instance
