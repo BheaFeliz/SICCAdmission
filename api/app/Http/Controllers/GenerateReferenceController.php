@@ -14,4 +14,6 @@ class GenerateReferenceController extends Controller
 
     return view('your-view', compact('registration', 'referenceNumber'));
 }
+
+
 }
