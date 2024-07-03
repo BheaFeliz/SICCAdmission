@@ -26,7 +26,7 @@ const useCardDetailsHooks = () => {
 
   useEffect(() => {
     if (registrationsData && !registrationsLoading && schedule) {
-      const filteredStudents = registrationsData.filter(reg => reg.roomId === schedule.id);
+      const filteredStudents = registrationsData.filter(reg => reg.roomId === schedule.room_id);
       setStudents(filteredStudents);
     }
     if (registrationsError) {
