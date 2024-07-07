@@ -1,4 +1,4 @@
-import { baseApi } from './baseApi';
+import { baseApi } from './baseApi'
 
 export const scheduleApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -15,15 +15,17 @@ export const scheduleApi = baseApi.injectEndpoints({
       }),
     }),
     getScheduleById: build.query({
-      providesTags: (result, error, cardId) => [{ type: 'scheduling', id: cardId }],
+      providesTags: (result, error, cardId) => [
+        { type: 'scheduling', id: cardId },
+      ],
       query: (cardId) => ({ url: `/scheduling/${cardId}` }),
     }),
   }),
   overrideExisting: false,
-});
+})
 
 export const {
   useCreateScheduleMutation,
   useGetSchedulesQuery,
   useGetScheduleByIdQuery,
-} = scheduleApi;
+} = scheduleApi
