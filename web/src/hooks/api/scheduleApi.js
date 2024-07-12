@@ -1,24 +1,31 @@
-import { baseApi } from './baseApi'
+import { baseApi } from './baseApi' // Ensure correct path if it's different
 
 export const scheduleApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getSchedules: build.query({
+      query: (page = 1) => `/scheduling?page=${page}`,
       providesTags: ['scheduling'],
-      query: (page = 1) => ({ url: `/scheduling?page=${page}` }),
     }),
     createSchedule: build.mutation({
-      invalidatesTags: ['scheduling'],
       query: (body) => ({
         url: 'scheduling',
         method: 'POST',
         body,
       }),
+      invalidatesTags: ['scheduling'],
+    }),
+    deleteSchedule: build.mutation({
+      query: (id) => ({
+        url: `scheduling/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['scheduling'],
     }),
     getScheduleById: build.query({
-      providesTags: (result, error, cardId) => [
-        { type: 'scheduling', id: cardId },
+      query: (scheduleId) => `/scheduling/${scheduleId}`,
+      providesTags: (result, error, scheduleId) => [
+        { type: 'scheduling', id: scheduleId },
       ],
-      query: (cardId) => ({ url: `/scheduling/${cardId}` }),
     }),
   }),
   overrideExisting: false,
@@ -27,5 +34,6 @@ export const scheduleApi = baseApi.injectEndpoints({
 export const {
   useCreateScheduleMutation,
   useGetSchedulesQuery,
+  useDeleteScheduleMutation,
   useGetScheduleByIdQuery,
 } = scheduleApi

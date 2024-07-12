@@ -1,9 +1,5 @@
 import Link from 'next/link'
-import {
-  HiOutlineCalendar,
-  HiOutlineUsers,
-  HiTemplate,
-} from 'react-icons/hi'
+import { HiOutlineCalendar, HiOutlineUsers, HiTemplate } from 'react-icons/hi'
 
 const links = [
   {
@@ -14,7 +10,7 @@ const links = [
   {
     label: 'Scheduling',
     icon: <HiOutlineCalendar />,
-    link: '/scheduling',
+    link: '/schedule',
   },
   {
     label: 'Students',

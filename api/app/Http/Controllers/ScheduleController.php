@@ -30,6 +30,7 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+           'name' => 'required|string|max:255',
             'date' => 'required|date',
             'startTime' => 'required',
             'endTime' => 'required',
@@ -44,6 +45,7 @@ class ScheduleController extends Controller
         $date = Carbon::parse($request->date)->format('Y-m-d');
 
         $schedule = new Schedule();
+        $schedule->name = $request->name;
         $schedule->date = $date;
         $schedule->startTime = $request->startTime;
         $schedule->endTime = $request->endTime;
@@ -57,6 +59,7 @@ class ScheduleController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
+            'name' => 'string',
             'date' => 'date',
             'startTime' => 'string',
             'endTime' => 'string',

@@ -11,6 +11,7 @@ class CreateSchedulesTable extends Migration
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
             //add Room name here
+            $table->string('name');
             $table->date('date');
             $table->string('startTime');
             $table->string('endTime');
