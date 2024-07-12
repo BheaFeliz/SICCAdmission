@@ -61,6 +61,7 @@ class CreateRegistrationForm extends Migration
             $table->jsonb('image_paths')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            
         });
 
         // Add a check constraint to ensure selectcourse is one of the valid choices
