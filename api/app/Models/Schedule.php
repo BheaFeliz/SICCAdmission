@@ -21,9 +21,4 @@ class Schedule extends Model
     {
         return $this->belongsTo(Card::class);
     }
-
-    public function registrations()
-    {
-        return $this->hasMany(Registration::class);
-    }
 }
