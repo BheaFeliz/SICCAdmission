@@ -10,13 +10,12 @@ class Schedule extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'card_id',
-        'date',
-        'startTime',
-        'endTime',
-        'description',
-    ];
+    protected $fillable = ['name','date', 'startTime', 'endTime', 'description',];
+
+    public function registrations()
+    {
+        return $this->hasMany(Registration::class);
+    }
 
     public function card()
     {
