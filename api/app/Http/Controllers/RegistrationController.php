@@ -6,6 +6,7 @@ use App\Http\Requests\AdmissionFormRequest;
 use App\Models\Registration;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -70,7 +71,10 @@ class RegistrationController extends Controller
             ],
         ]);
     
-        $validatedData['schedule_id'] = 1;
+        $scheduleId = $this->determineScheduleId();
+
+    // Add the determined schedule_id to validated data
+    $validatedData['schedule_id'] = $scheduleId;
     
         // Create a new registration instance
         $registration = new Registration();
@@ -87,6 +91,27 @@ class RegistrationController extends Controller
         // Return a response indicating success
         return response()->json(['message' => 'Registration successful'], 201);
     }
+
+    private function determineScheduleId()
+{
+    // Get the count of registrations for each schedule_id
+    $registrationsPerSchedule = Registration::select('schedule_id', DB::raw('count(*) as count'))
+        ->groupBy('schedule_id')
+        ->get()
+        ->pluck('count', 'schedule_id')
+        ->toArray();
+
+    // Find the schedule_id with fewer than 30 registrations
+    foreach ($registrationsPerSchedule as $scheduleId => $count) {
+        if ($count < 30) {
+            return $scheduleId;
+        }
+    }
+
+    // If all schedules have 30 registrations, increment the last schedule_id by 1
+    $lastScheduleId = array_key_last($registrationsPerSchedule);
+    return $lastScheduleId + 1;
+}
 
 public function show($id)
 {
