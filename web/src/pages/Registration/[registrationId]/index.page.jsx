@@ -1,11 +1,11 @@
 import dayjs from 'dayjs'
+import { Button } from 'flowbite-react'
 import Link from 'next/link' // Import Link from next/link
 import { useRouter } from 'next/router'
 import { FaCalendarAlt, FaUser } from 'react-icons/fa'
 
-import { Button } from '@/components/atoms/Button' // Import Button component
 import Loading from '@/components/atoms/Loading'
-import DeleteModal from '@/components/organisms/DeleteModal'
+// import DeleteModal from '@/components/organisms/DeleteModal'
 import PageHeader from '@/components/organisms/PageHeader'
 import RowItem from '@/components/organisms/RowItem'
 import Template from '@/components/templates/Template'
@@ -16,7 +16,7 @@ const Registration = () => {
   const router = useRouter()
   const { registrationId } = router.query
 
-  const { registration, isLoading, handleDelete } = useHooks(registrationId)
+  const { registration, isLoading } = useHooks(registrationId)
 
   const breadcrumbs = [
     {
@@ -36,7 +36,7 @@ const Registration = () => {
         breadcrumbs={breadcrumbs}
         right={
           <div className='flex pb-4 space-x-4'>
-            <DeleteModal handleDelete={() => handleDelete(registrationId)} />
+            {/* <DeleteModal handleDelete={() => handleDelete(registrationId)} /> */}
             <Link href={`/registration/${registrationId}/edit`}>
               <Button size='xs' color='warning' className='m-w-20'>
                 Edit
