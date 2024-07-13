@@ -29,7 +29,7 @@ const Schedule = () => {
               <p>{schedule.description}</p>
               <div className='flex space-x-2 mt-2'>
                 <Link href={`/schedule/${schedule.id}`} passHref>
-                  <Button as='a' size='xs' color='blue'>
+                  <Button as='a' size='lg' color='blue'>
                     View Details
                   </Button>
                 </Link>
@@ -45,9 +45,9 @@ const Schedule = () => {
         : <p>No schedules available.</p>}
       </div>
 
-      <div className='mt-4'>
+      <div className='mt-5'>
         <Link href='/schedule/new'>
-          <Button size='xs' color='warning'>
+          <Button size='lg' color='blue'>
             Add Schedule
           </Button>
         </Link>

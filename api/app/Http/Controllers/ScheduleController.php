@@ -18,13 +18,18 @@ class ScheduleController extends Controller
     // Fetch a single schedule by ID
     public function show(string $id)
 {
-    $schedule = Schedule::find($id);
+    // Fetch the schedule along with its registrations filtered by schedule_id
+    $schedule = Schedule::with('registrations')->find($id);
+
     if ($schedule) {
         return response()->json($schedule, 200);
     } else {
         return response()->json(['message' => 'Schedule not found'], 404);
     }
 }
+
+
+
 
     // Create a new schedule
     public function store(Request $request)
