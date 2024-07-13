@@ -12,7 +12,7 @@ export const useHooks = () => {
     registrations,
     isLoading: isRegistrationsLoading,
     isError: isRegistrationsError,
-  } = useStudents() // Use useStudents hook
+  } = useStudents()
 
   const isLoading = isSchedulesLoading || isRegistrationsLoading
   const isError = isSchedulesError || isRegistrationsError
