@@ -4,7 +4,7 @@ import React from 'react'
 
 import Template from '@/components/templates/Template'
 
-import useHooks from './hook'
+import useHooks from './hook' // Ensure this import path is correct
 
 const Schedule = () => {
   const { schedules, isLoading, isError, handleDeleteSchedule } = useHooks()
@@ -24,6 +24,7 @@ const Schedule = () => {
           schedules.map((schedule) => (
             <div key={schedule.id} className='border rounded p-4'>
               <h2 className='text-lg font-bold'>{schedule.name}</h2>
+              <p>Date: {schedule.date}</p>
               <p>Start Time: {schedule.startTime}</p>
               <p>End Time: {schedule.endTime}</p>
               <p>{schedule.description}</p>
