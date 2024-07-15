@@ -18,7 +18,9 @@ class ScheduleController extends Controller
     // Fetch a single schedule by ID
     public function show(string $id)
 {
-    $schedule = Schedule::find($id);
+    // Fetch the schedule along with its registrations filtered by schedule_id
+    $schedule = Schedule::with('registrations')->find($id);
+
     if ($schedule) {
         return response()->json($schedule, 200);
     } else {
@@ -26,10 +28,14 @@ class ScheduleController extends Controller
     }
 }
 
+
+
+
     // Create a new schedule
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+           'name' => 'required|string|max:255',
             'date' => 'required|date',
             'startTime' => 'required',
             'endTime' => 'required',
@@ -44,6 +50,7 @@ class ScheduleController extends Controller
         $date = Carbon::parse($request->date)->format('Y-m-d');
 
         $schedule = new Schedule();
+        $schedule->name = $request->name;
         $schedule->date = $date;
         $schedule->startTime = $request->startTime;
         $schedule->endTime = $request->endTime;
@@ -57,6 +64,7 @@ class ScheduleController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
+            'name' => 'string',
             'date' => 'date',
             'startTime' => 'string',
             'endTime' => 'string',

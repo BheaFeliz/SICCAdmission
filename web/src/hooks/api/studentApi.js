@@ -27,7 +27,7 @@ export const studentApi = baseApi.injectEndpoints({
       }),
     }),
   }),
-});
+}); 
 
 export const {
   useGetRegistrationsQuery,

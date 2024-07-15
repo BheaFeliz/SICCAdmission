@@ -29,10 +29,16 @@ const useHooks = () => {
       const newCard = {
         id: newCardId,
         title: newCardTitle,
-        schedule: []
+        schedule: [],
+        student: [],
       };
       setCardData(prevCardData => [...prevCardData, newCard]);
     }
+  };
+  
+  const assignRoomToStudent = () => {
+    const totalStudents = cardData.reduce((sum, card) => sum + card.students.length, 0);
+    return Math.floor(totalStudents / 30) + 1;
   };
   
 
@@ -48,13 +54,15 @@ const useHooks = () => {
     router.push(`/scheduling/new`);
   };
 
-  const addSchedule = (date) => {
+  const addSchedule = (date, student) => {
+    const roomNumber = assignRoomToStudent(student);
     if (selectedRoom !== null) {
       const updatedCardData = cardData.map(card => {
-        if (card.id === selectedRoom) {
+        if (card.id === roomNumber) {
           return {
             ...card,
-            schedule: [...card.schedule, date]
+            schedule: [...card.schedule, date],
+            students: [...card.students, student], // Add student to the room
           };
         }
         return card;

@@ -10,6 +10,8 @@ class CreateSchedulesTable extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
+            //add Room name here
+            $table->string('name');
             $table->date('date');
             $table->string('startTime');
             $table->string('endTime');
@@ -17,6 +19,10 @@ class CreateSchedulesTable extends Migration
             $table->timestamps();
         });
     }
+//Migrate na lng dri ang name instead na i Modal ang name sa room before mag add sa info
+//change na lng ninyu ang cardId na dri na lng tanan 
+// Probably error sa integration banda, start na lng mo dapit sa cardID since murag dli mn jud sya applicable kay wla mn ghpon sya na save sa database
+
 
     public function down()
     {

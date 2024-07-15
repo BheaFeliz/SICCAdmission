@@ -1,51 +1,45 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { AiFillSchedule } from "react-icons/ai";
+import { useEffect, useState } from 'react'
 
-import { useGetScheduleByIdQuery } from '@/hooks/api/scheduleApi';
-import { useGetRegistrationsQuery } from '@/hooks/api/studentApi';
+import { useGetScheduleByIdQuery } from '@/hooks/api/scheduleApi'
+import { useGetRegistrationsQuery } from '@/hooks/api/studentApi'
 
-const useCardDetailsHooks = () => {
-  const router = useRouter();
-  const { cardId } = router.query;
+const useHooks = (scheduleId) => {
+  const {
+    data: scheduling,
+    error: scheduleError,
+    isLoading: scheduleLoading,
+  } = useGetScheduleByIdQuery(scheduleId)
+  const {
+    data,
+    error: studentsError,
+    isLoading: studentsLoading,
+    refetch,
+  } = useGetRegistrationsQuery({ schedule_id: scheduleId })
 
-  const [schedule, setSchedule] = useState(null);
-  const [students, setStudents] = useState([]);
-
-  const { data: scheduleData, error: scheduleError, isLoading: scheduleLoading } = useGetScheduleByIdQuery(cardId);
-  const { data: registrationsData, error: registrationsError, isLoading: registrationsLoading } = useGetRegistrationsQuery();
-
-  useEffect(() => {
-    if (scheduleData && !scheduleLoading) {
-      setSchedule(scheduleData);
-    }
-    if (scheduleError) {
-      console.error('Error fetching schedule:', scheduleError);
-    }
-  }, [scheduleData, scheduleLoading, scheduleError]);
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
-    if (registrationsData && !registrationsLoading && schedule) {
-      const filteredStudents = registrationsData.filter(reg => reg.roomId === schedule.id);
-      setStudents(filteredStudents);
-    }
-    if (registrationsError) {
-      console.error('Error fetching registrations:', registrationsError);
-    }
-  }, [registrationsData, registrationsLoading, registrationsError, schedule]);
+    refetch()
+  }, [scheduleId, refetch])
 
-  const breadcrumbs = [
-    { href: '/scheduling', title: 'Scheduling', icon: AiFillSchedule },
-    { href: `/scheduling/${cardId}/roomdetails`, title: `Room ${cardId}` }
-  ];
+  // Console logging
+  useEffect(() => {
+    console.log('Registrations data:', data)
+  }, [scheduling, data, scheduleError, studentsError])
+
+  // Use data?.registrations || [] if the API response includes a registrations key
+  const registrations = data?.registrations || []
 
   return {
-    cardData: schedule,
-    students,
-    isLoading: scheduleLoading,
-    error: scheduleError,
-    breadcrumbs,
-  };
-};
+    scheduling,
+    scheduleError,
+    scheduleLoading,
+    studentsError,
+    studentsLoading,
+    registrations,
+    currentPage,
+    setCurrentPage,
+  }
+}
 
-export default useCardDetailsHooks;
+export default useHooks
