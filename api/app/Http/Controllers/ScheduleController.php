@@ -9,33 +9,26 @@ use Carbon\Carbon;
 
 class ScheduleController extends Controller
 {
-    // Fetch all schedules
     public function index()
     {
         return response()->json(Schedule::all(), 200);
     }
 
-    // Fetch a single schedule by ID
     public function show(string $id)
-{
-    // Fetch the schedule along with its registrations filtered by schedule_id
-    $schedule = Schedule::with('registrations')->find($id);
+    {
+        $schedule = Schedule::with('registrations')->find($id);
 
-    if ($schedule) {
-        return response()->json($schedule, 200);
-    } else {
-        return response()->json(['message' => 'Schedule not found'], 404);
+        if ($schedule) {
+            return response()->json($schedule, 200);
+        } else {
+            return response()->json(['message' => 'Schedule not found'], 404);
+        }
     }
-}
 
-
-
-
-    // Create a new schedule
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-           'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'date' => 'required|date',
             'startTime' => 'required',
             'endTime' => 'required',
@@ -46,7 +39,6 @@ class ScheduleController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        // Format the date to 'Y-m-d' format
         $date = Carbon::parse($request->date)->format('Y-m-d');
 
         $schedule = new Schedule();
@@ -60,7 +52,6 @@ class ScheduleController extends Controller
         return response()->json($schedule, 201);
     }
 
-    // Update an existing schedule
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -78,7 +69,6 @@ class ScheduleController extends Controller
         $schedule = Schedule::find($id);
         if ($schedule) {
             if ($request->has('date')) {
-                // Format the date to 'Y-m-d' format
                 $request['date'] = Carbon::parse($request->date)->format('Y-m-d');
             }
             $schedule->update($request->all());
@@ -88,7 +78,6 @@ class ScheduleController extends Controller
         }
     }
 
-    // Delete a schedule
     public function destroy($id)
     {
         $schedule = Schedule::find($id);

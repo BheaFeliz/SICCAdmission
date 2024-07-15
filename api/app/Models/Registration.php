@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 
 class Registration extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'fname', 'lname', 'mname', 'pref', 'age', 'monthoption', 'date', 'year',
@@ -20,30 +21,35 @@ class Registration extends Model
         'reference_number'
     ];
 
-    protected static function boot() {
+    protected static function boot()
+    {
         parent::boot();
 
         static::creating(function ($registration) {
-            $registration->reference_number = $registration->generateReferenceNumber($registration->schedule_id);
+            // No-op, reference number generated after creating the registration
+        });
+
+        static::created(function ($registration) {
+            $referenceNumber = $registration->generateReferenceNumber($registration->schedule_id);
+            $registration->reference_number = $referenceNumber;
+            $registration->save();
         });
     }
 
-    public function images() {
+    public function images()
+    {
         return $this->hasMany(Image::class);
     }
 
-    public function schedule() {
+    public function schedule()
+    {
         return $this->belongsTo(Schedule::class);
     }
 
-    public function generateReferenceNumber($scheduleId) {
-        // Format the creation date to month and date (e.g., 0628)
+    public function generateReferenceNumber($scheduleId)
+    {
         $monthDate = now()->format('md');
-        
-        // Log schedule ID
         Log::info('Generating reference number', ['schedule_id' => $scheduleId]);
-
-        // Generate the reference number
         return sprintf('%d-%s-%d', $this->id, $monthDate, $scheduleId);
     }
 }
