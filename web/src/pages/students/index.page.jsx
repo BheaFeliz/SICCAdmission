@@ -1,5 +1,6 @@
+import { PDFDocument, rgb } from 'pdf-lib';
 import React, { useState } from 'react';
-import { AiFillEdit,AiFillFilePdf } from "react-icons/ai";
+import { AiFillFilePdf } from "react-icons/ai";
 import { IoAccessibilitySharp } from "react-icons/io5";
 
 import Loading from '@/components/atoms/Loading';
@@ -74,14 +75,11 @@ const Dashboard = () => {
       render: (item) => (
         <div className="flex space-x-2">
           <button
-            onClick={() => handleEdit(item.id)}
-            className="bg-blue-500 text-white p-2 rounded"
+            onClick={() => generatePdf(item)}
+            className="bg-red-500 text-white p-2 rounded"
           >
-            <AiFillEdit size={24} />
-          </button>
-          <a href={`/path/to/pdf/${item.id}`} target="_blank" rel="noopener noreferrer">
             <AiFillFilePdf size={24} />
-          </a>
+          </button>
         </div>
       )
     },
@@ -99,9 +97,46 @@ const Dashboard = () => {
     });
   };
 
-  const handleEdit = (id) => {
-    // Handle edit logic here
-    console.log("Edit item with id:", id);
+  const generatePdf = async (item) => {
+    const url = '/Admission_Application-Form1.pdf';
+    const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
+
+    const pdfDoc = await PDFDocument.load(existingPdfBytes);
+    const pages = pdfDoc.getPages();
+    const firstPage = pages[0];
+
+    firstPage.drawText(`${item.lname}`, { x: 53, y: 705, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.fname}`, { x: 130, y: 705, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.mname}`, { x: 220, y: 705, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.pref}`, { x: 350, y: 705, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.age}`, { x: 430, y: 700, size: 12, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.monthoption}`, { x: 495, y: 700, size: 9, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.date},`, { x: 527, y: 700, size: 9, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.year}`, { x: 540, y: 700, size: 9, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.contactnumber}`, { x: 170, y: 636, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.email}`, { x: 435, y: 636, size: 9, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.pbirth}`, { x: 170, y: 623, size: 9, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.pbs}`, { x: 170, y: 585, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.barangay}`, { x: 260, y: 585, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.cityM}`, { x: 340, y: 585, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.province}`, { x: 400, y: 585, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.Zcode}`, { x: 530, y: 593, size: 10, color: rgb(0, 0, 0) });
+
+    firstPage.drawText(`${item.F_nameSchool}`, { x: 53, y: 400, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.F_Atrack}`, { x: 206, y: 400, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.F_AMprovince}`, { x: 275, y: 400, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.F_Ygrad}`, { x: 460, y: 400, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.T_nameSchool}`, { x: 53, y: 352, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.T_Atrack}`, { x: 206, y: 352, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.T_AMprovince}`, { x: 275, y: 352, size: 10, color: rgb(0, 0, 0) });
+    firstPage.drawText(`${item.T_Ygrad}`, { x: 460, y: 352, size: 10, color: rgb(0, 0, 0) });
+   
+
+    const pdfBytes = await pdfDoc.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    const blobUrl = URL.createObjectURL(blob);
+    
+    window.open(blobUrl, '_blank');
   };
 
   const filteredRegistrations = applyFilters(registrations);
