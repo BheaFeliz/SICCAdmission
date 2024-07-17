@@ -1,58 +1,68 @@
-import { Card } from 'flowbite-react';
-import Link from 'next/link';
-import React from 'react';
+import { Card } from 'flowbite-react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React from 'react'
 
-import PageHeader from '@/components/organisms/PageHeader';
-import Template from '@/components/templates/StudentTemplate';
-
+import PageHeader from '@/components/organisms/PageHeader'
+import Template from '@/components/templates/StudentTemplate'
+import { useGetRegistrationsQuery } from '@/hooks/api/studentApi'
 
 function InfoTable({ name, course, classroom, schoolYear, referenceNumber }) {
   return (
-    <table className="w-full">
-      <tbody className="bg-white divide-y divide-gray-200">
+    <table className='w-full'>
+      <tbody className='bg-white divide-y divide-gray-200'>
         <tr>
-          <td className="px-4 py-2 font-semibold">Name:</td>
-          <td className="px-4 py-2">{name}</td>
+          <td className='px-4 py-2 font-semibold'>Name:</td>
+          <td className='px-4 py-2'>{name}</td>
         </tr>
         <tr>
-          <td className="px-4 py-2 font-semibold">Course Selected:</td>
-          <td className="px-4 py-2">{course}</td>
+          <td className='px-4 py-2 font-semibold'>Course Selected:</td>
+          <td className='px-4 py-2'>{course}</td>
         </tr>
         <tr>
-          <td className="px-4 py-2 font-semibold">Classroom #:</td>
-          <td className="px-4 py-2">{classroom}</td>
+          <td className='px-4 py-2 font-semibold'>Room Name:</td>
+          <td className='px-4 py-2'>{classroom}</td>
         </tr>
         <tr>
-          <td className="px-4 py-2 font-semibold">School Year:</td>
-          <td className="px-4 py-2">{schoolYear}</td>
+          <td className='px-4 py-2 font-semibold'>School Year:</td>
+          <td className='px-4 py-2'>{schoolYear}</td>
         </tr>
         <tr>
-          <td className="px-4 py-2 font-semibold">Reference Number:</td>
-          <td className="px-4 py-2">{referenceNumber}</td>
+          <td className='px-4 py-2 font-semibold'>Reference Number:</td>
+          <td className='px-4 py-2'>{referenceNumber}</td>
         </tr>
       </tbody>
     </table>
-  );
+  )
 }
 
 function Component() {
+  const router = useRouter()
+  const { ref } = router.query
+  const { data, error, isLoading } = useGetRegistrationsQuery()
+
+  if (isLoading) return <div>Loading...</div>
+  if (error) return <div>Error loading data</div>
+
+  // Filter the registration by reference number
+  const registration = data?.registrations.find(
+    (reg) => reg.reference_number === ref,
+  )
+
+  if (!registration) return <div>No registration found</div>
+
   return (
     <Template>
-      <PageHeader >
-asd
-      </PageHeader>
-      <div className="container mx-auto mb-8" >
-      <h1 className='text-5xl'>Addmission Application Status</h1>
-      </div>
+      <PageHeader>Admission Application Status</PageHeader>
 
-      <div className="container mx-auto mt-8">
+      <div className='container mx-auto mt-8'>
         <Card className='w-full mb-20'>
           <InfoTable
-            name="bath#"
-            course="Computer Science"
-            classroom="#123"
-            schoolYear="2024-2025"
-            referenceNumber="REF123456"
+            name={`${registration.fname} ${registration.lname}`}
+            course={registration.selectcourse}
+            classroom={registration.classroom}
+            schoolYear={registration.schoolYear}
+            referenceNumber={registration.reference_number}
           />
           <div className='w-full px-1 mt-2 flex justify-end'>
             <Link
@@ -65,7 +75,7 @@ asd
         </Card>
       </div>
     </Template>
-  );
+  )
 }
 
-export default Component;
+export default Component
