@@ -19,6 +19,32 @@ const Schedule = () => {
 
   return (
     <Template>
+      <div className='flex flex-wrap justify-start items-center mb-8 space-x-4 '>
+        <div>
+          <Link href='/schedule/new'>
+            <Button size='lg' color='blue'>
+              Add Schedule
+            </Button>
+          </Link>
+        </div>
+
+        <div>
+          <Link href='/schedule/history'>
+            <Button size='lg' color='blue'>
+              View History
+            </Button>
+          </Link>
+        </div>
+
+        <div>
+          <Link href='/schedule/new'>
+            <Button size='lg' color='blue'>
+              Set Slots
+            </Button>
+          </Link>
+        </div>
+      </div>
+
       <div className='grid grid-cols-3 gap-2'>
         {schedules && schedules.length > 0 ?
           schedules.map((schedule) => (
@@ -44,14 +70,6 @@ const Schedule = () => {
             </div>
           ))
         : <p>No schedules available.</p>}
-      </div>
-
-      <div className='mt-5'>
-        <Link href='/schedule/new'>
-          <Button size='lg' color='blue'>
-            Add Schedule
-          </Button>
-        </Link>
       </div>
     </Template>
   )

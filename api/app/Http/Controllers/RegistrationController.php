@@ -12,10 +12,11 @@ use Illuminate\Support\Facades\Storage;
 class RegistrationController extends Controller
 {
     public function index()
-    {
-        $registrations = Registration::all();
-        return response()->json(['registrations' => $registrations], 200);
-    }
+{
+    $registrations = Registration::withTrashed()->get();
+    return response()->json(['registrations' => $registrations], 200);
+}
+
 
     public function store(Request $request)
     {
@@ -105,7 +106,10 @@ class RegistrationController extends Controller
 
     public function show($id)
     {
-        $registration = Registration::findOrFail($id);
+        $registration = Registration::with(['schedule' => function ($query) {
+            $query->withTrashed();
+        }])->findOrFail($id);
+    
         return response()->json(['registration' => $registration], 200);
     }
 
@@ -118,9 +122,9 @@ class RegistrationController extends Controller
     }
 
     public function destroy($id)
-    {
-        $registration = Registration::findOrFail($id);
-        $registration->delete();
-        return response()->json(['message' => 'Registration deleted successfully'], 200);
-    }
+{
+    $registration = Registration::findOrFail($id);
+    $registration->delete();
+    return response()->json(['message' => 'Registration deleted successfully'], 200);
+}
 }

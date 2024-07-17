@@ -1,4 +1,5 @@
-import { baseApi } from './baseApi' // Ensure correct path if it's different
+// src/hooks/api/scheduleApi.js
+import { baseApi } from './baseApi'
 
 export const scheduleApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -27,6 +28,10 @@ export const scheduleApi = baseApi.injectEndpoints({
         { type: 'scheduling', id: scheduleId },
       ],
     }),
+    getDeletedSchedules: build.query({
+      query: () => '/deleted-schedules',
+      providesTags: ['scheduling'],
+    }),
   }),
   overrideExisting: false,
 })
@@ -36,4 +41,5 @@ export const {
   useGetSchedulesQuery,
   useDeleteScheduleMutation,
   useGetScheduleByIdQuery,
+  useGetDeletedSchedulesQuery,
 } = scheduleApi

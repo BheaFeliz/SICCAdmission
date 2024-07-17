@@ -42,9 +42,9 @@ class Registration extends Model
     }
 
     public function schedule()
-    {
-        return $this->belongsTo(Schedule::class);
-    }
+{
+    return $this->belongsTo(Schedule::class);
+}
 
     public function generateReferenceNumber($scheduleId)
     {
