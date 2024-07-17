@@ -9,6 +9,15 @@ import useHooks from './hook' // Ensure this import path is correct
 const Schedule = () => {
   const { schedules, isLoading, isError, handleDeleteSchedule } = useHooks()
 
+  // Function to convert 24-hour time to 12-hour time format
+  const convertTo12HourFormat = (time) => {
+    const [hours, minutes] = time.split(':')
+    const hour = parseInt(hours, 10)
+    const period = hour >= 12 ? 'PM' : 'AM'
+    const adjustedHour = hour % 12 || 12
+    return `${adjustedHour}:${minutes} ${period}`
+  }
+
   if (isLoading) {
     return <Template>Loading...</Template>
   }
@@ -51,8 +60,8 @@ const Schedule = () => {
             <div key={schedule.id} className='border rounded p-4'>
               <h2 className='text-lg font-bold'>{schedule.name}</h2>
               <p>Date: {schedule.date}</p>
-              <p>Start Time: {schedule.startTime}</p>
-              <p>End Time: {schedule.endTime}</p>
+              <p>Start Time: {convertTo12HourFormat(schedule.startTime)}</p>
+              <p>End Time: {convertTo12HourFormat(schedule.endTime)}</p>
               <p>{schedule.description}</p>
               <div className='flex space-x-2 mt-2'>
                 <Link href={`/schedule/${schedule.id}`} passHref>
