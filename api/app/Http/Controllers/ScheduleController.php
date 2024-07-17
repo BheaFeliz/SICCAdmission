@@ -78,14 +78,18 @@ class ScheduleController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function getDeletedSchedules()
     {
-        $schedule = Schedule::find($id);
-        if ($schedule) {
-            $schedule->delete();
-            return response()->json(['message' => 'Schedule deleted'], 200);
-        } else {
-            return response()->json(['message' => 'Schedule not found'], 404);
-        }
+        $schedules = Schedule::onlyTrashed()->with(['registrations' => function ($query) {
+            $query->withTrashed();
+        }])->get();
+    
+        return response()->json($schedules);
     }
+    public function destroy($id)
+{
+    $schedule = Schedule::findOrFail($id);
+    $schedule->delete();
+    return response()->json(['message' => 'Schedule deleted successfully'], 200);
+}
 }

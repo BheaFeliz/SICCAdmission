@@ -13,9 +13,9 @@ class Schedule extends Model
     protected $fillable = ['name', 'date', 'startTime', 'endTime', 'description'];
 
     public function registrations()
-    {
-        return $this->hasMany(Registration::class);
-    }
+{
+    return $this->hasMany(Registration::class);
+}
 
     protected static function boot()
     {
@@ -27,4 +27,13 @@ class Schedule extends Model
             }
         });
     }
+
+    public function getDeletedSchedules()
+{
+    $deletedSchedules = Schedule::onlyTrashed()->with('registrations')->get();
+    return response()->json($deletedSchedules);
+}
+
+
+    
 }

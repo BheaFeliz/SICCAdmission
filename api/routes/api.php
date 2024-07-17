@@ -57,18 +57,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
     Route::get('/stores', [StoreController::class, 'index']);
 
-    // Route::prefix('scheduling')
-    // ->controller(ScheduleController::class)
-    // ->group(function () {
-    //     Route::get('/', 'index');
-    //     Route::get('/', 'show');
-    //     Route::post('/', 'store');
-    //     Route::put('/{id}', 'update');
-    //     Route::delete('/{id}', 'destroy');
-    // });
+    Route::middleware('api')->group(function () {
+        Route::get('/deleted-schedules', [ScheduleController::class, 'getDeletedSchedules']);
+        Route::resource('scheduling', ScheduleController::class);
+    });
 
-    Route::resource('scheduling', ScheduleController::class);
-    Route::resource('schedule', ScheduleController::class);
 
     
     Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard.show');
