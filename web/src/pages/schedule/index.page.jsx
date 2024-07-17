@@ -18,6 +18,15 @@ const Schedule = () => {
     return `${adjustedHour}:${minutes} ${period}`
   }
 
+  // Function to convert date to month-day-year format
+  const formatDate = (dateString) => {
+    const date = new Date(dateString)
+    const month = date.getMonth() + 1 // getMonth() returns zero-based month
+    const day = date.getDate()
+    const year = date.getFullYear()
+    return `${month}-${day}-${year}`
+  }
+
   if (isLoading) {
     return <Template>Loading...</Template>
   }
@@ -59,7 +68,7 @@ const Schedule = () => {
           schedules.map((schedule) => (
             <div key={schedule.id} className='border rounded p-4'>
               <h2 className='text-lg font-bold'>{schedule.name}</h2>
-              <p>Date: {schedule.date}</p>
+              <p>Date: {formatDate(schedule.date)}</p>
               <p>Start Time: {convertTo12HourFormat(schedule.startTime)}</p>
               <p>End Time: {convertTo12HourFormat(schedule.endTime)}</p>
               <p>{schedule.description}</p>
