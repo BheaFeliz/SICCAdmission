@@ -1,10 +1,20 @@
 import { Button } from 'flowbite-react'
 import Link from 'next/link'
 import React from 'react'
+import { IoCalendarSharp } from 'react-icons/io5';
 
+import PageHeader from '@/components/organisms/PageHeader';
 import Template from '@/components/templates/Template'
 
 import useHooks from './hook' // Ensure this import path is correct
+
+const breadcrumbs = [
+  {
+    href: '#',
+    title: 'Scheduling',
+    icon: IoCalendarSharp,
+  },
+];
 
 const Schedule = () => {
   const { schedules, isLoading, isError, handleDeleteSchedule } = useHooks()
@@ -37,6 +47,8 @@ const Schedule = () => {
 
   return (
     <Template>
+        <PageHeader breadcrumbs={breadcrumbs} />
+
       <div className='flex flex-wrap justify-start items-center mb-8 space-x-4 '>
         <div>
           <Link href='/schedule/new'>
