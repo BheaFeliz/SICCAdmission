@@ -1,4 +1,4 @@
-import { TextInput } from 'flowbite-react';
+import { Button, TextInput } from 'flowbite-react';
 import { PDFDocument, rgb } from 'pdf-lib';
 import React, { useState } from 'react';
 import { AiFillFilePdf } from "react-icons/ai";
@@ -266,6 +266,14 @@ const Dashboard = () => {
 
   const filteredRegistrations = applyFilters(registrations);
 
+  const resetFilters = () => {
+    setSelectedCourse('');
+    setSelectedDistrict('');
+    setSelectedAge('');
+    setSelectedSex('');
+    setSelectedGender('');
+  };
+
   // Calculate the slice of registrations to display based on the current page
   const itemsPerPage = 10;
   const startIdx = (currentPage - 1) * itemsPerPage;
@@ -315,6 +323,9 @@ const Dashboard = () => {
             value={selectedGender}
             onChange={(e) => setSelectedGender(e.target.value)}
           />
+          <Button  color="blue" onClick={resetFilters}>
+          Reset Filters
+          </Button>
         </div>
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
