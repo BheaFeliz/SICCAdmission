@@ -13,7 +13,9 @@ class RegistrationController extends Controller
 {
     public function index()
 {
-    $registrations = Registration::withTrashed()->get();
+    // Include the 'schedule' relationship when fetching registrations
+    $registrations = Registration::withTrashed()->with('schedule')->get();
+
     return response()->json(['registrations' => $registrations], 200);
 }
 

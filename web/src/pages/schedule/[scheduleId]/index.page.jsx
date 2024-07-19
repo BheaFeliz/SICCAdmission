@@ -1,10 +1,10 @@
 import { Button } from 'flowbite-react'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { IoCalendarSharp } from 'react-icons/io5';
+import { IoCalendarSharp } from 'react-icons/io5'
 import * as XLSX from 'xlsx'
 
-import PageHeader from '@/components/organisms/PageHeader';
+import PageHeader from '@/components/organisms/PageHeader'
 import Table from '@/components/organisms/Table'
 import Template from '@/components/templates/Template'
 import { Scourse } from '@/hooks/redux/const'
@@ -17,17 +17,17 @@ const breadcrumbs = [
     title: 'Scheduling',
     icon: IoCalendarSharp,
   },
-];
+]
 
 const Schedule = () => {
   const router = useRouter()
   const { scheduleId } = router.query
-  const { registrations, isLoading, isError } = useHooks()
+  const { scheduleName, registrations, isLoading, isError } = useHooks()
 
   const courseLabelMap = Scourse.reduce((acc, course) => {
-    acc[course.value] = course.label;
-    return acc;
-  }, {});
+    acc[course.value] = course.label
+    return acc
+  }, {})
 
   const filteredRegistrations = registrations.filter(
     (registration) => registration.schedule_id.toString() === scheduleId,
@@ -43,30 +43,39 @@ const Schedule = () => {
     {
       key: 'selectcourse',
       header: 'Course',
-      render: (row) => courseLabelMap [row.selectcourse] || row.selectcourse,
+      render: (row) => courseLabelMap[row.selectcourse] || row.selectcourse,
     },
   ]
 
   const handleDownloadExcel = () => {
-    const dataToExport = filteredRegistrations.map(registration => ({
-      'Contacts': registration.contactnumber,
-      
-    }));
+    const dataToExport = filteredRegistrations.map((registration) => ({
+      Contacts: registration.contactnumber,
+      'Last Name': registration.lname,
+      'First Name': registration.fname,
+      'Reference Number': registration.reference_number,
+      'Scheduled Date of Admission Test':
+        registration.schedule ?
+          new Date(registration.schedule.date).toLocaleDateString('en-US')
+        : 'N/A', // Include the schedule date
+    }))
 
-    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Registrations");
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Registrations')
 
-    XLSX.writeFile(workbook, "registrations.xlsx");
+    // Create a filename based on the schedule name
+    const filename = `${scheduleName.replace(/[^a-zA-Z0-9]/g, '_')}_registrations.xlsx`
+    // Write the file
+    XLSX.writeFile(workbook, filename)
   }
 
   return (
     <Template>
-        <PageHeader breadcrumbs={breadcrumbs} />
+      <PageHeader breadcrumbs={breadcrumbs} />
 
-          <Button onClick={handleDownloadExcel} className="btn-download">
-            Download Excel
-          </Button>
+      <Button onClick={handleDownloadExcel} className='btn-download'>
+        Download Excel
+      </Button>
       {isLoading ?
         <p>Loading...</p>
       : isError ?
