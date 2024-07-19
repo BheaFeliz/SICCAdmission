@@ -1,3 +1,4 @@
+import { TextInput } from 'flowbite-react';
 import { PDFDocument, rgb } from 'pdf-lib';
 import React, { useState } from 'react';
 import { AiFillFilePdf } from "react-icons/ai";
@@ -30,6 +31,7 @@ const Dashboard = () => {
     },
   ];
 
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const [selectedAge, setSelectedAge] = useState('');
@@ -87,7 +89,14 @@ const Dashboard = () => {
 
   const applyFilters = (registrations) => {
     return registrations.filter((reg) => {
+      const matchesSearch = searchQuery
+      ? reg.lname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        reg.fname.toLowerCase().includes(searchQuery.toLowerCase())
+      : true;
+
+
       return (
+        matchesSearch &&
         (!selectedCourse || reg.selectcourse === selectedCourse) &&
         (!selectedDistrict || reg.district === selectedDistrict) &&
         (!selectedAge || reg.age.toString() === selectedAge) &&
@@ -269,6 +278,13 @@ const Dashboard = () => {
 
       <div className="container mx-auto p-2">
         <div className="flex flex-wrap justify-start items-center mb-8 space-x-4">
+
+        <TextInput
+            type="text"
+            placeholder="Search by Name"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
           <SelectInput
             options={[{ value: '', label: 'Course' }, ...Scourse]}
             name='course'
