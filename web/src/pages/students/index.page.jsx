@@ -1,4 +1,5 @@
 import { Button, TextInput } from 'flowbite-react'
+import Image from 'next/image'
 import { PDFDocument, rgb } from 'pdf-lib'
 import React, { useState } from 'react'
 import { AiFillFilePdf } from 'react-icons/ai'
@@ -60,11 +61,13 @@ const Dashboard = () => {
       render: (item) => (
         <div className='flex space-x-2'>
           {item.images.map((image) => (
-            <img
+            <Image
               key={image.id}
               src={`http://localhost:8000${image.path}`}
               alt='Registration Image'
-              className='w-16 h-16 object-cover'
+              width={64} // Width of the image (adjust as needed)
+              height={64} // Height of the image (adjust as needed)
+              className='object-cover'
             />
           ))}
         </div>
