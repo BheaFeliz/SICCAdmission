@@ -13,8 +13,10 @@ class RegistrationController extends Controller
 {
     public function index()
 {
-    // Include the 'schedule' relationship when fetching registrations
-    $registrations = Registration::withTrashed()->with('schedule')->get();
+    $registrations = Registration::withTrashed()
+        ->with('schedule')
+        ->with('images') // Include images
+        ->get();
 
     return response()->json(['registrations' => $registrations], 200);
 }
@@ -79,7 +81,7 @@ class RegistrationController extends Controller
 
         if ($request->hasFile('fileinput')) {
             foreach ($request->file('fileinput') as $file) {
-                $path = Storage::put('registrations', $file);
+                $path = $file->store('registrations', 'public');
                 $url = Storage::url($path);
                 $registration->images()->create(['path' => $url]);
             }
