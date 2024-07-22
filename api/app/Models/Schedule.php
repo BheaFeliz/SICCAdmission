@@ -4,21 +4,36 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Registration;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Schedule extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name','date', 'startTime', 'endTime', 'description',];
+    protected $fillable = ['name', 'date', 'startTime', 'endTime', 'description'];
 
     public function registrations()
+{
+    return $this->hasMany(Registration::class);
+}
+
+    protected static function boot()
     {
-        return $this->hasMany(Registration::class);
+        parent::boot();
+
+        static::deleting(function ($schedule) {
+            foreach ($schedule->registrations as $registration) {
+                $registration->delete();
+            }
+        });
     }
 
-    public function card()
-    {
-        return $this->belongsTo(Card::class);
-    }
+    public function getDeletedSchedules()
+{
+    $deletedSchedules = Schedule::onlyTrashed()->with('registrations')->get();
+    return response()->json($deletedSchedules);
+}
+
+
+    
 }

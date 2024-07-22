@@ -11,13 +11,19 @@ use Illuminate\Support\Facades\Storage;
 
 class RegistrationController extends Controller
 {
-    public function index() {
-        $registrations = Registration::all();
-        return response()->json(['registrations' => $registrations], 200);
-    }
+    public function index()
+{
+    $registrations = Registration::withTrashed()
+        ->with('schedule')
+        ->with('images') // Include images
+        ->get();
 
-    public function store(Request $request) {
-        // Validate the request data
+    return response()->json(['registrations' => $registrations], 200);
+}
+
+
+    public function store(Request $request)
+    {
         $validatedData = $request->validate([
             'fname' => 'required|string|max:255',
             'lname' => 'required|string|max:255',
@@ -64,76 +70,65 @@ class RegistrationController extends Controller
                 'required',
                 'image',
                 'mimes:jpeg,png,jpg',
-                'max:2048', // Adjust max file size as per your requirement
+                'max:2048',
             ],
         ]);
 
         $scheduleId = $this->determineScheduleId();
-        // Add the determined schedule_id to validated data
         $validatedData['schedule_id'] = $scheduleId;
 
-        // Create a new registration instance and save it to get the ID
         $registration = Registration::create($validatedData);
 
-        // Generate the reference number now that the registration has been saved and has an ID
-        $referenceNumber = $registration->generateReferenceNumber($scheduleId);
-        
-        // Update the registration with the reference number
-        $registration->reference_number = $referenceNumber;
-        $registration->save();
-        
-        // Handle image uploads
         if ($request->hasFile('fileinput')) {
             foreach ($request->file('fileinput') as $file) {
-                $path = Storage::put('registrations', $file);
+                $path = $file->store('registrations', 'public');
                 $url = Storage::url($path);
                 $registration->images()->create(['path' => $url]);
             }
         }
 
-        // Return a response indicating success
-        return response()->json(['message' => 'Registration successful', 'reference_number' => $referenceNumber], 201);
+        return response()->json(['message' => 'Registration successful', 'reference_number' => $registration->reference_number], 201);
     }
 
-    private function determineScheduleId() {
-        // Get the count of registrations for each schedule_id
+    private function determineScheduleId()
+    {
         $registrationsPerSchedule = Registration::select('schedule_id', DB::raw('count(*) as count'))
             ->groupBy('schedule_id')
             ->get()
             ->pluck('count', 'schedule_id')
             ->toArray();
 
-        // Find the schedule_id with fewer than 30 registrations
         foreach ($registrationsPerSchedule as $scheduleId => $count) {
             if ($count < 2) {
                 return $scheduleId;
             }
         }
 
-        // If all schedules have 30 registrations, increment the last schedule_id by 1
         $lastScheduleId = array_key_last($registrationsPerSchedule);
-        return $lastScheduleId + 1;
+        return $lastScheduleId ? $lastScheduleId + 1 : 1;
     }
 
-    public function show($id) {
-        $registration = Registration::findOrFail($id);
+    public function show($id)
+    {
+        $registration = Registration::with(['schedule' => function ($query) {
+            $query->withTrashed();
+        }])->findOrFail($id);
+    
         return response()->json(['registration' => $registration], 200);
     }
 
-    public function update(AdmissionFormRequest $request, $id) {
+    public function update(AdmissionFormRequest $request, $id)
+    {
         $registration = Registration::findOrFail($id);
-        // Validate the request data
         $validatedData = $request->validated();
-        // Update the registration record in the database
         $registration->update($validatedData);
-        // Return a JSON response indicating success
         return response()->json(['message' => 'Registration updated successfully', 'data' => $registration], 200);
     }
 
-    public function destroy($id) {
-        $registration = Registration::findOrFail($id);
-        $registration->delete();
-        // Return a JSON response indicating success
-        return response()->json(['message' => 'Registration deleted successfully'], 200);
-    }
+    public function destroy($id)
+{
+    $registration = Registration::findOrFail($id);
+    $registration->delete();
+    return response()->json(['message' => 'Registration deleted successfully'], 200);
+}
 }
