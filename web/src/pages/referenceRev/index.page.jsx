@@ -8,6 +8,31 @@ import { useGetScheduleByIdQuery } from '@/hooks/api/scheduleApi'
 import { useGetRegistrationsQuery } from '@/hooks/api/studentApi'
 import { Scourse } from '@/hooks/redux/const'
 
+function convertTo12HourFormat(time24) {
+  const [hour, minute] = time24.split(':')
+  let period = 'AM'
+  let hour12 = parseInt(hour, 10)
+
+  if (hour12 >= 12) {
+    period = 'PM'
+    if (hour12 > 12) {
+      hour12 -= 12
+    }
+  } else if (hour12 === 0) {
+    hour12 = 12
+  }
+
+  return `${hour12}:${minute} ${period}`
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString)
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const year = date.getFullYear()
+  return `${month}/${day}/${year}`
+}
+
 function InfoTable({
   name,
   course,
@@ -48,12 +73,12 @@ function InfoTable({
           <td className='px-4 py-2'>{scheduleEndTime}</td>
         </tr>
         <tr>
-          <td className='px-4 py-2 font-semibold'>Title:</td>
-          <td className='px-4 py-2'>{title}</td>
-        </tr>
-        <tr>
           <td className='px-4 py-2 font-semibold'>Description:</td>
           <td className='px-4 py-2'>{description}</td>
+        </tr>
+        <tr>
+          <td className='px-4 py-2 font-semibold'>Room Number:</td>
+          <td className='px-4 py-2'>{title}</td>
         </tr>
       </tbody>
     </table>
@@ -111,6 +136,13 @@ function Component() {
     return acc
   }, {})
 
+  const formattedStartTime =
+    scheduleData ? convertTo12HourFormat(scheduleData.startTime) : 'N/A'
+  const formattedEndTime =
+    scheduleData ? convertTo12HourFormat(scheduleData.endTime) : 'N/A'
+
+  const formattedDate = scheduleData ? formatDate(scheduleData.date) : 'N/A'
+
   return (
     <Template>
       <PageHeader>Admission Application Status</PageHeader>
@@ -118,9 +150,8 @@ function Component() {
       <div className='m-2'>
         <Card>
           <p>
-            Fill out this form carefully and TYPE all the information requested.
-            Select the appropriate choices. if the item is not applicable
-            indicate select or type N/A. INCOMPLETE FORMS WILL BE NOT PROCESSED.
+            Instructions: Please remember to bring the following items for you
+            upcoming examination
           </p>
         </Card>
       </div>
@@ -133,9 +164,9 @@ function Component() {
               courseLabelMap[registration.selectcourse] ||
               registration.selectcourse
             }
-            scheduleDate={scheduleData ? scheduleData.date : 'N/A'}
-            scheduleStartTime={scheduleData ? scheduleData.startTime : 'N/A'}
-            scheduleEndTime={scheduleData ? scheduleData.endTime : 'N/A'}
+            scheduleDate={formattedDate}
+            scheduleStartTime={formattedStartTime}
+            scheduleEndTime={formattedEndTime}
             referenceNumber={registration.reference_number}
             title={scheduleData ? scheduleData.title : 'N/A'}
             description={scheduleData ? scheduleData.description : 'N/A'}
