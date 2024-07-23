@@ -88,9 +88,9 @@ const Registration = () => {
             <Card>
               <p>
                 Fill out this form carefully and TYPE all the
-                information requested. Select the appropriate choices. if the
+                information requested. Select the appropriate choices. If the
                 item is not applicable indicate select or type N/A. INCOMPLETE
-                FORMS WILL BE NOT PROCESSED.
+                FORMS WILL BE NOT PROCESS.
               </p>
             </Card>
           </div>
@@ -351,8 +351,9 @@ const Registration = () => {
                 />
               </Card>
             </div>
-
-            <Button type='submit'>Proceed</Button>
+            <div className='flex justify-end'>
+            <Button type='submit'>Finish</Button>
+            </div>
           </div>
         </form>
       </Card>
