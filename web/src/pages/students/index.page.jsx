@@ -92,7 +92,7 @@ const Dashboard = () => {
       header: 'Contact Number',
       render: (item) => item.contactnumber,
     },
-    { key: 'email', header: 'Email', render: (item) => item.email },
+    { key: 'email', header: 'Email Address', render: (item) => item.email },
     {
       key: 'Scourse',
       header: 'Course',
@@ -104,8 +104,8 @@ const Dashboard = () => {
       render: (item) => districtLabelMap[item.district] || item.district,
     },
     {
-      key: 'action',
-      header: 'Action',
+      key: 'pdf',
+      header: 'Document',
       render: (item) => (
         <div className='flex space-x-2'>
           <button

@@ -21,7 +21,6 @@ const Dashboard = () => {
     },
   ]
 
-  // Create a mapping from course codes to labels
   const courseLabelMap = Scourse.reduce((acc, course) => {
     acc[course.value] = course.label
     return acc
@@ -63,7 +62,6 @@ const Dashboard = () => {
   return (
     <Template>
       <PageHeader breadcrumbs={breadcrumbs} />
-
       <div className='mx-auto max-w-screen-lg mt-12'>
         {isLoading ?
           <div className='flex justify-center items-center h-64'>
