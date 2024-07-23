@@ -139,13 +139,68 @@ const Dashboard = () => {
     })
   }
 
-  const generatePdf = async (item) => {
+  const drawImage = async (pdfDoc, imageUrl, x, y, width, height) => {
+    try {
+      const response = await fetch(imageUrl)
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.statusText}`)
+      }
+
+      const imageBytes = await response.arrayBuffer()
+      let image
+
+      // Determine image format based on file extension
+      if (imageUrl.endsWith('.png')) {
+        image = await pdfDoc.embedPng(imageBytes)
+      } else if (imageUrl.endsWith('.jpg') || imageUrl.endsWith('.jpeg')) {
+        image = await pdfDoc.embedJpg(imageBytes)
+      } else {
+        throw new Error('Unsupported image format')
+      }
+
+      const pages = pdfDoc.getPages()
+      const firstPage = pages[0]
+      firstPage.drawImage(image, {
+        x,
+        y,
+        width,
+        height,
+      })
+    } catch (error) {
+      console.error('Error drawing image:', error)
+    }
+  }
+
+  const generatePdf = async (registrations) => {
     const url = '/Admission_Application-Form1.pdf'
     const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer())
 
     const pdfDoc = await PDFDocument.load(existingPdfBytes)
     const pages = pdfDoc.getPages()
     const firstPage = pages[0]
+
+    const imageX = 50 // X-coordinate for images
+    let imageY = 400 // Starting Y-coordinate for images
+    const imageWidth = 200 // Width of the image
+    const imageHeight = 200 // Height of the image
+
+    // Iterate over each registration to add images
+    for (const registration of registrations) {
+      if (registration.images && registration.images.length > 0) {
+        for (const images of registration.images) {
+          await drawImage(
+            pdfDoc,
+            `http://localhost:8000${images.path}`,
+            imageX,
+            imageY,
+            imageWidth,
+            imageHeight,
+          )
+          // Adjust Y-coordinate for the next image
+          imageY -= imageHeight + 10
+        }
+      }
+    }
 
     const getTextOrNA = (text) => (text ? text : 'N/A')
 
@@ -706,6 +761,8 @@ const Dashboard = () => {
 
     const pdfBytes = await pdfDoc.save()
     const blob = new Blob([pdfBytes], { type: 'application/pdf' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
     const blobUrl = URL.createObjectURL(blob)
 
     window.open(blobUrl, '_blank')
