@@ -10,13 +10,21 @@ const studentStatusDashboard = () => {
     {
       href: '#',
       title: 'SICC Online Admission Application Portal',
-    //   icon: FaRegChartBar,
+      //   icon: FaRegChartBar,
     },
   ]
 
   const cardData = [
-    { title: 'Online Application Form', description: 'Visit this site to reserve your admission test here.', link: '/registration' } ,
-    { title: 'Check Your Enrollment Status', description: 'Visit this site to check your admission slot here.', link: '/referenceInput' },
+    {
+      title: 'Online Application Form',
+      description: 'Visit this site to fill up your admission form here.',
+      link: '/registration',
+    },
+    {
+      title: 'Check Your Admission Test Information',
+      description: 'Visit this site to check your admission information.',
+      link: '/referenceInput',
+    },
     // { title: '1000', description: 'BS Agri-Business' },
   ]
 
@@ -24,17 +32,17 @@ const studentStatusDashboard = () => {
     <StudentTemplate>
       <PageHeader breadcrumbs={breadcrumbs} />
 
-      <div className="container mx-auto mb-8" >
-      <div className='m-5 grid gap-5 mb-6 md:grid-cols-3'>
-        {cardData.map((card, index) => (
-          <CardItem
-            key={index}
-            title={card.title}
-            description={card.description}
-            link={card.link}
-          />
-        ))}
-      </div>
+      <div className='container mx-auto mb-8'>
+        <div className='m-5 grid gap-5 mb-6 md:grid-cols-3'>
+          {cardData.map((card, index) => (
+            <CardItem
+              key={index}
+              title={card.title}
+              description={card.description}
+              link={card.link}
+            />
+          ))}
+        </div>
       </div>
     </StudentTemplate>
   )

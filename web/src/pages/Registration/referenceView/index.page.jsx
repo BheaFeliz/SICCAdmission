@@ -23,7 +23,7 @@ function Component() {
 
   return (
     <Template>
-      <PageHeader>Admission Applications Received:</PageHeader>
+      <PageHeader>Admission Application Received:</PageHeader>
       <div className='container mx-auto mb-8'>
         <h1 className='text-4xl'>Admission Applications Received:</h1>
       </div>
