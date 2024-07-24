@@ -29,6 +29,11 @@ const links = [
     icon: <RxActivityLog />,
     link: '/students',
   },
+  {
+    label: 'Course',
+    icon: <RxActivityLog />,
+    link: '/course',
+  },
 ]
 
 const Sidebar = () => {
