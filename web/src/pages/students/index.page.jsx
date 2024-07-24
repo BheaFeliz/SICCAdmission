@@ -10,14 +10,17 @@ import Paginations from '@/components/atoms/Pagination'
 import PageHeader from '@/components/organisms/PageHeader'
 import SelectInput from '@/components/organisms/SelectInput'
 import Table from '@/components/organisms/Table'
+import StaffTemplate from '@/components/templates/StaffTemplate'
 import Template from '@/components/templates/Template'
 import { capitalizeFirstLetter } from '@/hooks/lib/util'
+import { useUser } from '@/hooks/redux/auth'
 import { Scourse, SDistrict } from '@/hooks/redux/const'
 
 import useHooks from './hooks'
 
 const Dashboard = () => {
   const { registrations, isLoading, currentPage, onPageChange } = useHooks()
+  const { user } = useUser()
 
   const breadcrumbs = [
     {
@@ -785,70 +788,136 @@ const Dashboard = () => {
   const paginatedData = filteredRegistrations.slice(startIdx, endIdx)
 
   return (
-    <Template>
-      <PageHeader breadcrumbs={breadcrumbs} />
+    <div>
+      {user.role === 'admin' ?
+        <Template>
+          <PageHeader breadcrumbs={breadcrumbs} />
 
-      <div className='container mx-auto p-2'>
-        <div className='flex flex-wrap justify-start items-center mb-8 space-x-4'>
-          <TextInput
-            type='text'
-            placeholder='Search by Name'
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <SelectInput
-            options={[{ value: '', label: 'Course' }, ...Scourse]}
-            name='course'
-            value={selectedCourse}
-            onChange={(e) => setSelectedCourse(e.target.value)}
-          />
-          <SelectInput
-            options={[{ value: '', label: 'District' }, ...SDistrict]}
-            name='district'
-            value={selectedDistrict}
-            onChange={(e) => setSelectedDistrict(e.target.value)}
-          />
-          <SelectInput
-            options={[{ value: '', label: 'Age' }, ...uniqueAges]}
-            name='age'
-            value={selectedAge}
-            onChange={(e) => setSelectedAge(e.target.value)}
-          />
-          <SelectInput
-            options={[{ value: '', label: 'Sex' }, ...uniqueSexes]}
-            name='sex'
-            value={selectedSex}
-            onChange={(e) => setSelectedSex(e.target.value)}
-          />
-          <SelectInput
-            options={[{ value: '', label: 'Gender' }, ...uniqueGenders]}
-            name='gender'
-            value={selectedGender}
-            onChange={(e) => setSelectedGender(e.target.value)}
-          />
-          <Button color='blue' onClick={resetFilters}>
-            Reset Filters
-          </Button>
-        </div>
-        {isLoading ?
-          <div className='flex justify-center items-center h-64'>
-            <Loading />
-          </div>
-        : <>
-            <Table rows={rows} data={paginatedData} />
-            <div className='mt-4 flex justify-center'>
-              <Paginations
-                currentPage={currentPage}
-                onPageChange={onPageChange}
-                totalPages={Math.ceil(
-                  filteredRegistrations.length / itemsPerPage,
-                )}
+          <div className='container mx-auto p-2'>
+            <div className='flex flex-wrap justify-start items-center mb-8 space-x-4'>
+              <TextInput
+                type='text'
+                placeholder='Search by Name'
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
+              <SelectInput
+                options={[{ value: '', label: 'Course' }, ...Scourse]}
+                name='course'
+                value={selectedCourse}
+                onChange={(e) => setSelectedCourse(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'District' }, ...SDistrict]}
+                name='district'
+                value={selectedDistrict}
+                onChange={(e) => setSelectedDistrict(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'Age' }, ...uniqueAges]}
+                name='age'
+                value={selectedAge}
+                onChange={(e) => setSelectedAge(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'Sex' }, ...uniqueSexes]}
+                name='sex'
+                value={selectedSex}
+                onChange={(e) => setSelectedSex(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'Gender' }, ...uniqueGenders]}
+                name='gender'
+                value={selectedGender}
+                onChange={(e) => setSelectedGender(e.target.value)}
+              />
+              <Button color='blue' onClick={resetFilters}>
+                Reset Filters
+              </Button>
             </div>
-          </>
-        }
-      </div>
-    </Template>
+            {isLoading ?
+              <div className='flex justify-center items-center h-64'>
+                <Loading />
+              </div>
+            : <>
+                <Table rows={rows} data={paginatedData} />
+                <div className='mt-4 flex justify-center'>
+                  <Paginations
+                    currentPage={currentPage}
+                    onPageChange={onPageChange}
+                    totalPages={Math.ceil(
+                      filteredRegistrations.length / itemsPerPage,
+                    )}
+                  />
+                </div>
+              </>
+            }
+          </div>
+        </Template>
+      : <StaffTemplate>
+          <div className='container mx-auto p-2'>
+            <div className='flex flex-wrap justify-start items-center mb-8 space-x-4'>
+              <TextInput
+                type='text'
+                placeholder='Search by Name'
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'Course' }, ...Scourse]}
+                name='course'
+                value={selectedCourse}
+                onChange={(e) => setSelectedCourse(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'District' }, ...SDistrict]}
+                name='district'
+                value={selectedDistrict}
+                onChange={(e) => setSelectedDistrict(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'Age' }, ...uniqueAges]}
+                name='age'
+                value={selectedAge}
+                onChange={(e) => setSelectedAge(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'Sex' }, ...uniqueSexes]}
+                name='sex'
+                value={selectedSex}
+                onChange={(e) => setSelectedSex(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'Gender' }, ...uniqueGenders]}
+                name='gender'
+                value={selectedGender}
+                onChange={(e) => setSelectedGender(e.target.value)}
+              />
+              <Button color='blue' onClick={resetFilters}>
+                Reset Filters
+              </Button>
+            </div>
+            {isLoading ?
+              <div className='flex justify-center items-center h-64'>
+                <Loading />
+              </div>
+            : <>
+                <Table rows={rows} data={paginatedData} />
+                <div className='mt-4 flex justify-center'>
+                  <Paginations
+                    currentPage={currentPage}
+                    onPageChange={onPageChange}
+                    totalPages={Math.ceil(
+                      filteredRegistrations.length / itemsPerPage,
+                    )}
+                  />
+                </div>
+              </>
+            }
+          </div>
+        </StaffTemplate>
+      }
+    </div>
   )
 }
 
