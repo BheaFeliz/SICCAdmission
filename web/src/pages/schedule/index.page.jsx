@@ -80,7 +80,7 @@ const Schedule = () => {
 
           <div className='flex flex-wrap justify-start items-center mb-8 space-x-4'>
             <div>
-              <Link href='/schedule/new'>
+              <Link href='/schedule/scheduleRoom'>
                 <Button size='lg' color='blue'>
                   Add Schedule
                 </Button>

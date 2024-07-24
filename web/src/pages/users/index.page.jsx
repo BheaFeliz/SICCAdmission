@@ -18,17 +18,20 @@ const UserDashboard = () => {
   return (
     <Template>
       <Link href='/users/new'>
-        <Button size='xs' color='success'>
-          Create User
-        </Button>
+        <div className='flex justify-end mb-2 '>
+          <Button size='md' color='blue'>
+            Create User
+          </Button>
+        </div>
       </Link>
       <Table>
         <TableHead>
           <TableHeadCell>Name</TableHeadCell>
           <TableHeadCell>Username</TableHeadCell>
-
+          <TableHeadCell>Email Address</TableHeadCell>
           <TableHeadCell>Position</TableHeadCell>
           <TableHeadCell>Role</TableHeadCell>
+          <TableHeadCell>Action</TableHeadCell>
         </TableHead>
         <TableBody>
           {users &&
@@ -36,8 +39,12 @@ const UserDashboard = () => {
               <TableRow key={user.id}>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.username}</TableCell>
+                <TableCell>{user.email}</TableCell>
                 <TableCell>{user.position}</TableCell>
                 <TableCell>{user.role}</TableCell>
+                <TableCell>
+                  <Button color='failure'>Delete</Button>
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>

@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/useToast'
 const schema = yup.object({
   name: yup.string().required(errors.required),
   username: yup.string().min(4).required(errors.required),
-  email: yup.string().min(4).required(errors.required),
+  email: yup.string().email().required(errors.required),
   role: yup.string().oneOf(['staff', 'admin']).required(errors.required),
   phone: yup.string().nullable(),
   position: yup.string().nullable(errors.required),
