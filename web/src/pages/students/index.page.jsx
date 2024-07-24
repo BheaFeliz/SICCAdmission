@@ -10,14 +10,17 @@ import Paginations from '@/components/atoms/Pagination'
 import PageHeader from '@/components/organisms/PageHeader'
 import SelectInput from '@/components/organisms/SelectInput'
 import Table from '@/components/organisms/Table'
+import StaffTemplate from '@/components/templates/StaffTemplate'
 import Template from '@/components/templates/Template'
 import { capitalizeFirstLetter } from '@/hooks/lib/util'
+import { useUser } from '@/hooks/redux/auth'
 import { Scourse, SDistrict } from '@/hooks/redux/const'
 
 import useHooks from './hooks'
 
 const Dashboard = () => {
   const { registrations, isLoading, currentPage, onPageChange } = useHooks()
+  const { user } = useUser()
 
   const breadcrumbs = [
     {
@@ -139,13 +142,68 @@ const Dashboard = () => {
     })
   }
 
-  const generatePdf = async (item) => {
+  const drawImage = async (pdfDoc, imageUrl, x, y, width, height) => {
+    try {
+      const response = await fetch(imageUrl)
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.statusText}`)
+      }
+
+      const imageBytes = await response.arrayBuffer()
+      let image
+
+      // Determine image format based on file extension
+      if (imageUrl.endsWith('.png')) {
+        image = await pdfDoc.embedPng(imageBytes)
+      } else if (imageUrl.endsWith('.jpg') || imageUrl.endsWith('.jpeg')) {
+        image = await pdfDoc.embedJpg(imageBytes)
+      } else {
+        throw new Error('Unsupported image format')
+      }
+
+      const pages = pdfDoc.getPages()
+      const firstPage = pages[0]
+      firstPage.drawImage(image, {
+        x,
+        y,
+        width,
+        height,
+      })
+    } catch (error) {
+      console.error('Error drawing image:', error)
+    }
+  }
+
+  const generatePdf = async (registrations) => {
     const url = '/Admission_Application-Form1.pdf'
     const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer())
 
     const pdfDoc = await PDFDocument.load(existingPdfBytes)
     const pages = pdfDoc.getPages()
     const firstPage = pages[0]
+
+    const imageX = 50 // X-coordinate for images
+    let imageY = 400 // Starting Y-coordinate for images
+    const imageWidth = 200 // Width of the image
+    const imageHeight = 200 // Height of the image
+
+    // Iterate over each registration to add images
+    for (const registration of registrations) {
+      if (registration.images && registration.images.length > 0) {
+        for (const images of registration.images) {
+          await drawImage(
+            pdfDoc,
+            `http://localhost:8000${images.path}`,
+            imageX,
+            imageY,
+            imageWidth,
+            imageHeight,
+          )
+          // Adjust Y-coordinate for the next image
+          imageY -= imageHeight + 10
+        }
+      }
+    }
 
     const getTextOrNA = (text) => (text ? text : 'N/A')
 
@@ -706,6 +764,8 @@ const Dashboard = () => {
 
     const pdfBytes = await pdfDoc.save()
     const blob = new Blob([pdfBytes], { type: 'application/pdf' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
     const blobUrl = URL.createObjectURL(blob)
 
     window.open(blobUrl, '_blank')
@@ -728,70 +788,136 @@ const Dashboard = () => {
   const paginatedData = filteredRegistrations.slice(startIdx, endIdx)
 
   return (
-    <Template>
-      <PageHeader breadcrumbs={breadcrumbs} />
+    <div>
+      {user.role === 'admin' ?
+        <Template>
+          <PageHeader breadcrumbs={breadcrumbs} />
 
-      <div className='container mx-auto p-2'>
-        <div className='flex flex-wrap justify-start items-center mb-8 space-x-4'>
-          <TextInput
-            type='text'
-            placeholder='Search by Name'
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <SelectInput
-            options={[{ value: '', label: 'Course' }, ...Scourse]}
-            name='course'
-            value={selectedCourse}
-            onChange={(e) => setSelectedCourse(e.target.value)}
-          />
-          <SelectInput
-            options={[{ value: '', label: 'District' }, ...SDistrict]}
-            name='district'
-            value={selectedDistrict}
-            onChange={(e) => setSelectedDistrict(e.target.value)}
-          />
-          <SelectInput
-            options={[{ value: '', label: 'Age' }, ...uniqueAges]}
-            name='age'
-            value={selectedAge}
-            onChange={(e) => setSelectedAge(e.target.value)}
-          />
-          <SelectInput
-            options={[{ value: '', label: 'Sex' }, ...uniqueSexes]}
-            name='sex'
-            value={selectedSex}
-            onChange={(e) => setSelectedSex(e.target.value)}
-          />
-          <SelectInput
-            options={[{ value: '', label: 'Gender' }, ...uniqueGenders]}
-            name='gender'
-            value={selectedGender}
-            onChange={(e) => setSelectedGender(e.target.value)}
-          />
-          <Button color='blue' onClick={resetFilters}>
-            Reset Filters
-          </Button>
-        </div>
-        {isLoading ?
-          <div className='flex justify-center items-center h-64'>
-            <Loading />
-          </div>
-        : <>
-            <Table rows={rows} data={paginatedData} />
-            <div className='mt-4 flex justify-center'>
-              <Paginations
-                currentPage={currentPage}
-                onPageChange={onPageChange}
-                totalPages={Math.ceil(
-                  filteredRegistrations.length / itemsPerPage,
-                )}
+          <div className='container mx-auto p-2'>
+            <div className='flex flex-wrap justify-start items-center mb-8 space-x-4'>
+              <TextInput
+                type='text'
+                placeholder='Search by Name'
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
+              <SelectInput
+                options={[{ value: '', label: 'Course' }, ...Scourse]}
+                name='course'
+                value={selectedCourse}
+                onChange={(e) => setSelectedCourse(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'District' }, ...SDistrict]}
+                name='district'
+                value={selectedDistrict}
+                onChange={(e) => setSelectedDistrict(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'Age' }, ...uniqueAges]}
+                name='age'
+                value={selectedAge}
+                onChange={(e) => setSelectedAge(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'Sex' }, ...uniqueSexes]}
+                name='sex'
+                value={selectedSex}
+                onChange={(e) => setSelectedSex(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'Gender' }, ...uniqueGenders]}
+                name='gender'
+                value={selectedGender}
+                onChange={(e) => setSelectedGender(e.target.value)}
+              />
+              <Button color='blue' onClick={resetFilters}>
+                Reset Filters
+              </Button>
             </div>
-          </>
-        }
-      </div>
-    </Template>
+            {isLoading ?
+              <div className='flex justify-center items-center h-64'>
+                <Loading />
+              </div>
+            : <>
+                <Table rows={rows} data={paginatedData} />
+                <div className='mt-4 flex justify-center'>
+                  <Paginations
+                    currentPage={currentPage}
+                    onPageChange={onPageChange}
+                    totalPages={Math.ceil(
+                      filteredRegistrations.length / itemsPerPage,
+                    )}
+                  />
+                </div>
+              </>
+            }
+          </div>
+        </Template>
+      : <StaffTemplate>
+          <div className='container mx-auto p-2'>
+            <div className='flex flex-wrap justify-start items-center mb-8 space-x-4'>
+              <TextInput
+                type='text'
+                placeholder='Search by Name'
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'Course' }, ...Scourse]}
+                name='course'
+                value={selectedCourse}
+                onChange={(e) => setSelectedCourse(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'District' }, ...SDistrict]}
+                name='district'
+                value={selectedDistrict}
+                onChange={(e) => setSelectedDistrict(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'Age' }, ...uniqueAges]}
+                name='age'
+                value={selectedAge}
+                onChange={(e) => setSelectedAge(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'Sex' }, ...uniqueSexes]}
+                name='sex'
+                value={selectedSex}
+                onChange={(e) => setSelectedSex(e.target.value)}
+              />
+              <SelectInput
+                options={[{ value: '', label: 'Gender' }, ...uniqueGenders]}
+                name='gender'
+                value={selectedGender}
+                onChange={(e) => setSelectedGender(e.target.value)}
+              />
+              <Button color='blue' onClick={resetFilters}>
+                Reset Filters
+              </Button>
+            </div>
+            {isLoading ?
+              <div className='flex justify-center items-center h-64'>
+                <Loading />
+              </div>
+            : <>
+                <Table rows={rows} data={paginatedData} />
+                <div className='mt-4 flex justify-center'>
+                  <Paginations
+                    currentPage={currentPage}
+                    onPageChange={onPageChange}
+                    totalPages={Math.ceil(
+                      filteredRegistrations.length / itemsPerPage,
+                    )}
+                  />
+                </div>
+              </>
+            }
+          </div>
+        </StaffTemplate>
+      }
+    </div>
   )
 }
 

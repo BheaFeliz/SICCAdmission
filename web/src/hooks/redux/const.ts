@@ -1,3 +1,10 @@
+export const roles = [
+  {
+    value: 'staff',
+    label: 'Staff',
+  },
+  { value: 'admin', label: 'admin' },
+]
 export const suffixoption = [
   {
     value: null,

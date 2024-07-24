@@ -26,7 +26,7 @@ class UserRequest extends FormRequest
             'username' => 'required|string|min:3|unique:users',
             'phone' => 'required|string|size:11',
             'position' => 'required|string',
-            'role' => 'required|string', 
+            'role' => 'required|string|in:staff,admin'
         ];
     }
 }

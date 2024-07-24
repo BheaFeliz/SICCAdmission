@@ -87,10 +87,10 @@ const Registration = () => {
           <div className='m-2'>
             <Card>
               <p>
-                Fill out this form carefully and TYPE all the
-                information requested. Select the appropriate choices. if the
-                item is not applicable indicate select or type N/A. INCOMPLETE
-                FORMS WILL BE NOT PROCESSED.
+                Fill out this form carefully and TYPE all the information
+                requested. Select the appropriate choices. If the item is not
+                applicable indicate select or type N/A. INCOMPLETE FORMS WILL
+                NOT BE PROCESSED.
               </p>
             </Card>
           </div>
@@ -322,21 +322,21 @@ const Registration = () => {
             <div className='m-2'>
               <Card>
                 <p>
-                  CONFORME: By signing below, I hereby certify that all the
-                  information written in this application are complete and
-                  accurate. I agree to update the Office of Admissions and the
-                  Registrars Office for any changes. I acknowledge that I have
-                  read and understood the Samal Island City College (SICC)
-                  Admissions Privacy Notice posted in the office premises
-                  understand that by applying for admission/registering as a
-                  student of this institutuion, I allow SICC through the Office
-                  of Admissions to collect, record, organize, update or modif
-                  retrieve, consult, utilize, consolidate, block, erase or
-                  delete any information which are a part of my personal data
-                  for historical, statistical, research and evaluation purposes
-                  pursuant to the provisions of the Republic Act No. 10173 of
-                  the Philippines, Data Privacy Act of 2012 and its
-                  corresponding Implementing Rules and Regulations.
+                  CONFORME: I hereby certify that all the information written in
+                  this application are complete and accurate. I agree to update
+                  the Office of Admissions and the Registrars Office for any
+                  changes. I acknowledge that I have read and understood the
+                  Samal Island City College (SICC) Admissions Privacy Notice
+                  posted in the office premises understand that by applying for
+                  admission/registering as a student of this institutuion, I
+                  allow SICC through the Office of Admissions to collect,
+                  record, organize, update or modif retrieve, consult, utilize,
+                  consolidate, block, erase or delete any information which are
+                  a part of my personal data for historical, statistical,
+                  research and evaluation purposes pursuant to the provisions of
+                  the Republic Act No. 10173 of the Philippines, Data Privacy
+                  Act of 2012 and its corresponding Implementing Rules and
+                  Regulations.
                 </p>
               </Card>
             </div>
@@ -351,8 +351,9 @@ const Registration = () => {
                 />
               </Card>
             </div>
-
-            <Button type='submit'>Proceed</Button>
+            <div className='flex justify-end'>
+              <Button type='submit'>Finish</Button>
+            </div>
           </div>
         </form>
       </Card>

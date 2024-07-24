@@ -1,10 +1,10 @@
-import { baseApi } from './baseApi';
+import { baseApi } from './baseApi'
 
 export const studentApi = baseApi.injectEndpoints({
   tagTypes: ['registrations'],
   endpoints: (build) => ({
     getRegistrations: build.query({
-      query: () => 'registration',
+      query: () => 'registration?include=images',
       providesTags: ['registrations'],
     }),
     createRegistration: build.mutation({
@@ -27,11 +27,11 @@ export const studentApi = baseApi.injectEndpoints({
       }),
     }),
   }),
-}); 
+})
 
 export const {
   useGetRegistrationsQuery,
   useCreateRegistrationMutation,
   useGetRegistrationByIdQuery,
   useDeleteRegistrationMutation,
-} = studentApi;
+} = studentApi

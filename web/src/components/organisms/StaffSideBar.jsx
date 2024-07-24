@@ -1,7 +1,5 @@
 import Link from 'next/link'
-import { AiOutlineUserAdd } from 'react-icons/ai'
 import { HiOutlineCalendar, HiOutlineUsers, HiTemplate } from 'react-icons/hi'
-import { RxActivityLog } from 'react-icons/rx'
 
 const links = [
   {
@@ -19,24 +17,9 @@ const links = [
     icon: <HiOutlineUsers />,
     link: '/students',
   },
-  {
-    label: 'Create Users',
-    icon: <AiOutlineUserAdd />,
-    link: '/users',
-  },
-  {
-    label: 'Activity',
-    icon: <RxActivityLog />,
-    link: '/students',
-  },
-  {
-    label: 'Course',
-    icon: <RxActivityLog />,
-    link: '/course',
-  },
 ]
 
-const Sidebar = () => {
+const StaffSidebar = () => {
   return (
     <aside className='pt-2 w-64 overflow-y-auto bg-gray-50'>
       <ul className='space-y-2'>
@@ -57,4 +40,4 @@ const Sidebar = () => {
   )
 }
 
-export default Sidebar
+export default StaffSidebar
