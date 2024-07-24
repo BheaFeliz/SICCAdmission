@@ -10,7 +10,7 @@ import StaffTemplate from '@/components/templates/StaffTemplate'
 import Template from '@/components/templates/Template'
 import { useUser } from '@/hooks/redux/auth' // Ensure you import useUser hook
 
-import useHooks from './hook' // Ensure this import path is correct
+import useHooks from './hooks' // Ensure this import path is correct
 
 const breadcrumbs = [
   {

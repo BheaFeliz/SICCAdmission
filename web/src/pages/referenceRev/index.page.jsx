@@ -42,7 +42,6 @@ function InfoTable({
   scheduleEndTime,
   session,
   remark,
-  description,
   roomName,
 }) {
   return (
@@ -61,7 +60,7 @@ function InfoTable({
           <td className='px-9 py-2 text-center'>{name}</td>
         </tr>
         <tr>
-          <td className='px-9 py-2 font-semibold'>Course Selected:</td>
+          <td className='px-9 py-2 font-semibold'>Course:</td>
           <td className='px-9 py-2 text-center'>{course}</td>
         </tr>
         <tr>
@@ -83,10 +82,6 @@ function InfoTable({
         <tr>
           <td className='px-9 py-2 font-semibold'>Remark:</td>
           <td className='px-9 py-2 text-center'>{remark}</td>
-        </tr>
-        <tr>
-          <td className='px-9 py-2 font-semibold'>Description:</td>
-          <td className='px-9 py-2 text-center'>{description}</td>
         </tr>
         <tr>
           <td className='px-9 py-2 font-semibold'>Room Number:</td>
