@@ -351,8 +351,9 @@ const Registration = () => {
                 />
               </Card>
             </div>
-
-            <Button type='submit'>Proceed</Button>
+            <div className='flex justify-end'>
+              <Button type='submit'>Finish</Button>
+            </div>
           </div>
         </form>
       </Card>

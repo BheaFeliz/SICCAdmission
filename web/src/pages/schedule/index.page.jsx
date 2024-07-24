@@ -1,12 +1,14 @@
-import { Button, Card } from 'flowbite-react' // Import Card here
+import { Button, Card, Modal } from 'flowbite-react' // Ensure this import is correct
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
+import { HiOutlineExclamationCircle } from 'react-icons/hi'
 import { IoCalendarSharp } from 'react-icons/io5'
 
+import Loading from '@/components/atoms/Loading'
 import PageHeader from '@/components/organisms/PageHeader'
 import StaffTemplate from '@/components/templates/StaffTemplate'
 import Template from '@/components/templates/Template'
-import { useUser } from '@/hooks/redux/auth'
+import { useUser } from '@/hooks/redux/auth' // Ensure you import useUser hook
 
 import useHooks from './hook' // Ensure this import path is correct
 
@@ -20,7 +22,10 @@ const breadcrumbs = [
 
 const Schedule = () => {
   const { schedules, isError, handleDeleteSchedule } = useHooks()
-  const { user } = useUser() // Ensure you import useUser hook
+  const { user } = useUser()
+  const [openModal, setOpenModal] = useState(false)
+  const [selectedSchedule, setSelectedSchedule] = useState(null)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   // Function to convert 24-hour time to 12-hour time format
   const convertTo12HourFormat = (time) => {
@@ -38,6 +43,25 @@ const Schedule = () => {
     const day = date.getDate()
     const year = date.getFullYear()
     return `${month}-${day}-${year}`
+  }
+
+  const handleOpenModal = (schedule) => {
+    setSelectedSchedule(schedule)
+    setOpenModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setOpenModal(false)
+    setSelectedSchedule(null)
+    setIsDeleting(false)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (selectedSchedule) {
+      setIsDeleting(true)
+      await handleDeleteSchedule(selectedSchedule.id)
+      handleCloseModal()
+    }
   }
 
   if (isError) {
@@ -84,8 +108,6 @@ const Schedule = () => {
             {schedules && schedules.length > 0 ?
               schedules.map((schedule) => (
                 <Card key={schedule.id} className='p-2'>
-                  {' '}
-                  {/* Use Card component */}
                   <h2 className='text-lg font-bold'>{schedule.name}</h2>
                   <p>Date: {formatDate(schedule.date)}</p>
                   <p>Start Time: {convertTo12HourFormat(schedule.startTime)}</p>
@@ -97,17 +119,44 @@ const Schedule = () => {
                         View Details
                       </Button>
                     </Link>
-                    <button
-                      className='bg-red-500 text-white px-4 py-2 rounded-md'
-                      onClick={() => handleDeleteSchedule(schedule.id)}
+                    <Button
+                      size='lg'
+                      color='failure'
+                      onClick={() => handleOpenModal(schedule)}
                     >
                       Delete Schedule
-                    </button>
+                    </Button>
                   </div>
                 </Card>
               ))
             : <p>No schedules available.</p>}
           </div>
+
+          {selectedSchedule && (
+            <Modal show={openModal} size='md' onClose={handleCloseModal} popup>
+              <Modal.Header />
+              <Modal.Body>
+                {isDeleting ?
+                  <Loading />
+                : <div className='text-center'>
+                    <HiOutlineExclamationCircle className='mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200' />
+                    <h3 className='mb-5 text-lg font-normal text-gray-500 dark:text-gray-400'>
+                      Are you sure you want to delete the schedule{' '}
+                      {selectedSchedule.name}?
+                    </h3>
+                    <div className='flex justify-center gap-4'>
+                      <Button color='failure' onClick={handleConfirmDelete}>
+                        {"Yes, I'm sure"}
+                      </Button>
+                      <Button color='gray' onClick={handleCloseModal}>
+                        No, cancel
+                      </Button>
+                    </div>
+                  </div>
+                }
+              </Modal.Body>
+            </Modal>
+          )}
         </Template>
       : <StaffTemplate>
           <PageHeader breadcrumbs={breadcrumbs} />
@@ -126,8 +175,6 @@ const Schedule = () => {
             {schedules && schedules.length > 0 ?
               schedules.map((schedule) => (
                 <Card key={schedule.id} className='p-4'>
-                  {' '}
-                  {/* Use Card component */}
                   <h2 className='text-lg font-bold'>{schedule.name}</h2>
                   <p>Date: {formatDate(schedule.date)}</p>
                   <p>Start Time: {convertTo12HourFormat(schedule.startTime)}</p>

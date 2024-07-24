@@ -15,11 +15,20 @@ class RegistrationController extends Controller
 {
     $registrations = Registration::withTrashed()
         ->with('schedule')
-        ->with('images') // Include images
+        ->with('images')
         ->get();
 
-    return response()->json(['registrations' => $registrations], 200);
+    $courseCounts = Registration::withTrashed()
+        ->select('selectcourse', DB::raw('count(*) as count'))
+        ->groupBy('selectcourse')
+        ->pluck('count', 'selectcourse');
+
+    return response()->json([
+        'registrations' => $registrations,
+        'course_counts' => $courseCounts,
+    ], 200);
 }
+
 
 
     public function store(Request $request)

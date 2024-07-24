@@ -21,7 +21,6 @@ const Dashboard = () => {
     },
   ]
 
-  // Create a mapping from course codes to labels
   const courseLabelMap = Scourse.reduce((acc, course) => {
     acc[course.value] = course.label
     return acc
@@ -31,7 +30,13 @@ const Dashboard = () => {
     ([course, count]) => ({
       title: count,
       description: courseLabelMap[course] || course,
+      link: `/dashboard/filteredcourse?course=${course}`, // Add link to each course card
     }),
+  )
+
+  const totalCourses = Object.values(data?.course_counts ?? {}).reduce(
+    (acc, count) => acc + count,
+    0,
   )
 
   return (

@@ -1,8 +1,23 @@
+import { Button } from 'flowbite-react'
 import React from 'react'
+import { IoCalendarSharp } from 'react-icons/io5'
 
+import PageHeader from '@/components/organisms/PageHeader'
 import Template from '@/components/templates/Template'
 
 import useHooks from './hooks'
+
+const breadcrumbs = [
+  {
+    href: '/schedule',
+    title: 'Scheduling',
+    icon: IoCalendarSharp,
+  },
+  {
+    href: '#',
+    title: 'Schedule Room',
+  }
+]
 
 const Field = ({ id, label, type = 'text', register, errors }) => (
   <div className='mb-4'>
@@ -31,6 +46,7 @@ const RoomSchedulingForm = () => {
 
   return (
     <Template>
+      <PageHeader breadcrumbs={breadcrumbs} />
       <div className='flex justify-center items-center mt-4'>
         <h2 className='text-2xl font-bold mb-4'>Schedule Room</h2>
       </div>
@@ -69,13 +85,13 @@ const RoomSchedulingForm = () => {
           register={register}
           errors={errors}
         />
-        <div className='flex justify-center'>
-          <button
+        <div className='flex justify-end'>
+          <Button
             type='submit'
-            className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'
+            color="blue"
           >
-            Confirm
-          </button>
+            Create Schedule
+          </Button>
         </div>
       </form>
     </Template>

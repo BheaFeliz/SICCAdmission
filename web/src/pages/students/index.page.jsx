@@ -1,6 +1,6 @@
 import { Button, TextInput } from 'flowbite-react'
 import Image from 'next/image'
-import { PDFDocument, rgb } from 'pdf-lib'
+//import { PDFDocument, rgb } from 'pdf-lib'
 import React, { useState } from 'react'
 import { AiFillFilePdf } from 'react-icons/ai'
 import { IoAccessibilitySharp } from 'react-icons/io5'
@@ -92,7 +92,7 @@ const Dashboard = () => {
       header: 'Contact Number',
       render: (item) => item.contactnumber,
     },
-    { key: 'email', header: 'Email', render: (item) => item.email },
+    { key: 'email', header: 'Email Address', render: (item) => item.email },
     {
       key: 'Scourse',
       header: 'Course',
@@ -104,8 +104,8 @@ const Dashboard = () => {
       render: (item) => districtLabelMap[item.district] || item.district,
     },
     {
-      key: 'action',
-      header: 'Action',
+      key: 'pdf',
+      header: 'Document',
       render: (item) => (
         <div className='flex space-x-2'>
           <button
