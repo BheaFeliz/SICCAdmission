@@ -76,8 +76,13 @@ const Dashboard = () => {
                     key={index}
                     title={card.title}
                     description={card.description}
+                    link={card.link}
                   />
                 ))}
+                <CardItem
+                  title={totalCourses}
+                  description='Total Admission Course'
+                />
               </div>
             }
           </div>
