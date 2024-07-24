@@ -10,7 +10,7 @@ import StaffTemplate from '@/components/templates/StaffTemplate'
 import Template from '@/components/templates/Template'
 import { useUser } from '@/hooks/redux/auth' // Ensure you import useUser hook
 
-import useHooks from './hook' // Ensure this import path is correct
+import useHooks from './hooks' // Ensure this import path is correct
 
 const breadcrumbs = [
   {
@@ -112,7 +112,8 @@ const Schedule = () => {
                   <p>Date: {formatDate(schedule.date)}</p>
                   <p>Start Time: {convertTo12HourFormat(schedule.startTime)}</p>
                   <p>End Time: {convertTo12HourFormat(schedule.endTime)}</p>
-                  <p>{schedule.description}</p>
+                  <p>{schedule.session}</p>
+                  <p>{schedule.remark}</p>
                   <div className='flex space-x-2 mt-2'>
                     <Link href={`/schedule/${schedule.id}`} passHref>
                       <Button as='a' size='lg' color='blue'>
@@ -179,7 +180,8 @@ const Schedule = () => {
                   <p>Date: {formatDate(schedule.date)}</p>
                   <p>Start Time: {convertTo12HourFormat(schedule.startTime)}</p>
                   <p>End Time: {convertTo12HourFormat(schedule.endTime)}</p>
-                  <p>{schedule.description}</p>
+                  <p>{schedule.session}</p>
+                  <p>{schedule.remark}</p>
                   <div className='flex space-x-2 mt-2'>
                     <Link href={`/schedule/${schedule.id}`} passHref>
                       <Button as='a' size='lg' color='blue'>

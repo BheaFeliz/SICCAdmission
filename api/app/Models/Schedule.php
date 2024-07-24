@@ -10,12 +10,12 @@ class Schedule extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'date', 'startTime', 'endTime', 'description'];
+    protected $fillable = ['name', 'date', 'startTime', 'endTime', 'session', 'remark'];
 
     public function registrations()
-{
-    return $this->hasMany(Registration::class);
-}
+    {
+        return $this->hasMany(Registration::class);
+    }
 
     protected static function boot()
     {
@@ -29,11 +29,8 @@ class Schedule extends Model
     }
 
     public function getDeletedSchedules()
-{
-    $deletedSchedules = Schedule::onlyTrashed()->with('registrations')->get();
-    return response()->json($deletedSchedules);
-}
-
-
-    
+    {
+        $deletedSchedules = Schedule::onlyTrashed()->with('registrations')->get();
+        return response()->json($deletedSchedules);
+    }
 }
