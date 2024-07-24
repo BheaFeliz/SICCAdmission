@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::select(['name', 'username', 'phone', 'position', 'role'])->get();
+        $users = User::select(['name', 'username', 'phone', 'position', 'role', 'email'])->get();
         return response()->json(['users' => $users]);
     }
     

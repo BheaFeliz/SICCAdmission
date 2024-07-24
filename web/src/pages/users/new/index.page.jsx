@@ -38,6 +38,7 @@ function CreateUserPage() {
             className='form-input'
             {...formState}
           />
+
           <SelectInput
             name='role'
             options={[
@@ -65,20 +66,6 @@ function CreateUserPage() {
           <Button type='submit'>Create User</Button>
         </form>
       </div>
-
-      {/* {currentUser?.role === 'admin' && (
-        <>
-          <h2>User List</h2>
-          <ul>
-            {Array.isArray(users) &&
-              users.map((user) => (
-                <li key={user.username}>
-                  {user.name} - {user.username} - {user.role}
-                </li>
-              ))}
-          </ul>
-        </>
-      )} */}
     </Template>
   )
 }

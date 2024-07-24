@@ -13,11 +13,11 @@ class AuthController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:50',
             'username' => 'required|string|max:50', 
-            'email' => 'nullable|unique:users',
+            'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed',
             'role' => 'in:admin,staff',
             'phone' => 'nullable|string|size:11',
-            'position' => 'nullable|string|max:50'
+            'position' => 'required|string|max:50'
         ]);
 
         $userData = array_merge($data, ['role' => $data['role'] ?? 'staff']);
