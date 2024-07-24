@@ -21,10 +21,11 @@ const schema = yup.object().shape({
         return value > startTime
       },
     ),
-  description: yup
+  session: yup.string().required('Session is required'),
+  remark: yup
     .string()
     .nullable()
-    .max(100, 'Description cannot be more than 100 characters'),
+    .max(200, 'Remark cannot be more than 200 characters'),
 })
 
 const useHooks = () => {

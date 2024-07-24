@@ -40,45 +40,57 @@ function InfoTable({
   scheduleDate,
   scheduleStartTime,
   scheduleEndTime,
-  title,
+  session,
+  remark,
   description,
+  roomName,
 }) {
   return (
     <table className='w-full'>
       <thead className='bg-gray-200'>
         <tr>
-          <th className='px-4 py-2 font-semibold'>Reference Number:</th>
-          <th className='px-4 py-2'>{referenceNumber}</th>
+          <th className='px-9 py-4 font-semibold text-xl'>Reference Number:</th>
+          <th className='px-9 py-4 font-bold text-xl text-center'>
+            {referenceNumber}
+          </th>
         </tr>
       </thead>
       <tbody className='bg-white divide-y divide-gray-200'>
         <tr>
-          <td className='px-4 py-2 font-semibold'>Name:</td>
-          <td className='px-4 py-2'>{name}</td>
+          <td className='px-9 py-2 font-semibold'>Name:</td>
+          <td className='px-9 py-2 text-center'>{name}</td>
         </tr>
         <tr>
-          <td className='px-4 py-2 font-semibold'>Course Selected:</td>
-          <td className='px-4 py-2'>{course}</td>
+          <td className='px-9 py-2 font-semibold'>Course Selected:</td>
+          <td className='px-9 py-2 text-center'>{course}</td>
         </tr>
         <tr>
-          <td className='px-4 py-2 font-semibold'>Scheduled Date:</td>
-          <td className='px-4 py-2'>{scheduleDate}</td>
+          <td className='px-9 py-2 font-semibold'>Scheduled Date:</td>
+          <td className='px-9 py-2 text-center'>{scheduleDate}</td>
         </tr>
         <tr>
-          <td className='px-4 py-2 font-semibold'>Scheduled Start Time:</td>
-          <td className='px-4 py-2'>{scheduleStartTime}</td>
+          <td className='px-9 py-2 font-semibold'>Scheduled Start Time:</td>
+          <td className='px-9 py-2 text-center'>{scheduleStartTime}</td>
         </tr>
         <tr>
-          <td className='px-4 py-2 font-semibold'>Scheduled End Time:</td>
-          <td className='px-4 py-2'>{scheduleEndTime}</td>
+          <td className='px-9 py-2 font-semibold'>Scheduled End Time:</td>
+          <td className='px-9 py-2 text-center'>{scheduleEndTime}</td>
         </tr>
         <tr>
-          <td className='px-4 py-2 font-semibold'>Description:</td>
-          <td className='px-4 py-2'>{description}</td>
+          <td className='px-9 py-2 font-semibold'>Session:</td>
+          <td className='px-9 py-2 text-center'>{session}</td>
         </tr>
         <tr>
-          <td className='px-4 py-2 font-semibold'>Room Number:</td>
-          <td className='px-4 py-2'>{title}</td>
+          <td className='px-9 py-2 font-semibold'>Remark:</td>
+          <td className='px-9 py-2 text-center'>{remark}</td>
+        </tr>
+        <tr>
+          <td className='px-9 py-2 font-semibold'>Description:</td>
+          <td className='px-9 py-2 text-center'>{description}</td>
+        </tr>
+        <tr>
+          <td className='px-9 py-2 font-semibold'>Room Number:</td>
+          <td className='px-9 py-2 text-center'>{roomName}</td>
         </tr>
       </tbody>
     </table>
@@ -149,9 +161,9 @@ function Component() {
 
       <div className='m-2'>
         <Card>
-          <p>
-            Instructions: Please remember to bring the following items for you
-            upcoming examination
+          <p className='font-bold'>
+            Instructions: Please remember to bring the necessary Documents (PSA,
+            Form 137 and Report Card) upcoming examination
           </p>
         </Card>
       </div>
@@ -167,9 +179,10 @@ function Component() {
             scheduleDate={formattedDate}
             scheduleStartTime={formattedStartTime}
             scheduleEndTime={formattedEndTime}
+            session={scheduleData ? scheduleData.session : 'N/A'}
+            remark={scheduleData ? scheduleData.remark : 'N/A'}
             referenceNumber={registration.reference_number}
-            title={scheduleData ? scheduleData.title : 'N/A'}
-            description={scheduleData ? scheduleData.description : 'N/A'}
+            roomName={scheduleData ? scheduleData.name : 'N/A'}
           />
         </Card>
       </div>

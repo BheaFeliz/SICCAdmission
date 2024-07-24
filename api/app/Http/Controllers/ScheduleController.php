@@ -32,7 +32,8 @@ class ScheduleController extends Controller
             'date' => 'required|date',
             'startTime' => 'required',
             'endTime' => 'required',
-            'description' => 'string|nullable',
+            'session' => 'required|string|max:255',
+            'remark' => 'string|nullable|max:200',
         ]);
 
         if ($validator->fails()) {
@@ -46,7 +47,8 @@ class ScheduleController extends Controller
         $schedule->date = $date;
         $schedule->startTime = $request->startTime;
         $schedule->endTime = $request->endTime;
-        $schedule->description = $request->description;
+        $schedule->session = $request->session;
+        $schedule->remark = $request->remark;
         $schedule->save();
 
         return response()->json($schedule, 201);
@@ -59,7 +61,8 @@ class ScheduleController extends Controller
             'date' => 'date',
             'startTime' => 'string',
             'endTime' => 'string',
-            'description' => 'string|nullable',
+            'session' => 'string|max:255',
+            'remark' => 'string|nullable|max:200',
         ]);
 
         if ($validator->fails()) {
@@ -86,6 +89,7 @@ class ScheduleController extends Controller
     
         return response()->json($schedules);
     }
+
     public function destroy($id)
     {
         $schedule = Schedule::findOrFail($id);
@@ -99,5 +103,4 @@ class ScheduleController extends Controller
     
         return response()->json(['message' => 'Schedule deleted successfully'], 200);
     }
-    
 }

@@ -16,10 +16,10 @@ const breadcrumbs = [
   {
     href: '#',
     title: 'Schedule Room',
-  }
+  },
 ]
 
-const Field = ({ id, label, type = 'text', register, errors }) => (
+const Field = ({ id, label, type = 'text', register, errors, children }) => (
   <div className='mb-4'>
     <label htmlFor={id} className='block text-sm font-semibold mb-2'>
       {label}
@@ -30,6 +30,14 @@ const Field = ({ id, label, type = 'text', register, errors }) => (
         {...register(id)}
         className={`w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 ${errors[id] ? 'border-red-500' : ''}`}
       />
+    : type === 'select' ?
+      <select
+        id={id}
+        {...register(id)}
+        className={`w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 ${errors[id] ? 'border-red-500' : ''}`}
+      >
+        {children}
+      </select>
     : <input
         type={type}
         id={id}
@@ -79,17 +87,28 @@ const RoomSchedulingForm = () => {
           errors={errors}
         />
         <Field
-          id='description'
-          label='Description'
+          id='session'
+          label='Session'
+          type='select'
+          register={register}
+          errors={errors}
+        >
+          <option value=''>Select Session</option>
+          <option value='Morning Session'>Morning Session</option>
+          <option value='Morning-Afternoon Session'>
+            Morning-Afternoon Session
+          </option>
+          <option value='Afternoon Session'>Afternoon Session</option>
+        </Field>
+        <Field
+          id='remark'
+          label='Remark'
           type='textarea'
           register={register}
           errors={errors}
         />
         <div className='flex justify-end'>
-          <Button
-            type='submit'
-            color="blue"
-          >
+          <Button type='submit' color='blue'>
             Create Schedule
           </Button>
         </div>
