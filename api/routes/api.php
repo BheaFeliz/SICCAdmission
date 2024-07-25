@@ -9,6 +9,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\CourseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,4 +67,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
     Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard.show');
 
+    Route::get('/courses', [CourseController::class, 'index']);
+    Route::post('/courses', [CourseController::class, 'store']);
 });
