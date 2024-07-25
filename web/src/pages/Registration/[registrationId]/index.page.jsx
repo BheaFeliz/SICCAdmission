@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import { Button } from 'flowbite-react'
 import Link from 'next/link' // Import Link from next/link
 import { useRouter } from 'next/router'
-import { FaCalendarAlt, FaUser } from 'react-icons/fa'
+import { FaUser } from 'react-icons/fa'
 
 import Loading from '@/components/atoms/Loading'
 // import DeleteModal from '@/components/organisms/DeleteModal'
@@ -52,7 +52,6 @@ const Registration = () => {
             <RowItem
               label='Date'
               value={dayjs(registration.created_at).format('MMM DD, YYYY')}
-              icon={<FaCalendarAlt />}
             />
           </div>
           <RowItem label='First Name' value={registration.fname} />

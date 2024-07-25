@@ -11,6 +11,8 @@ class Registration extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $guarded = [];
+
     protected $fillable = [
         'fname', 'lname', 'mname', 'pref', 'age', 'monthoption', 'date', 'year',
         'sex', 'gender', 'civilstatus', 'contactnumber', 'email', 'pbirth', 'indigentP',

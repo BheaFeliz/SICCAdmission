@@ -19,6 +19,14 @@ export const studentApi = baseApi.injectEndpoints({
       query: (id) => `/registration/${id}`,
       providesTags: ['registrations'],
     }),
+    updateRegistration: build.mutation({
+      invalidatesTags: ['registrations'],
+      query: ({ registrationId, ...body }) => ({
+        url: `registration/${registrationId}`,
+        method: 'PUT',
+        body,
+      }),
+    }),
     deleteRegistration: build.mutation({
       invalidatesTags: ['registrations'],
       query: (id) => ({
@@ -32,6 +40,7 @@ export const studentApi = baseApi.injectEndpoints({
 export const {
   useGetRegistrationsQuery,
   useCreateRegistrationMutation,
+  useUpdateRegistrationMutation,
   useGetRegistrationByIdQuery,
   useDeleteRegistrationMutation,
 } = studentApi
