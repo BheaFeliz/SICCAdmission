@@ -20,7 +20,7 @@ function CreateCoursePage() {
         <div className='text-2xl font-bold mb-2'>Create Course</div>
         <form onSubmit={handleSubmit}>
           <TextInput
-            label='Label'
+            label='Course Name'
             type='text'
             name='label'
             className='form-input'
@@ -28,7 +28,7 @@ function CreateCoursePage() {
           />
           <TextInput
             name='value'
-            label='Value'
+            label='Course Initials'
             className='form-input'
             {...formState}
           />

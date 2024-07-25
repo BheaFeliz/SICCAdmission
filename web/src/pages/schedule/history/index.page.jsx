@@ -1,10 +1,9 @@
-import { Button } from 'flowbite-react'
+import { Button, Card } from 'flowbite-react'
 import Link from 'next/link'
 import React from 'react'
 import { IoCalendarSharp } from 'react-icons/io5'
 
 import PageHeader from '@/components/organisms/PageHeader'
-import Table from '@/components/organisms/Table'
 import Template from '@/components/templates/Template'
 
 import { useDeletedSchedules } from './hooks'
@@ -39,40 +38,6 @@ const convertTo12HourFormat = (time) => {
 
 const ScheduleHistory = () => {
   const { deletedSchedules, isLoading, isError } = useDeletedSchedules()
-  const rows = [
-    { key: 'name', header: 'Name', render: (row) => row.name },
-    {
-      key: 'date',
-      header: 'Date',
-      render: (row) => formatDate(row.date) || row.date,
-    },
-    {
-      key: 'startTime',
-      header: 'Start Time',
-      render: (row) => convertTo12HourFormat(row.startTime) || row.startTime,
-    },
-    {
-      key: 'endTime',
-      header: 'End Time',
-      render: (row) => convertTo12HourFormat(row.endTime) || row.endTime,
-    },
-    {
-      key: 'session',
-      header: 'Session',
-      render: (row) => row.session,
-    },
-    {
-      key: 'remark',
-      header: 'Remark',
-      render: (row) => row.remark,
-    },
-    {
-      key: 'registrations',
-      header: 'Registrations',
-      render: (row) =>
-        row.registrations.map((reg) => `${reg.fname} ${reg.lname}`).join(', '),
-    },
-  ]
 
   if (isLoading) {
     return <Template>Loading...</Template>
@@ -86,10 +51,29 @@ const ScheduleHistory = () => {
     <Template>
       <PageHeader breadcrumbs={breadcrumbs} />
       <h1 className='text-xl font-bold mb-4'>Deleted Schedules</h1>
-      {deletedSchedules && deletedSchedules.length > 0 ?
-        <Table rows={rows} data={deletedSchedules} />
-      : <p>No deleted schedules available.</p>}
-      <div className='mt-5'>
+      <div className='grid grid-cols-3 gap-2'>
+        {deletedSchedules && deletedSchedules.length > 0 ?
+          deletedSchedules.map((schedule) => (
+            <Card key={schedule.id} className='p-2'>
+              <h2 className='text-lg font-bold'>{schedule.name}</h2>
+              <p>Date: {formatDate(schedule.date)}</p>
+              <p>Start Time: {convertTo12HourFormat(schedule.startTime)}</p>
+              <p>End Time: {convertTo12HourFormat(schedule.endTime)}</p>
+              <p>{schedule.session}</p>
+              <p>{schedule.remark}</p>
+
+              <div className='flex space-x-2 mt-2 '>
+                <Link href={`/schedule/${schedule.id}`} passHref>
+                  <Button as='a' size='lg' color='blue'>
+                    Deleted Registrations
+                  </Button>
+                </Link>
+              </div>
+            </Card>
+          ))
+        : <p>No deleted schedules available.</p>}
+      </div>
+      <div className='mt-5 flex justify-end mr-6'>
         <Link href='/schedule'>
           <Button size='lg' color='blue'>
             Back to Schedules
