@@ -168,8 +168,7 @@ function Component() {
           <InfoTable
             name={`${registration.fname} ${registration.lname}`}
             course={
-              courseLabelMap[registration.selectcourse] ||
-              registration.selectcourse
+              courseLabelMap[registration.courseId] || registration.courseId
             }
             scheduleDate={formattedDate}
             scheduleStartTime={formattedStartTime}

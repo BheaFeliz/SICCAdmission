@@ -9,6 +9,7 @@ import Loading from '@/components/atoms/Loading'
 import PageHeader from '@/components/organisms/PageHeader'
 import RowItem from '@/components/organisms/RowItem'
 import Template from '@/components/templates/Template'
+import { useCourses } from '@/hooks/redux/useCourses'
 
 import useHooks from './hooks'
 
@@ -18,6 +19,7 @@ const Registration = () => {
 
   const { registration, isLoading } = useHooks(registrationId)
 
+  const { courses } = useCourses()
   const breadcrumbs = [
     {
       href: '/registration',
@@ -29,6 +31,11 @@ const Registration = () => {
       title: 'Registration Detail',
     },
   ]
+
+  const courseMap = courses.reduce((map, course) => {
+    map[course.id] = course.label
+    return map
+  }, {})
 
   return (
     <Template>
@@ -121,7 +128,7 @@ const Registration = () => {
               <RowItem label='Year Attended' value={registration.T_Ygrad} />
             </div>
           )}
-          <RowItem label='Course' value={registration.selectcourse} />
+          <RowItem label='Course' value={courseMap[registration.courseId]} />
         </section>
       }
     </Template>

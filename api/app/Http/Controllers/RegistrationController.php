@@ -19,9 +19,9 @@ class RegistrationController extends Controller
         ->get();
 
     $courseCounts = Registration::withTrashed()
-        ->select('selectcourse', DB::raw('count(*) as count'))
-        ->groupBy('selectcourse')
-        ->pluck('count', 'selectcourse');
+        ->select('courseId', DB::raw('count(*) as count'))
+        ->groupBy('courseId')
+        ->pluck('count', 'courseId');
 
     return response()->json([
         'registrations' => $registrations,
@@ -73,7 +73,7 @@ class RegistrationController extends Controller
             'T_Atrack' => 'nullable|string|max:255',
             'T_AMprovince' => 'nullable|string|max:255',
             'T_Ygrad' => 'nullable|string|max:255',
-            'selectcourse' => 'nullable|string|max:255',
+            'courseId' => 'required|exists:courses,id',
             'fileinput' => 'required|array',
             'fileinput.*' => [
                 'required',
@@ -180,7 +180,7 @@ class RegistrationController extends Controller
             'T_Atrack' => 'nullable|string|max:255',
             'T_AMprovince' => 'nullable|string|max:255',
             'T_Ygrad' => 'nullable|string|max:255',
-            'selectcourse' => 'nullable|string|max:255',
+            'courseId' => 'required|exists:courses,id',
             'fileinput' => 'nullable|array',
             'fileinput.*' => [
                 'nullable',

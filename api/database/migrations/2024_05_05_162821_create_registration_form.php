@@ -56,16 +56,15 @@ class CreateRegistrationForm extends Migration
             $table->string('T_Atrack')->nullable();
             $table->string('T_AMprovince')->nullable();
             $table->string('T_Ygrad')->nullable();
-            $table->string('selectcourse')->nullable();
+            $table->foreignId('courseId')
+            ->constrained('courses')
+            ->onUpdate('cascade');
             $table->timestamp('email_verified_at')->nullable();
             $table->jsonb('image_paths')->nullable();
             $table->rememberToken();
             $table->timestamps();
             
         });
-
-        // Add a check constraint to ensure selectcourse is one of the valid choices
-        DB::statement("ALTER TABLE registrations ADD CONSTRAINT check_selectcourse CHECK (selectcourse IN ('" . implode("','", $validChoices) . "'))");
     }
 
     /**

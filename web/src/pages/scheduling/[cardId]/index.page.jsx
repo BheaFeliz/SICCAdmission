@@ -8,6 +8,7 @@ import Table from '@/components/organisms/Table'
 import Template from '@/components/templates/Template'
 import { capitalizeFirstLetter } from '@/hooks/lib/util'
 import { Scourse, SDistrict } from '@/hooks/redux/const'
+import { useCourses } from '@/hooks/redux/useCourses'
 
 import useHooks from './hooks'
 
@@ -23,8 +24,8 @@ const Scheduling = ({ cardId }) => {
     currentPage,
     setCurrentPage,
   } = useHooks(actualCardId)
+  const { courses } = useCourses()
 
-  const [selectedCourse, setSelectedCourse] = useState('')
   const [selectedDistrict, setSelectedDistrict] = useState('')
   const [selectedAge, setSelectedAge] = useState('')
   const [selectedSex, setSelectedSex] = useState('')
@@ -35,11 +36,6 @@ const Scheduling = ({ cardId }) => {
     console.error('Registrations is not an array:', registrations)
     return null // Or render an error message
   }
-
-  const courseLabelMap = Scourse.reduce((acc, course) => {
-    acc[course.value] = course.label
-    return acc
-  }, {})
 
   const districtLabelMap = SDistrict.reduce((acc, district) => {
     acc[district.value] = district.label
@@ -75,6 +71,11 @@ const Scheduling = ({ cardId }) => {
   const endIdx = startIdx + itemsPerPage
   const paginatedData = filteredRegistrations.slice(startIdx, endIdx)
 
+  const courseMap = courses.reduce((map, course) => {
+    map[course.id] = course.label
+    return map
+  }, {})
+
   const rows = [
     { key: 'id', header: 'ID', render: (item) => item.id },
     { key: 'fname', header: 'First Name', render: (item) => item.fname },
@@ -97,9 +98,9 @@ const Scheduling = ({ cardId }) => {
     },
     { key: 'email', header: 'Email', render: (item) => item.email },
     {
-      key: 'Scourse',
+      key: 'courseId',
       header: 'Course',
-      render: (item) => courseLabelMap[item.selectcourse] || item.selectcourse,
+      render: (item) => courseMap[item.courseId] || 'Unknown',
     },
     {
       key: 'district',
