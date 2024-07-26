@@ -10,7 +10,7 @@ class Schedule extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'date', 'startTime', 'endTime', 'session', 'remark'];
+    protected $fillable = ['name', 'date', 'startTime', 'endTime', 'session', 'remark', 'max_registrations'];
 
     public function registrations()
     {

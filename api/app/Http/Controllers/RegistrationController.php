@@ -101,21 +101,31 @@ class RegistrationController extends Controller
 
     private function determineScheduleId()
     {
+        // Get the list of schedules and their current registration counts
         $registrationsPerSchedule = Registration::select('schedule_id', DB::raw('count(*) as count'))
             ->groupBy('schedule_id')
             ->get()
             ->pluck('count', 'schedule_id')
             ->toArray();
-
-        foreach ($registrationsPerSchedule as $scheduleId => $count) {
-            if ($count < 2) {
-                return $scheduleId;
+    
+        // Fetch all schedules ordered by their ID
+        $schedules = Schedule::orderBy('id')->get();
+    
+        foreach ($schedules as $schedule) {
+            // Get current registration count for this schedule
+            $currentCount = $registrationsPerSchedule[$schedule->id] ?? 0;
+    
+            // Check if this schedule can accommodate more registrations
+            if ($currentCount < $schedule->max_registrations) {
+                return $schedule->id;
             }
         }
-
-        $lastScheduleId = array_key_last($registrationsPerSchedule);
-        return $lastScheduleId ? $lastScheduleId + 1 : 1;
+    
+        // If all schedules are full, handle the logic here (e.g., return an error or a specific value)
+        throw new \Exception('All schedules are full.');
     }
+
+
 
     public function show($id)
     {

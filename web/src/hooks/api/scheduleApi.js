@@ -22,6 +22,14 @@ export const scheduleApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['scheduling'],
     }),
+    updateAllSchedules: build.mutation({
+      query: ({ max_registrations }) => ({
+        url: `/schedules`,
+        method: 'PATCH',
+        body: { max_registrations },
+      }),
+    }),
+
     getScheduleById: build.query({
       query: (scheduleId) => `/scheduling/${scheduleId}`,
       providesTags: (result, error, scheduleId) => [
@@ -42,4 +50,5 @@ export const {
   useDeleteScheduleMutation,
   useGetScheduleByIdQuery,
   useGetDeletedSchedulesQuery,
+  useUpdateAllSchedulesMutation,
 } = scheduleApi

@@ -103,4 +103,16 @@ class ScheduleController extends Controller
     
         return response()->json(['message' => 'Schedule deleted successfully'], 200);
     }
+
+    public function updateAll(Request $request)
+    {
+        $validatedData = $request->validate([
+            'max_registrations' => 'required|integer|min:0',
+        ]);
+
+        // Update all schedules with the new max_registrations value
+        Schedule::query()->update(['max_registrations' => $validatedData['max_registrations']]);
+
+        return response()->json(['message' => 'All schedules updated successfully']);
+    }
 }

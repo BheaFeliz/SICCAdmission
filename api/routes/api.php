@@ -69,4 +69,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/courses', [CourseController::class, 'index']);
     Route::post('/courses', [CourseController::class, 'store']);
+    Route::patch('/schedules', [ScheduleController::class, 'updateAll']);
 });
