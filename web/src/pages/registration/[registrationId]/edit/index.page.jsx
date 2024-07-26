@@ -1,4 +1,3 @@
-// src/pages/registration/[registrationId]/edit/index.page.jsx
 import { Button } from 'flowbite-react'
 import { useState } from 'react'
 
@@ -13,20 +12,20 @@ import {
   Monthoption,
   Ofw,
   Scategory,
-  Scourse,
   SDistrict,
   sex,
   Studenttype,
   suffixoption,
 } from '@/hooks/redux/const'
+import { useCourses } from '@/hooks/redux/useCourses'
 
 import { useHooks } from './hooks'
 
 const EditRegistration = ({ registrationId }) => {
   const { formState, handleSubmit } = useHooks(registrationId)
+  const { courses } = useCourses()
 
   const [showTextInput, setShowTextInput] = useState(false)
-
   const [showFamilyBackgroundInput, setShowFamilyBackgroundInput] =
     useState(false)
   const [showOFWInput, setShowOFWInput] = useState(false)
@@ -57,12 +56,7 @@ const EditRegistration = ({ registrationId }) => {
   const handleOFWChange = (e) => {
     const value = e.target.value
     const selectedOption = Ofw.find((option) => option.value === value)
-
-    if (selectedOption && selectedOption.showTextInput) {
-      setShowOFWInput(true)
-    } else {
-      setShowOFWInput(false)
-    }
+    setShowOFWInput(selectedOption && selectedOption.showTextInput)
   }
 
   const handleStudentCategoryChange = (e) => {
@@ -73,19 +67,7 @@ const EditRegistration = ({ registrationId }) => {
   return (
     <Template>
       <form onSubmit={handleSubmit} className='p-8 flex flex-col space-y-6'>
-        <div className='flex space-x-8'>
-          {/* <div>
-            <label>Date</label>
-            <input
-              type='text'
-              name='created_at'
-              value={dayjs(formData.created_at).format('MMM DD, YYYY')}
-              onChange={handleChange}
-              disabled
-            />
-          </div> */}
-        </div>
-        <div className='style=min-height: 140px;'>
+        <div style={{ minHeight: '140px' }}>
           <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
             <TextInput label='Last Name' name='lname' {...formState} />
             <TextInput label='First Name' name='fname' {...formState} />
@@ -299,7 +281,12 @@ const EditRegistration = ({ registrationId }) => {
             </div>
           )}
           <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
-            <SelectInput options={Scourse} name='selectcourse' {...formState} />
+            <SelectInput
+              label='Select a course'
+              options={courses}
+              name='courseId'
+              {...formState}
+            />
           </div>
           <Button type='submit'>Save</Button>
         </div>

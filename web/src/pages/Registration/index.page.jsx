@@ -15,12 +15,12 @@ import {
   Monthoption,
   Ofw,
   Scategory,
-  Scourse,
   SDistrict,
   sex,
   Studenttype,
   suffixoption,
 } from '@/hooks/redux/const'
+import { useCourses } from '@/hooks/redux/useCourses'
 
 import { useHooks } from './hooks'
 
@@ -34,6 +34,7 @@ const Registration = () => {
   ]
 
   const { formState, handleSubmit } = useHooks()
+  const { courses } = useCourses()
 
   const [showTextInput, setShowTextInput] = useState(false)
   const [showFamilyBackgroundInput, setShowFamilyBackgroundInput] =
@@ -313,8 +314,14 @@ const Registration = () => {
             )}
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
               <SelectInput
-                options={Scourse}
-                name='selectcourse'
+                name='courseId'
+                options={[
+                  { value: '', label: 'Select a course', isDisabled: true },
+                  ...courses.map((course) => ({
+                    value: course.id,
+                    label: course.label,
+                  })),
+                ]}
                 {...formState}
               />
             </div>
