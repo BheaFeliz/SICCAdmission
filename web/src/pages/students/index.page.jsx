@@ -16,6 +16,7 @@ import Template from '@/components/templates/Template'
 import { capitalizeFirstLetter } from '@/hooks/lib/util'
 import { useUser } from '@/hooks/redux/auth'
 import { Scourse, SDistrict } from '@/hooks/redux/const'
+import { useCourses } from '@/hooks/redux/useCourses'
 
 import useHooks from './hooks'
 
@@ -23,6 +24,7 @@ const Dashboard = () => {
   const { registrations, isLoading, currentPage, onPageChange } = useHooks()
   const { user } = useUser()
 
+  const { courses } = useCourses()
   const breadcrumbs = [
     {
       href: '#',
@@ -55,11 +57,6 @@ const Dashboard = () => {
   const [selectedSex, setSelectedSex] = useState('')
   const [selectedGender, setSelectedGender] = useState('')
 
-  const courseLabelMap = Scourse.reduce((acc, course) => {
-    acc[course.value] = course.label
-    return acc
-  }, {})
-
   const districtLabelMap = SDistrict.reduce((acc, district) => {
     acc[district.value] = district.label
     return acc
@@ -74,6 +71,11 @@ const Dashboard = () => {
   const uniqueGenders = [
     ...new Set(registrations.map((reg) => reg.gender)),
   ].map((gender) => ({ value: gender, label: capitalizeFirstLetter(gender) }))
+
+  const courseMap = courses.reduce((map, course) => {
+    map[course.id] = course.label
+    return map
+  }, {})
 
   const rows = [
     {
@@ -115,9 +117,9 @@ const Dashboard = () => {
     },
     { key: 'email', header: 'Email Address', render: (item) => item.email },
     {
-      key: 'Scourse',
+      key: 'courseId',
       header: 'Course',
-      render: (item) => courseLabelMap[item.selectcourse] || item.selectcourse,
+      render: (item) => courseMap[item.courseId] || 'Unknown',
     },
     {
       key: 'district',
@@ -141,7 +143,7 @@ const Dashboard = () => {
 
       return (
         matchesSearch &&
-        (!selectedCourse || reg.selectcourse === selectedCourse) &&
+        (!selectedCourse || reg.courseId === selectedCourse) &&
         (!selectedDistrict || reg.district === selectedDistrict) &&
         (!selectedAge || reg.age.toString() === selectedAge) &&
         (!selectedSex || reg.sex.toLowerCase() === selectedSex.toLowerCase()) &&

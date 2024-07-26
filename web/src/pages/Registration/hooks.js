@@ -22,6 +22,7 @@ const registrationSchema = Yup.object().shape({
   province: Yup.string().required('Province is required'),
   Zcode: Yup.number().required('Zip Code is required'),
   fileinput: Yup.mixed().nullable(),
+  courseId: Yup.string().required('Course is required'),
 })
 
 export function useHooks() {

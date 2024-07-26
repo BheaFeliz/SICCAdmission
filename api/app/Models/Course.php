@@ -14,4 +14,10 @@ class Course extends Model
 
     // Optionally, define the date attributes if you want to customize date handling
     protected $dates = ['deleted_at']; // This is optional, Laravel automatically casts it to a date
+
+    public function registrations()
+    {
+        return $this->hasMany(Registration::class);
+    }
+    
 }

@@ -7,12 +7,14 @@ import StaffTemplate from '@/components/templates/StaffTemplate'
 import Template from '@/components/templates/Template'
 import { dashboardApi } from '@/hooks/api/dashboardApi'
 import { useUser } from '@/hooks/redux/auth'
-import { Scourse } from '@/hooks/redux/const'
+//import { Scourse } from '@/hooks/redux/const'
+import { useCourses } from '@/hooks/redux/useCourses'
 
 const Dashboard = () => {
   const { data, isLoading } = dashboardApi.useGetDashboardQuery()
   const { user } = useUser()
 
+  const { courses } = useCourses()
   const breadcrumbs = [
     {
       href: '#',
@@ -21,15 +23,20 @@ const Dashboard = () => {
     },
   ]
 
-  const courseLabelMap = Scourse.reduce((acc, course) => {
-    acc[course.value] = course.label
+  // const courseMap = courses.reduce((map, course) => {
+  //   map[course.id] = course.label
+  //   return map
+  // }, {})
+
+  const courseLabelMap = courses.reduce((acc, course) => {
+    acc[course.id] = course.label
     return acc
   }, {})
 
   const cardData = Object.entries(data?.course_counts ?? {}).map(
     ([course, count]) => ({
       title: count,
-      description: courseLabelMap[course] || course,
+      description: courseLabelMap[course.id] || course,
       link: `/dashboard/filteredcourse?course=${course}`, // Add link to each course card
     }),
   )
