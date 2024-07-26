@@ -25,9 +25,9 @@ const links = [
     link: '/users',
   },
   {
-    label: 'Activity',
+    label: 'Activity Logs',
     icon: <RxActivityLog />,
-    link: '/students',
+    link: '/activitylogs',
   },
   {
     label: 'Course',
