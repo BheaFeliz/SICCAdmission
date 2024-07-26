@@ -59,6 +59,7 @@ const ScheduleHistory = () => {
               <p>Date: {formatDate(schedule.date)}</p>
               <p>Start Time: {convertTo12HourFormat(schedule.startTime)}</p>
               <p>End Time: {convertTo12HourFormat(schedule.endTime)}</p>
+              <p>Max Registrations: {schedule.max_registrations}</p>
               <p>{schedule.session}</p>
               <p>{schedule.remark}</p>
 

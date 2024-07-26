@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use App\Models\Schedule;
 use Illuminate\Support\Facades\Validator;
@@ -9,8 +10,18 @@ use Carbon\Carbon;
 
 class ScheduleController extends Controller
 {
+    private function logActivity($action, $schedule = null, $data = null)
+    {
+        ActivityLog::create([
+            'action' => $action,
+            'schedule_id' => $schedule ? $schedule->id : null,
+            'data' => $data ? json_encode($data) : null,
+        ]);
+    }
+
     public function index()
     {
+        $this->logActivity('get_schedules');
         return response()->json(Schedule::all(), 200);
     }
 
@@ -19,8 +30,10 @@ class ScheduleController extends Controller
         $schedule = Schedule::with('registrations')->find($id);
 
         if ($schedule) {
+            $this->logActivity('get_schedule', $schedule);
             return response()->json($schedule, 200);
         } else {
+            $this->logActivity('get_schedule_not_found', null, ['id' => $id]);
             return response()->json(['message' => 'Schedule not found'], 404);
         }
     }
@@ -51,6 +64,7 @@ class ScheduleController extends Controller
         $schedule->remark = $request->remark;
         $schedule->save();
 
+        $this->logActivity('create_schedule', $schedule, $request->all());
         return response()->json($schedule, 201);
     }
 
@@ -75,14 +89,17 @@ class ScheduleController extends Controller
                 $request['date'] = Carbon::parse($request->date)->format('Y-m-d');
             }
             $schedule->update($request->all());
+            $this->logActivity('update_schedule', $schedule, $request->all());
             return response()->json($schedule, 200);
         } else {
+            $this->logActivity('update_schedule_not_found', null, ['id' => $id]);
             return response()->json(['message' => 'Schedule not found'], 404);
         }
     }
 
     public function getDeletedSchedules()
     {
+        $this->logActivity('get_deleted_schedules');
         $schedules = Schedule::onlyTrashed()->with(['registrations' => function ($query) {
             $query->withTrashed();
         }])->get();
@@ -100,7 +117,21 @@ class ScheduleController extends Controller
         }
     
         $schedule->delete();
+        $this->logActivity('delete_schedule', $schedule);
     
         return response()->json(['message' => 'Schedule deleted successfully'], 200);
+    }
+
+    public function updateAll(Request $request)
+    {
+        $validatedData = $request->validate([
+            'max_registrations' => 'required|integer|min:0',
+        ]);
+
+        // Update all schedules with the new max_registrations value
+        Schedule::query()->update(['max_registrations' => $validatedData['max_registrations']]);
+
+        $this->logActivity('update_all_schedules', null, $request->all());
+        return response()->json(['message' => 'All schedules updated successfully']);
     }
 }

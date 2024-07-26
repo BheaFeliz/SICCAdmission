@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\ActivityLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,4 +70,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/courses', [CourseController::class, 'index']);
     Route::post('/courses', [CourseController::class, 'store']);
+    Route::patch('/schedules', [ScheduleController::class, 'updateAll']);
+
+    Route::get('activitylogs', [ActivityLogController::class, 'index']);
+    Route::get('activitylogs/{id}', [ActivityLogController::class, 'show']);
 });

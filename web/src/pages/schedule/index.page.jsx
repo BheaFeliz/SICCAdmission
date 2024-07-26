@@ -1,4 +1,4 @@
-import { Button, Card, Modal } from 'flowbite-react' // Ensure this import is correct
+import { Button, Card, Modal, TextInput } from 'flowbite-react'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
@@ -8,9 +8,9 @@ import Loading from '@/components/atoms/Loading'
 import PageHeader from '@/components/organisms/PageHeader'
 import StaffTemplate from '@/components/templates/StaffTemplate'
 import Template from '@/components/templates/Template'
-import { useUser } from '@/hooks/redux/auth' // Ensure you import useUser hook
+import { useUser } from '@/hooks/redux/auth'
 
-import useHooks from './hooks' // Ensure this import path is correct
+import useHooks from './hooks'
 
 const breadcrumbs = [
   {
@@ -21,11 +21,18 @@ const breadcrumbs = [
 ]
 
 const Schedule = () => {
-  const { schedules, isError, handleDeleteSchedule } = useHooks()
+  const {
+    schedules,
+    isError,
+    handleDeleteSchedule,
+    handleUpdateMaxRegistrationsForAll,
+  } = useHooks()
   const { user } = useUser()
   const [openModal, setOpenModal] = useState(false)
+  const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [selectedSchedule, setSelectedSchedule] = useState(null)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [maxRegistrations, setMaxRegistrations] = useState(0)
 
   // Function to convert 24-hour time to 12-hour time format
   const convertTo12HourFormat = (time) => {
@@ -45,13 +52,19 @@ const Schedule = () => {
     return `${month}-${day}-${year}`
   }
 
-  const handleOpenModal = (schedule) => {
-    setSelectedSchedule(schedule)
+  const handleOpenModal = () => {
+    setMaxRegistrations(0) // Reset input field
     setOpenModal(true)
+  }
+
+  const handleOpenDeleteModal = (schedule) => {
+    setSelectedSchedule(schedule)
+    setOpenDeleteModal(true)
   }
 
   const handleCloseModal = () => {
     setOpenModal(false)
+    setOpenDeleteModal(false)
     setSelectedSchedule(null)
     setIsDeleting(false)
   }
@@ -62,6 +75,11 @@ const Schedule = () => {
       await handleDeleteSchedule(selectedSchedule.id)
       handleCloseModal()
     }
+  }
+
+  const handleSetSlotsForAll = async () => {
+    await handleUpdateMaxRegistrationsForAll(maxRegistrations)
+    handleCloseModal()
   }
 
   if (isError) {
@@ -78,7 +96,13 @@ const Schedule = () => {
         <Template>
           <PageHeader breadcrumbs={breadcrumbs} />
 
-          <div className='flex flex-wrap justify-start items-center mb-8 space-x-4'>
+          <div className='flex justify-start mb-8 space-x-4'>
+            <div>
+              <Button size='lg' color='blue' onClick={handleOpenModal}>
+                Set Slots for All
+              </Button>
+            </div>
+
             <div>
               <Link href='/schedule/scheduleRoom'>
                 <Button size='lg' color='blue'>
@@ -89,16 +113,8 @@ const Schedule = () => {
 
             <div>
               <Link href='/schedule/history'>
-                <Button size='lg' color='blue'>
+                <Button size='lg' color='failure'>
                   View History
-                </Button>
-              </Link>
-            </div>
-
-            <div>
-              <Link href='/schedule/new'>
-                <Button size='lg' color='blue'>
-                  Set Slots
                 </Button>
               </Link>
             </div>
@@ -112,6 +128,7 @@ const Schedule = () => {
                   <p>Date: {formatDate(schedule.date)}</p>
                   <p>Start Time: {convertTo12HourFormat(schedule.startTime)}</p>
                   <p>End Time: {convertTo12HourFormat(schedule.endTime)}</p>
+                  <p>Max Registrations: {schedule.max_registrations}</p>
                   <p>{schedule.session}</p>
                   <p>{schedule.remark}</p>
                   <div className='flex space-x-2 mt-2'>
@@ -123,7 +140,7 @@ const Schedule = () => {
                     <Button
                       size='lg'
                       color='failure'
-                      onClick={() => handleOpenModal(schedule)}
+                      onClick={() => handleOpenDeleteModal(schedule)}
                     >
                       Delete Schedule
                     </Button>
@@ -134,7 +151,12 @@ const Schedule = () => {
           </div>
 
           {selectedSchedule && (
-            <Modal show={openModal} size='md' onClose={handleCloseModal} popup>
+            <Modal
+              show={openDeleteModal}
+              size='md'
+              onClose={handleCloseModal}
+              popup
+            >
               <Modal.Header />
               <Modal.Body>
                 {isDeleting ?
@@ -147,10 +169,10 @@ const Schedule = () => {
                     </h3>
                     <div className='flex justify-center gap-4'>
                       <Button color='failure' onClick={handleConfirmDelete}>
-                        {"Yes, I'm sure"}
+                        {'Yes'}
                       </Button>
                       <Button color='gray' onClick={handleCloseModal}>
-                        No, cancel
+                        No
                       </Button>
                     </div>
                   </div>
@@ -158,6 +180,26 @@ const Schedule = () => {
               </Modal.Body>
             </Modal>
           )}
+
+          <Modal show={openModal} size='md' onClose={handleCloseModal}>
+            <Modal.Header>
+              Set Maximum Registrations for All Schedules
+            </Modal.Header>
+            <Modal.Body>
+              <div className='flex flex-col space-y-4'>
+                <TextInput
+                  type='number'
+                  min='0'
+                  value={maxRegistrations}
+                  onChange={(e) => setMaxRegistrations(e.target.value)}
+                  placeholder='Enter maximum registrations'
+                />
+                <Button onClick={handleSetSlotsForAll} color='blue'>
+                  Set Slots for All
+                </Button>
+              </div>
+            </Modal.Body>
+          </Modal>
         </Template>
       : <StaffTemplate>
           <PageHeader breadcrumbs={breadcrumbs} />
@@ -180,6 +222,7 @@ const Schedule = () => {
                   <p>Date: {formatDate(schedule.date)}</p>
                   <p>Start Time: {convertTo12HourFormat(schedule.startTime)}</p>
                   <p>End Time: {convertTo12HourFormat(schedule.endTime)}</p>
+                  <p>Max Registrations: {schedule.max_registrations}</p>
                   <p>{schedule.session}</p>
                   <p>{schedule.remark}</p>
                   <div className='flex space-x-2 mt-2'>
