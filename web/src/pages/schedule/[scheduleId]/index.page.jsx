@@ -9,7 +9,7 @@ import PageHeader from '@/components/organisms/PageHeader'
 import Table from '@/components/organisms/Table'
 import Template from '@/components/templates/Template'
 import { capitalizeFirstLetter } from '@/hooks/lib/util'
-import { Scourse } from '@/hooks/redux/const'
+import { useCourses } from '@/hooks/redux/useCourses'
 
 import useHooks from './hooks'
 
@@ -22,7 +22,7 @@ const breadcrumbs = [
   {
     href: '#',
     title: 'View Details',
-  }
+  },
 ]
 
 const Schedule = () => {
@@ -30,9 +30,10 @@ const Schedule = () => {
   const { scheduleId } = router.query
   const { scheduleName, registrations, isLoading, isError } = useHooks()
 
-  const courseLabelMap = Scourse.reduce((acc, course) => {
-    acc[course.value] = course.label
-    return acc
+  const { courses } = useCourses()
+  const courseMap = courses.reduce((map, course) => {
+    map[course.id] = course.label
+    return map
   }, {})
 
   const filteredRegistrations = registrations.filter(
@@ -43,13 +44,21 @@ const Schedule = () => {
     { key: 'lname', header: 'Last Name', render: (row) => row.lname },
     { key: 'fname', header: 'First Name', render: (row) => row.fname },
     { key: 'age', header: 'Age', render: (row) => row.age },
-    { key: 'sex', header: 'Sex', render: (row) => capitalizeFirstLetter (row.sex) },
-    { key: 'gender', header: 'Gender', render: (row) => capitalizeFirstLetter (row.gender) },
+    {
+      key: 'sex',
+      header: 'Sex',
+      render: (row) => capitalizeFirstLetter(row.sex),
+    },
+    {
+      key: 'gender',
+      header: 'Gender',
+      render: (row) => capitalizeFirstLetter(row.gender),
+    },
     { key: 'barangay', header: 'Barangay', render: (row) => row.barangay },
     {
       key: 'selectcourse',
       header: 'Course',
-      render: (row) => courseLabelMap[row.selectcourse] || row.selectcourse,
+      render: (row) => courseMap[row.courseId] || row.courseId,
     },
   ]
 
@@ -78,15 +87,16 @@ const Schedule = () => {
   return (
     <Template>
       <PageHeader breadcrumbs={breadcrumbs} />
-      <div size='lg' className='flex flex-wrap justify-start items-center mb-8 space-x-4'>
+      <div
+        size='lg'
+        className='flex flex-wrap justify-start items-center mb-8 space-x-4'
+      >
         <Link href='/schedule'>
-          <Button color='blue'>
-            Back to Schedules
-          </Button>
+          <Button color='blue'>Back to Schedules</Button>
         </Link>
         <Button onClick={handleDownloadExcel} className='btn-download'>
-        Download Excel
-      </Button>
+          Download Excel
+        </Button>
       </div>
       {isLoading ?
         <p>Loading...</p>

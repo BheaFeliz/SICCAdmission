@@ -15,8 +15,16 @@ export const courseApi = baseApi.injectEndpoints({
         body: newCourse,
       }),
     }),
+    getCourseById: build.query({
+      providesTags: (courseId) => [{ type: 'Course', id: courseId }],
+      query: (courseId) => ({ url: `/courses/${courseId}` }),
+    }),
   }),
   overrideExisting: false,
 })
 
-export const { useGetCoursesQuery, useAddCourseMutation } = courseApi
+export const {
+  useGetCoursesQuery,
+  useAddCourseMutation,
+  useGetCourseByIdQuery,
+} = courseApi

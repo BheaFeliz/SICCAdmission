@@ -1,20 +1,22 @@
-import { useRouter } from 'next/router';
-import { IoAccessibilitySharp } from 'react-icons/io5';
+import { useRouter } from 'next/router'
+import { IoAccessibilitySharp } from 'react-icons/io5'
 
-import Paginations from '@/components/atoms/Pagination';
-import PageHeader from '@/components/organisms/PageHeader';
-import Table from '@/components/organisms/Table';
-import Template from '@/components/templates/Template';
-import { capitalizeFirstLetter } from '@/hooks/lib/util';
-import { Scourse, SDistrict } from '@/hooks/redux/const';
+import Paginations from '@/components/atoms/Pagination'
+import PageHeader from '@/components/organisms/PageHeader'
+import Table from '@/components/organisms/Table'
+import Template from '@/components/templates/Template'
+import { capitalizeFirstLetter } from '@/hooks/lib/util'
+import { Scourse, SDistrict } from '@/hooks/redux/const'
 
-import useHooks from './hooks';
+import useHooks from './hooks'
 
 const FilteredCourse = () => {
-  const router = useRouter();
-  const { course } = router.query;
+  const router = useRouter()
+  const { course: courseId } = router.query
 
-  const { registrations, currentPage, onPageChange } = useHooks(course); // Pass the course to the hook
+  const { registrations, currentPage, onPageChange } = useHooks(
+    Number(courseId),
+  ) // Pass the courseId as a number
 
   const breadcrumbs = [
     {
@@ -26,17 +28,17 @@ const FilteredCourse = () => {
       href: '#/dashboard/filteredcourse',
       title: 'Student',
     },
-  ];
+  ]
 
-  const courseLabelMap = Scourse.reduce((acc, course) => {
-    acc[course.value] = course.label;
-    return acc;
-  }, {});
+  const courseLabelMap = Scourse.reduce((acc, courseId) => {
+    acc[courseId.value] = courseId.label
+    return acc
+  }, {})
 
   const districtLabelMap = SDistrict.reduce((acc, district) => {
-    acc[district.value] = district.label;
-    return acc;
-  }, {});
+    acc[district.value] = district.label
+    return acc
+  }, {})
 
   const rows = [
     { key: 'lname', header: 'Last Name', render: (item) => item.lname },
@@ -61,32 +63,35 @@ const FilteredCourse = () => {
     {
       key: 'Scourse',
       header: 'Course',
-      render: (item) => courseLabelMap[item.selectcourse] || item.selectcourse,
+      render: (item) => courseLabelMap[item.courseId] || item.courseId,
     },
     {
       key: 'district',
       header: 'District',
       render: (item) => districtLabelMap[item.district] || item.district,
     },
-  ];
+  ]
 
-  const filteredRegistrations = course 
-    ? registrations.filter(registration => registration.selectcourse === course)
-    : registrations;
+  const filteredRegistrations =
+    courseId ?
+      registrations.filter(
+        (registration) => registration.courseId === Number(courseId),
+      )
+    : registrations
 
-  const totalCourses = filteredRegistrations.length;
+  const totalCourses = filteredRegistrations.length
 
-  const itemsPerPage = 10;
-  const startIdx = (currentPage - 1) * itemsPerPage;
-  const endIdx = startIdx + itemsPerPage;
-  const paginatedData = filteredRegistrations.slice(startIdx, endIdx);
+  const itemsPerPage = 10
+  const startIdx = (currentPage - 1) * itemsPerPage
+  const endIdx = startIdx + itemsPerPage
+  const paginatedData = filteredRegistrations.slice(startIdx, endIdx)
 
   return (
     <Template>
       <PageHeader breadcrumbs={breadcrumbs} />
 
       <div className='mb-4'>
-        <p>Total Courses: {totalCourses}</p>
+        <p>Total Registered: {totalCourses}</p>
       </div>
 
       <Table rows={rows} data={paginatedData} />
@@ -99,7 +104,7 @@ const FilteredCourse = () => {
         />
       </div>
     </Template>
-  );
-};
+  )
+}
 
-export default FilteredCourse;
+export default FilteredCourse

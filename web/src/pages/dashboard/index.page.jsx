@@ -3,106 +3,80 @@ import { TbLayoutDashboard } from 'react-icons/tb'
 import Loading from '@/components/atoms/Loading'
 import CardItem from '@/components/organisms/Card'
 import PageHeader from '@/components/organisms/PageHeader'
-import StaffTemplate from '@/components/templates/StaffTemplate'
 import Template from '@/components/templates/Template'
-import { dashboardApi } from '@/hooks/api/dashboardApi'
-import { useUser } from '@/hooks/redux/auth'
-//import { Scourse } from '@/hooks/redux/const'
 import { useCourses } from '@/hooks/redux/useCourses'
+import { useStudents } from '@/hooks/redux/useStudents'
 
 const Dashboard = () => {
-  const { data, isLoading } = dashboardApi.useGetDashboardQuery()
-  const { user } = useUser()
+  const {
+    courses,
+    isError: coursesError,
+    isLoading: coursesLoading,
+  } = useCourses()
 
-  const { courses } = useCourses()
-  const breadcrumbs = [
-    {
-      href: '#',
-      title: 'Dashboard',
-      icon: TbLayoutDashboard,
-    },
-  ]
+  const {
+    registrations,
+    isError: registrationsError,
+    isLoading: registrationsLoading,
+  } = useStudents()
 
-  // const courseMap = courses.reduce((map, course) => {
-  //   map[course.id] = course.label
-  //   return map
-  // }, {})
+  // Combine loading states
+  const isLoading = coursesLoading || registrationsLoading
+  const isError = coursesError || registrationsError
 
-  const courseLabelMap = courses.reduce((acc, course) => {
-    acc[course.id] = course.label
+  // Create a map for quick lookup of registration counts
+  const registrationCounts = (registrations || []).reduce((acc, reg) => {
+    acc[reg.courseId] = (acc[reg.courseId] || 0) + 1
     return acc
   }, {})
 
-  const cardData = Object.entries(data?.course_counts ?? {}).map(
-    ([course, count]) => ({
-      title: count,
-      description: courseLabelMap[course.id] || course,
-      link: `/dashboard/filteredcourse?course=${course}`, // Add link to each course card
-    }),
-  )
+  // Map courses to card data
+  const cardData = (courses || []).map((course) => ({
+    title: `${registrationCounts[course.id] || 0} Admissions`,
+    description: course.label,
+    link: `/dashboard/filteredcourse?course=${course.id}`, // Assuming you want to link to the course details
+  }))
 
-  const totalCourses = Object.values(data?.course_counts ?? {}).reduce(
-    (acc, count) => acc + count,
-    0,
-  )
+  // Calculate total registrations
+  const totalRegistrations = (registrations || []).length
 
   return (
-    <div>
-      {user.role === 'admin' ?
-        <Template>
-          <PageHeader breadcrumbs={breadcrumbs} />
-          <div className='mx-auto max-w-screen-lg mt-12'>
-            {isLoading ?
-              <div className='flex justify-center items-center h-64'>
-                <Loading />
-              </div>
-            : <div className='grid grid-cols-3 gap-2'>
-                {cardData.map((card, index) => (
-                  <CardItem
-                    key={index}
-                    title={card.title}
-                    description={card.description}
-                    link={card.link} // Pass link to CardItem
-                  />
-                ))}
-              </div>
-            }
-            <div className='flex justify-end mt-4'>
-              <CardItem
-                title={totalCourses}
-                description={<strong>Total Admission Course</strong>}
-              />
-            </div>
+    <Template>
+      <PageHeader
+        breadcrumbs={[
+          {
+            href: '#',
+            title: 'Dashboard',
+            icon: TbLayoutDashboard,
+          },
+        ]}
+      />
+      <div className='mx-auto max-w-screen-lg mt-12'>
+        {isLoading ?
+          <div className='flex justify-center items-center h-64'>
+            <Loading />
           </div>
-        </Template>
-      : <StaffTemplate>
-          <PageHeader breadcrumbs={breadcrumbs} />
-          <div className='mx-auto max-w-screen-lg mt-12'>
-            {isLoading ?
-              <div className='flex justify-center items-center h-64'>
-                <Loading />
-              </div>
-            : <div className='grid grid-cols-3 gap-2'>
-                {cardData.map((card, index) => (
-                  <CardItem
-                    key={index}
-                    title={card.title}
-                    description={card.description}
-                    link={card.link} // Pass link to CardItem
-                  />
-                ))}
-              </div>
-            }
-            <div className='flex justify-end mt-4'>
+        : isError ?
+          <div className='text-red-500'>Error loading data</div>
+        : <div className='grid grid-cols-3 gap-2'>
+            {cardData.map((card, index) => (
               <CardItem
-                title={totalCourses}
-                description={<strong>Total Admission Course</strong>}
+                key={index}
+                title={card.title}
+                description={card.description}
+                link={card.link}
               />
-            </div>
+            ))}
           </div>
-        </StaffTemplate>
-      }
-    </div>
+        }
+        <div className='flex justify-end mt-4'>
+          <CardItem
+            title={`${totalRegistrations} Registrations`}
+            description={<strong>Total Registrations</strong>}
+          />
+        </div>
+      </div>
+    </Template>
   )
 }
 
