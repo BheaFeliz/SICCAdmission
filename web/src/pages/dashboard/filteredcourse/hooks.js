@@ -1,14 +1,15 @@
-import { useState } from 'react';
-import { FaUserFriends } from 'react-icons/fa';
+import { useState } from 'react'
+import { FaUserFriends } from 'react-icons/fa'
 
-import { useStudents } from '@/hooks/redux/useStudents';
+import { useStudents } from '@/hooks/redux/useStudents'
 
-const useHooks = (selectedCourse) => {
-  const { registrations, isLoading } = useStudents();
+const useHooks = (courseId) => {
+  const { registrations, isLoading } = useStudents()
 
-  const filteredRegistrations = selectedCourse 
-    ? registrations.filter(registration => registration.selectcourse === selectedCourse)
-    : registrations;
+  const filteredRegistrations =
+    courseId ?
+      registrations.filter((registration) => registration.courseId === courseId)
+    : registrations
 
   const breadcrumbs = [
     {
@@ -16,11 +17,11 @@ const useHooks = (selectedCourse) => {
       title: 'Students',
       icon: FaUserFriends,
     },
-  ];
+  ]
 
-  const totalPages = 5; // This should be dynamically set based on your API response
-  const [currentPage, setCurrentPage] = useState(1);
-  const onPageChange = (page) => setCurrentPage(page);
+  const totalPages = Math.ceil(filteredRegistrations.length / 10) // Adjust if necessary
+  const [currentPage, setCurrentPage] = useState(1)
+  const onPageChange = (page) => setCurrentPage(page)
 
   return {
     totalPages,
@@ -29,7 +30,7 @@ const useHooks = (selectedCourse) => {
     registrations: filteredRegistrations,
     isLoading,
     breadcrumbs,
-  };
-};
+  }
+}
 
-export default useHooks;
+export default useHooks

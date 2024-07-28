@@ -6,7 +6,7 @@ import PageHeader from '@/components/organisms/PageHeader'
 import Template from '@/components/templates/StudentTemplate'
 import { useGetScheduleByIdQuery } from '@/hooks/api/scheduleApi'
 import { useGetRegistrationsQuery } from '@/hooks/api/studentApi'
-import { Scourse } from '@/hooks/redux/const'
+import { useCourses } from '@/hooks/redux/useCourses'
 
 function convertTo12HourFormat(time24) {
   const [hour, minute] = time24.split(':')
@@ -101,6 +101,8 @@ function Component() {
     isLoading: isLoadingRegistrations,
   } = useGetRegistrationsQuery()
 
+  const { courses } = useCourses()
+
   const [scheduleId, setScheduleId] = useState(null)
 
   useEffect(() => {
@@ -138,17 +140,17 @@ function Component() {
     (reg) => reg.reference_number === ref,
   )
 
-  const courseLabelMap = Scourse.reduce((acc, course) => {
-    acc[course.value] = course.label
-    return acc
-  }, {})
-
   const formattedStartTime =
     scheduleData ? convertTo12HourFormat(scheduleData.startTime) : 'N/A'
   const formattedEndTime =
     scheduleData ? convertTo12HourFormat(scheduleData.endTime) : 'N/A'
 
   const formattedDate = scheduleData ? formatDate(scheduleData.date) : 'N/A'
+
+  const courseMap = courses.reduce((map, course) => {
+    map[course.id] = course.label
+    return map
+  }, {})
 
   return (
     <Template>
@@ -167,9 +169,7 @@ function Component() {
         <Card className='w-full mb-20'>
           <InfoTable
             name={`${registration.fname} ${registration.lname}`}
-            course={
-              courseLabelMap[registration.courseId] || registration.courseId
-            }
+            course={courseMap[registration.courseId]}
             scheduleDate={formattedDate}
             scheduleStartTime={formattedStartTime}
             scheduleEndTime={formattedEndTime}

@@ -335,23 +335,23 @@ export const Scourse = [
     hidden: true,
   },
   {
-    value: 'bsab',
+    value: '1',
     label: 'BS Agri Bussiness',
   },
   {
-    value: 'bse',
+    value: '2',
     label: 'BS Entrepreneuship',
   },
   {
-    value: 'bpa',
+    value: '3',
     label: 'Bachelor of Public Administration',
   },
   {
-    value: 'bstmt',
+    value: '4',
     label: 'BS Tourism Management',
   },
   {
-    value: 'bsc',
+    value: '5',
     label: 'BS Criminology',
   },
 ]

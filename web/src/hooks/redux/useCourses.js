@@ -13,3 +13,16 @@ export const useCourses = () => {
     isLoading,
   }
 }
+
+export const useCourse = (courseId) => {
+  const { data, isError, isLoading } =
+    courseApi.useGetCourseByCourseId(courseId)
+
+  const course = useMemo(() => data?.course || {}, [data])
+
+  return {
+    course,
+    isError,
+    isLoading,
+  }
+}

@@ -33,6 +33,7 @@ const Schedule = () => {
   const [selectedSchedule, setSelectedSchedule] = useState(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const [maxRegistrations, setMaxRegistrations] = useState(0)
+  const [selectedDate, setSelectedDate] = useState('')
 
   // Function to convert 24-hour time to 12-hour time format
   const convertTo12HourFormat = (time) => {
@@ -43,13 +44,27 @@ const Schedule = () => {
     return `${adjustedHour}:${minutes} ${period}`
   }
 
-  // Function to convert date to month-day-year format
+  // Function to convert date to month-day-year format with month in words
   const formatDate = (dateString) => {
     const date = new Date(dateString)
-    const month = date.getMonth() + 1 // getMonth() returns zero-based month
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ]
+    const month = monthNames[date.getMonth()] // getMonth() returns zero-based month
     const day = date.getDate()
     const year = date.getFullYear()
-    return `${month}-${day}-${year}`
+    return `${month} ${day}, ${year}`
   }
 
   const handleOpenModal = () => {
@@ -82,6 +97,15 @@ const Schedule = () => {
     handleCloseModal()
   }
 
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value)
+  }
+
+  const filteredSchedules =
+    selectedDate ?
+      schedules.filter((schedule) => formatDate(schedule.date) === selectedDate)
+    : schedules
+
   if (isError) {
     return (
       <Template>
@@ -111,6 +135,12 @@ const Schedule = () => {
             </div>
 
             <div>
+              <Button size='lg' color='blue' onClick={handleOpenModal}>
+                Set Slots for All
+              </Button>
+            </div>
+
+            <div>
               <Link href='/schedule/history'>
                 <Button size='lg' color='failure'>
                   View History
@@ -119,9 +149,24 @@ const Schedule = () => {
             </div>
           </div>
 
+          <div className='flex justify-start mb-4'>
+            <select
+              value={selectedDate}
+              onChange={handleDateChange}
+              className='p-2 border border-gray-300 rounded-md'
+            >
+              <option value=''>All Dates</option>
+              {schedules.map((schedule) => (
+                <option key={schedule.id} value={formatDate(schedule.date)}>
+                  {formatDate(schedule.date)}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div className='grid grid-cols-3 gap-2'>
-            {schedules && schedules.length > 0 ?
-              schedules.map((schedule) => (
+            {filteredSchedules && filteredSchedules.length > 0 ?
+              filteredSchedules.map((schedule) => (
                 <Card key={schedule.id} className='p-2'>
                   <h2 className='text-lg font-bold'>{schedule.name}</h2>
                   <p>Date: {formatDate(schedule.date)}</p>
@@ -213,9 +258,24 @@ const Schedule = () => {
             </div>
           </div>
 
+          <div className='flex justify-start mb-4'>
+            <select
+              value={selectedDate}
+              onChange={handleDateChange}
+              className='p-2 border border-gray-300 rounded-md'
+            >
+              <option value=''>All Dates</option>
+              {schedules.map((schedule) => (
+                <option key={schedule.id} value={formatDate(schedule.date)}>
+                  {formatDate(schedule.date)}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <div className='grid grid-cols-3 gap-2'>
-            {schedules && schedules.length > 0 ?
-              schedules.map((schedule) => (
+            {filteredSchedules && filteredSchedules.length > 0 ?
+              filteredSchedules.map((schedule) => (
                 <Card key={schedule.id} className='p-4'>
                   <h2 className='text-lg font-bold'>{schedule.name}</h2>
                   <p>Date: {formatDate(schedule.date)}</p>
