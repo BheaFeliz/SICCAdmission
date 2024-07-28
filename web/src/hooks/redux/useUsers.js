@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
-
 import { userApi } from '../api/userApi'
 
 export const useUsers = () => {
   const { data, isError, isLoading } = userApi.useGetUsersQuery()
+  const [deleteUser] = userApi.useDeleteUserMutation()
 
   const users = useMemo(() => data?.users || [], [data])
 
@@ -11,5 +11,6 @@ export const useUsers = () => {
     users,
     isError,
     isLoading,
+    deleteUser,
   }
 }

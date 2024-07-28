@@ -8,17 +8,27 @@ import {
   TableRow,
 } from 'flowbite-react'
 import Link from 'next/link'
-
 import Template from '@/components/templates/Template'
-
 import useHooks from './hooks'
 
 const UserDashboard = () => {
-  const { users } = useHooks()
+  const { users, deleteUser } = useHooks()
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteUser(id).unwrap()
+      alert('User deleted successfully')
+    } catch (error) {
+      console.error('Failed to delete user:', error)
+      alert('Failed to delete user')
+    }
+  }
+  
+
   return (
     <Template>
       <Link href='/users/new'>
-        <div className='flex justify-end mb-2 '>
+        <div className='flex justify-end mb-2'>
           <Button size='md' color='blue'>
             Create User
           </Button>
@@ -43,7 +53,9 @@ const UserDashboard = () => {
                 <TableCell>{user.position}</TableCell>
                 <TableCell>{user.role}</TableCell>
                 <TableCell>
-                  <Button color='failure'>Delete</Button>
+                  <Button color='failure' onClick={() => handleDelete(user.id)}>
+                    Delete
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -52,4 +64,5 @@ const UserDashboard = () => {
     </Template>
   )
 }
+
 export default UserDashboard
