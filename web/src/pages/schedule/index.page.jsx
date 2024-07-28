@@ -98,17 +98,16 @@ const Schedule = () => {
 
           <div className='flex justify-start mb-8 space-x-4'>
             <div>
-              <Button size='lg' color='blue' onClick={handleOpenModal}>
-                Set Slots for All
-              </Button>
-            </div>
-
-            <div>
               <Link href='/schedule/scheduleRoom'>
                 <Button size='lg' color='blue'>
                   Add Schedule
                 </Button>
               </Link>
+            </div>
+            <div>
+              <Button size='lg' color='blue' onClick={handleOpenModal}>
+                Set Slots for All
+              </Button>
             </div>
 
             <div>
