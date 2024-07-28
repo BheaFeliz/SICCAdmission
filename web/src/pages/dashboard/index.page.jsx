@@ -71,8 +71,8 @@ const Dashboard = () => {
         }
         <div className='flex justify-end mt-4'>
           <CardItem
-            title={`${totalRegistrations} Registrations`}
-            description={<strong>Total Registrations</strong>}
+            title={`${totalRegistrations} Admissions`}
+            description={<strong>Total Admissions</strong>}
           />
         </div>
       </div>

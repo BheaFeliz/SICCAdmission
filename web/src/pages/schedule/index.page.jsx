@@ -128,6 +128,7 @@ const Schedule = () => {
                 </Button>
               </Link>
             </div>
+
             <div>
               <Button size='lg' color='blue' onClick={handleOpenModal}>
                 Set Slots for All

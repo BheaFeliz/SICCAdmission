@@ -106,15 +106,17 @@ function Component() {
   const [scheduleId, setScheduleId] = useState(null)
 
   useEffect(() => {
-    if (registrationsData) {
+    if (!isLoadingRegistrations && registrationsData) {
       const registration = registrationsData.registrations.find(
         (reg) => reg.reference_number === ref,
       )
       if (registration) {
         setScheduleId(registration.schedule_id)
+      } else {
+        router.push('/error')
       }
     }
-  }, [registrationsData, ref])
+  }, [isLoadingRegistrations, registrationsData, ref, router])
 
   const {
     data: scheduleData,
