@@ -25,12 +25,12 @@ const links = [
     link: '/users',
   },
   {
-    label: 'Activity Logs',
+    label: 'Activity Logs Management',
     icon: <RxActivityLog />,
     link: '/activitylogs',
   },
   {
-    label: 'Course',
+    label: 'Course Management',
     icon: <RxActivityLog />,
     link: '/courses',
   },

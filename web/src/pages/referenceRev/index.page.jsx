@@ -1,4 +1,4 @@
-import { Card } from 'flowbite-react'
+import { Button, Card, Table } from 'flowbite-react'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
@@ -7,6 +7,8 @@ import Template from '@/components/templates/StudentTemplate'
 import { useGetScheduleByIdQuery } from '@/hooks/api/scheduleApi'
 import { useGetRegistrationsQuery } from '@/hooks/api/studentApi'
 import { useCourses } from '@/hooks/redux/useCourses'
+import Link from 'next/link'
+import Loading from '@/components/atoms/Loading'
 
 function convertTo12HourFormat(time24) {
   const [hour, minute] = time24.split(':')
@@ -45,50 +47,64 @@ function InfoTable({
   roomName,
 }) {
   return (
-    <table className='w-full'>
-      <thead className='bg-gray-200'>
-        <tr>
-          <th className='px-9 py-4 font-semibold text-xl'>Reference Number:</th>
-          <th className='px-9 py-4 font-bold text-xl text-center'>
-            {referenceNumber}
-          </th>
-        </tr>
-      </thead>
-      <tbody className='bg-white divide-y divide-gray-200'>
-        <tr>
-          <td className='px-9 py-2 font-semibold'>Name:</td>
-          <td className='px-9 py-2 text-center'>{name}</td>
-        </tr>
-        <tr>
-          <td className='px-9 py-2 font-semibold'>Course:</td>
-          <td className='px-9 py-2 text-center'>{course}</td>
-        </tr>
-        <tr>
-          <td className='px-9 py-2 font-semibold'>Scheduled Date:</td>
-          <td className='px-9 py-2 text-center'>{scheduleDate}</td>
-        </tr>
-        <tr>
-          <td className='px-9 py-2 font-semibold'>Scheduled Start Time:</td>
-          <td className='px-9 py-2 text-center'>{scheduleStartTime}</td>
-        </tr>
-        <tr>
-          <td className='px-9 py-2 font-semibold'>Scheduled End Time:</td>
-          <td className='px-9 py-2 text-center'>{scheduleEndTime}</td>
-        </tr>
-        <tr>
-          <td className='px-9 py-2 font-semibold'>Session:</td>
-          <td className='px-9 py-2 text-center'>{session}</td>
-        </tr>
-        <tr>
-          <td className='px-9 py-2 font-semibold'>Remark:</td>
-          <td className='px-9 py-2 text-center'>{remark}</td>
-        </tr>
-        <tr>
-          <td className='px-9 py-2 font-semibold'>Room Number:</td>
-          <td className='px-9 py-2 text-center'>{roomName}</td>
-        </tr>
-      </tbody>
-    </table>
+    <Table>
+      <Table.Head className='bg-gray-200'>
+        <Table.HeadCell className='px-9 py-4 font-semibold text-xl'>
+          Reference Number:
+        </Table.HeadCell>
+        <Table.HeadCell className='px-9 py-4 font-bold text-xl text-center'>
+          {referenceNumber}
+        </Table.HeadCell>
+      </Table.Head>
+      <Table.Body className='divide-y divide-gray-200'>
+        <Table.Row>
+          <Table.Cell className='px-9 py-2 font-semibold'>Name:</Table.Cell>
+          <Table.Cell className='px-9 py-2 text-center'>{name}</Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell className='px-9 py-2 font-semibold'>Course:</Table.Cell>
+          <Table.Cell className='px-9 py-2 text-center'>{course}</Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell className='px-9 py-2 font-semibold'>
+            Scheduled Date:
+          </Table.Cell>
+          <Table.Cell className='px-9 py-2 text-center'>
+            {scheduleDate}
+          </Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell className='px-9 py-2 font-semibold'>
+            Scheduled Start Time:
+          </Table.Cell>
+          <Table.Cell className='px-9 py-2 text-center'>
+            {scheduleStartTime}
+          </Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell className='px-9 py-2 font-semibold'>
+            Scheduled End Time:
+          </Table.Cell>
+          <Table.Cell className='px-9 py-2 text-center'>
+            {scheduleEndTime}
+          </Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell className='px-9 py-2 font-semibold'>Session:</Table.Cell>
+          <Table.Cell className='px-9 py-2 text-center'>{session}</Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell className='px-9 py-2 font-semibold'>Remark:</Table.Cell>
+          <Table.Cell className='px-9 py-2 text-center'>{remark}</Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell className='px-9 py-2 font-semibold'>
+            Room Number:
+          </Table.Cell>
+          <Table.Cell className='px-9 py-2 text-center'>{roomName}</Table.Cell>
+        </Table.Row>
+      </Table.Body>
+    </Table>
   )
 }
 
@@ -132,11 +148,21 @@ function Component() {
     }
   }, [scheduleData])
 
-  if (isLoadingRegistrations || isLoadingSchedule) return <div>Loading...</div>
-  if (registrationsError || scheduleError) return <div>Error loading data</div>
+  if (isLoadingRegistrations || isLoadingSchedule) {
+    return (
+      <div className='flex justify-center items-center h-64'>
+        <Loading />
+      </div>
+    )
+  }
 
-  if (!registrationsData || !scheduleData)
-    return <div>No registration found</div>
+  if (registrationsError || scheduleError) {
+    return
+  }
+
+  if (!registrationsData || !scheduleData) {
+    return
+  }
 
   const registration = registrationsData.registrations.find(
     (reg) => reg.reference_number === ref,
@@ -181,6 +207,14 @@ function Component() {
             roomName={scheduleData ? scheduleData.name : 'N/A'}
           />
         </Card>
+      </div>
+
+      <div className='flex justify-end'>
+        <Link href='/studentdashboard'>
+          <Button color='blue' size='lg'>
+            Back to Dashboard
+          </Button>
+        </Link>
       </div>
     </Template>
   )
