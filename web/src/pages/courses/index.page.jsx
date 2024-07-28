@@ -1,3 +1,4 @@
+// index.page.jsx
 import {
   Button,
   Table,
@@ -14,11 +15,12 @@ import Template from '@/components/templates/Template'
 import useHooks from './hooks'
 
 const CourseList = () => {
-  const { courses } = useHooks()
+  const { courses, handleDelete } = useHooks()
+
   return (
     <Template>
       <Link href='/courses/new'>
-        <div className='flex justify-end mb-2 '>
+        <div className='flex justify-end mb-2'>
           <Button size='md' color='blue'>
             Create Course
           </Button>
@@ -26,10 +28,12 @@ const CourseList = () => {
       </Link>
       <Table>
         <TableHead>
-          <TableHeadCell>ID</TableHeadCell>
-          <TableHeadCell>Label</TableHeadCell>
-          <TableHeadCell>Value</TableHeadCell>
-          <TableHeadCell>Action</TableHeadCell>
+          <TableRow>
+            <TableHeadCell>ID</TableHeadCell>
+            <TableHeadCell>Label</TableHeadCell>
+            <TableHeadCell>Value</TableHeadCell>
+            <TableHeadCell>Action</TableHeadCell>
+          </TableRow>
         </TableHead>
         <TableBody>
           {courses &&
@@ -39,7 +43,9 @@ const CourseList = () => {
                 <TableCell>{course.label}</TableCell>
                 <TableCell>{course.value}</TableCell>
                 <TableCell>
-                  <Button color='failure'>Delete</Button>
+                  <Button color='failure' onClick={() => handleDelete(course.id)}>
+                    Delete
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

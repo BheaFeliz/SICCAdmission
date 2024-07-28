@@ -1,3 +1,4 @@
+// courseApi.js
 import { baseApi } from './baseApi'
 
 export const courseApi = baseApi.injectEndpoints({
@@ -19,6 +20,13 @@ export const courseApi = baseApi.injectEndpoints({
       providesTags: (courseId) => [{ type: 'Course', id: courseId }],
       query: (courseId) => ({ url: `/courses/${courseId}` }),
     }),
+    deleteCourse: build.mutation({
+      invalidatesTags: ['courses'],
+      query: (courseId) => ({
+        url: `/courses/${courseId}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
   overrideExisting: false,
 })
@@ -27,4 +35,5 @@ export const {
   useGetCoursesQuery,
   useAddCourseMutation,
   useGetCourseByIdQuery,
+  useDeleteCourseMutation, // Ensure this is exported
 } = courseApi

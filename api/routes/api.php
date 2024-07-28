@@ -74,4 +74,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('activitylogs', [ActivityLogController::class, 'index']);
     Route::get('activitylogs/{id}', [ActivityLogController::class, 'show']);
+    
+
+    Route::delete('/courses/{course}', [CourseController::class, 'destroy']);
+
+    Route::delete('/admin/users/{id}', [UserController::class, 'destroy']);
+
 });
