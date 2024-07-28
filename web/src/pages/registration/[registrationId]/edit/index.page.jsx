@@ -281,12 +281,17 @@ const EditRegistration = ({ registrationId }) => {
             </div>
           )}
           <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
-            <SelectInput
-              label='Select a course'
-              options={courses}
-              name='courseId'
-              {...formState}
-            />
+          <SelectInput
+                name='courseId'
+                options={[
+                  { value: '', label: 'Select a course', isDisabled: true },
+                  ...courses.map((course) => ({
+                    value: course.id,
+                    label: course.label,
+                  })),
+                ]}
+                {...formState}
+              />
           </div>
           <Button type='submit'>Save</Button>
         </div>

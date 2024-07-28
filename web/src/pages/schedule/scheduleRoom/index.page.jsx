@@ -6,6 +6,7 @@ import PageHeader from '@/components/organisms/PageHeader'
 import Template from '@/components/templates/Template'
 
 import useHooks from './hooks'
+import Link from 'next/link'
 
 const breadcrumbs = [
   {
@@ -108,10 +109,19 @@ const RoomSchedulingForm = () => {
           register={register}
           errors={errors}
         />
+        <div className='grid grid-cols-2 gap-2'>
+        <div className='flex justify-start'>
+        <Link href='/schedule'>
+          <Button color='failure'>
+            Back to Schedules
+          </Button>
+        </Link>
+        </div>
         <div className='flex justify-end'>
           <Button type='submit' color='blue'>
             Create Schedule
           </Button>
+        </div>
         </div>
       </form>
     </Template>

@@ -27,13 +27,13 @@ const UserDashboard = () => {
 
   return (
     <Template>
+      <div className='flex justify-end mb-2'>
       <Link href='/users/new'>
-        <div className='flex justify-end mb-2'>
           <Button size='md' color='blue'>
             Create User
           </Button>
-        </div>
       </Link>
+      </div>
       <Table>
         <TableHead>
           <TableHeadCell>Name</TableHeadCell>
