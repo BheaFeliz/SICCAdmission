@@ -25,14 +25,14 @@ const links = [
     link: '/users',
   },
   {
-    label: 'Activity',
+    label: 'Course Management',
     icon: <RxActivityLog />,
-    link: '/students',
+    link: '/courses',
   },
   {
-    label: 'Course',
+    label: 'Activity Management',
     icon: <RxActivityLog />,
-    link: '/course',
+    link: '/activitylogs',
   },
 ]
 
