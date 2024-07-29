@@ -5,18 +5,25 @@ import Paginations from '@/components/atoms/Pagination';
 import PageHeader from '@/components/organisms/PageHeader';
 import Table from '@/components/organisms/Table';
 import Template from '@/components/templates/Template';
+import StaffTemplate from '@/components/templates/StaffTemplate'; // Import the StaffTemplate component
 import { capitalizeFirstLetter } from '@/hooks/lib/util';
 import { Scourse, SDistrict } from '@/hooks/redux/const';
 import Loading from '@/components/atoms/Loading';
+import { useUser } from '@/hooks/redux/auth'; // Import the useUser hook
 
 import useHooks from './hooks';
+import Link from 'next/link';
+import { Button } from 'flowbite-react';
 
 const FilteredCourse = () => {
   const router = useRouter();
   const { course: courseId } = router.query;
   const numericCourseId = Number(courseId); // Convert courseId to a number
 
+  const { user } = useUser(); // Get the user data
   const { registrations, currentPage, onPageChange, isLoading } = useHooks(numericCourseId);
+
+  const TemplateComponent = user.role === 'admin' ? Template : StaffTemplate; // Choose the template based on user role
 
   const breadcrumbs = [
     {
@@ -86,7 +93,7 @@ const FilteredCourse = () => {
   const paginatedData = filteredRegistrations.slice(startIdx, endIdx);
 
   return (
-    <Template>
+    <TemplateComponent>
       <PageHeader breadcrumbs={breadcrumbs} />
 
       {isLoading ? (
@@ -110,7 +117,14 @@ const FilteredCourse = () => {
           </div>
         </>
       )}
-    </Template>
+      <div className='mt-5 flex justify-end mr-6'>
+        <Link href='/dashboard'>
+          <Button size='lg' color='blue'>
+            Back to Dashboard
+          </Button>
+        </Link>
+      </div>
+    </TemplateComponent>
   );
 };
 

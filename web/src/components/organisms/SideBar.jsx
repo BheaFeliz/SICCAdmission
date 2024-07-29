@@ -20,19 +20,19 @@ const links = [
     link: '/students',
   },
   {
-    label: 'User Management',
+    label: 'Create Users',
     icon: <AiOutlineUserAdd />,
     link: '/users',
   },
   {
-    label: 'Activity Logs Management',
+    label: 'Activity',
     icon: <RxActivityLog />,
-    link: '/activitylogs',
+    link: '/students',
   },
   {
-    label: 'Course Management',
+    label: 'Course',
     icon: <RxActivityLog />,
-    link: '/courses',
+    link: '/course',
   },
 ]
 

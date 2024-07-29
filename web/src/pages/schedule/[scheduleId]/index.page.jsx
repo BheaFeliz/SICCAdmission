@@ -3,14 +3,16 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { IoCalendarSharp } from 'react-icons/io5';
-import * as XLSX from 'xlsx'// Make sure to import XLSX
+import * as XLSX from 'xlsx'; // Import XLSX
 
 import PageHeader from '@/components/organisms/PageHeader';
 import Table from '@/components/organisms/Table';
 import Template from '@/components/templates/Template';
+import StaffTemplate from '@/components/templates/StaffTemplate'; // Import the StaffTemplate component
 import { capitalizeFirstLetter } from '@/hooks/lib/util';
 import { useCourses } from '@/hooks/redux/useCourses';
 import Loading from '@/components/atoms/Loading'; // Import the Loading component
+import { useUser } from '@/hooks/redux/auth'; // Import the useUser hook
 
 import useHooks from './hooks';
 
@@ -30,6 +32,9 @@ const Schedule = () => {
   const router = useRouter();
   const { scheduleId } = router.query;
   const { scheduleName, registrations, isLoading, isError } = useHooks();
+  const { user } = useUser(); // Get the user data
+
+  const TemplateComponent = user.role === 'admin' ? Template : StaffTemplate; // Choose the template based on user role
 
   const { courses } = useCourses();
   const courseMap = courses.reduce((map, course) => {
@@ -86,7 +91,7 @@ const Schedule = () => {
   };
 
   return (
-    <Template>
+    <TemplateComponent>
       <PageHeader breadcrumbs={breadcrumbs} />
       <div
         size='lg'
@@ -119,7 +124,7 @@ const Schedule = () => {
           </div>
         </div>
       )}
-    </Template>
+    </TemplateComponent>
   );
 };
 

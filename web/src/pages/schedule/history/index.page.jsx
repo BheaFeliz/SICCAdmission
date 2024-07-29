@@ -5,7 +5,9 @@ import { IoCalendarSharp } from 'react-icons/io5';
 
 import PageHeader from '@/components/organisms/PageHeader';
 import Template from '@/components/templates/Template';
+import StaffTemplate from '@/components/templates/StaffTemplate'; // Import the StaffTemplate component
 import Loading from '@/components/atoms/Loading'; // Import the Loading component
+import { useUser } from '@/hooks/redux/auth'; // Import the useUser hook
 
 import { useDeletedSchedules } from './hooks';
 
@@ -38,24 +40,27 @@ const convertTo12HourFormat = (time) => {
 };
 
 const ScheduleHistory = () => {
+  const { user } = useUser(); // Get the user data
   const { deletedSchedules, isLoading, isError } = useDeletedSchedules();
+
+  const TemplateComponent = user.role === 'admin' ? Template : StaffTemplate; // Choose the template based on user role
 
   if (isLoading) {
     return (
-      <Template>
+      <TemplateComponent>
         <div className='flex justify-center items-center h-screen'>
           <Loading /> {/* Show global loading spinner */}
         </div>
-      </Template>
+      </TemplateComponent>
     );
   }
 
   if (isError) {
-    return <Template>Error fetching deleted schedules.</Template>;
+    return <TemplateComponent>Error fetching deleted schedules.</TemplateComponent>;
   }
 
   return (
-    <Template>
+    <TemplateComponent>
       <PageHeader breadcrumbs={breadcrumbs} />
       <h1 className='text-xl font-bold mb-4'>Deleted Schedules</h1>
       <div className='grid grid-cols-3 gap-2'>
@@ -96,7 +101,7 @@ const ScheduleHistory = () => {
           </Button>
         </Link>
       </div>
-    </Template>
+    </TemplateComponent>
   );
 };
 
