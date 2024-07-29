@@ -433,56 +433,56 @@ const Dashboard = () => {
       }
     }
 
-    const drawTextOrCheckmarkForCourse = (
-      text,
-      xBsab,
-      yBsab,
-      xBse,
-      yBse,
-      xBpa,
-      yBpa,
-      xBstmt,
-      yBstmt,
-      xBsc,
-      yBsc,
-    ) => {
-      if (text.toLowerCase() === 'bsab') {
-        firstPage.drawText('X', {
-          x: xBsab,
-          y: yBsab,
-          size: 10,
-          color: rgb(0, 0, 0),
-        })
-      } else if (text.toLowerCase() === 'bse') {
-        firstPage.drawText('X', {
-          x: xBse,
-          y: yBse,
-          size: 10,
-          color: rgb(0, 0, 0),
-        })
-      } else if (text.toLowerCase() === 'bpa') {
-        firstPage.drawText('X', {
-          x: xBpa,
-          y: yBpa,
-          size: 10,
-          color: rgb(0, 0, 0),
-        })
-      } else if (text.toLowerCase() === 'bstmt') {
-        firstPage.drawText('X', {
-          x: xBstmt,
-          y: yBstmt,
-          size: 10,
-          color: rgb(0, 0, 0),
-        })
-      } else if (text.toLowerCase() === 'bsc') {
-        firstPage.drawText('X', {
-          x: xBsc,
-          y: yBsc,
-          size: 10,
-          color: rgb(0, 0, 0),
-        })
-      }
-    }
+    // const drawTextOrCheckmarkForCourse = (
+    //   text,
+    //   xBsab,
+    //   yBsab,
+    //   xBse,
+    //   yBse,
+    //   xBpa,
+    //   yBpa,
+    //   xBstmt,
+    //   yBstmt,
+    //   xBsc,
+    //   yBsc,
+    // ) => {
+    //   if (text.toLowerCase() === 'bsab') {
+    //     firstPage.drawText('X', {
+    //       x: xBsab,
+    //       y: yBsab,
+    //       size: 10,
+    //       color: rgb(0, 0, 0),
+    //     })
+    //   } else if (text.toLowerCase() === 'bse') {
+    //     firstPage.drawText('X', {
+    //       x: xBse,
+    //       y: yBse,
+    //       size: 10,
+    //       color: rgb(0, 0, 0),
+    //     })
+    //   } else if (text.toLowerCase() === 'bpa') {
+    //     firstPage.drawText('X', {
+    //       x: xBpa,
+    //       y: yBpa,
+    //       size: 10,
+    //       color: rgb(0, 0, 0),
+    //     })
+    //   } else if (text.toLowerCase() === 'bstmt') {
+    //     firstPage.drawText('X', {
+    //       x: xBstmt,
+    //       y: yBstmt,
+    //       size: 10,
+    //       color: rgb(0, 0, 0),
+    //     })
+    //   } else if (text.toLowerCase() === 'bsc') {
+    //     firstPage.drawText('X', {
+    //       x: xBsc,
+    //       y: yBsc,
+    //       size: 10,
+    //       color: rgb(0, 0, 0),
+    //     })
+    //   }
+    // }
 
     firstPage.drawText(`${item.reference_number}`, {
       x: 500,
@@ -704,19 +704,19 @@ const Dashboard = () => {
       color: rgb(0, 0, 0),
     })
 
-    drawTextOrCheckmarkForCourse(
-      item.selectcourse,
-      83,
-      317,
-      83,
-      303,
-      231,
-      936,
-      231,
-      303,
-      410,
-      317,
-    )
+    // drawTextOrCheckmarkForCourse(
+    //   item.selectcourse,
+    //   83,
+    //   317,
+    //   83,
+    //   303,
+    //   231,
+    //   936,
+    //   231,
+    //   303,
+    //   410,
+    //   317,
+    // )
 
     const pdfBytes = await pdfDoc.save()
     const blob = new Blob([pdfBytes], { type: 'application/pdf' })
