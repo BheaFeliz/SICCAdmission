@@ -8,7 +8,9 @@ import {
   TableRow,
 } from 'flowbite-react'
 import Link from 'next/link'
+
 import Template from '@/components/templates/Template'
+
 import useHooks from './hooks'
 
 const UserDashboard = () => {
@@ -23,7 +25,6 @@ const UserDashboard = () => {
       alert('Failed to delete user')
     }
   }
-  
 
   return (
     <Template>
