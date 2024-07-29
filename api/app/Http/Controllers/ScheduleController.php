@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Schedule;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {
@@ -14,8 +15,9 @@ class ScheduleController extends Controller
     {
         ActivityLog::create([
             'action' => $action,
-            'schedule_id' => $schedule ? $schedule->id : null,
             'data' => $data ? json_encode($data) : null,
+            'user_id' => Auth::id(), // Assuming you are using Laravel's authentication
+            'username' => Auth::user() ? Auth::user()->username : 'guest',
         ]);
     }
 

@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class CourseController extends Controller
 {
     // Get all courses
-    
     public function index()
     {
         $courses = Course::all();
@@ -23,11 +23,31 @@ class CourseController extends Controller
             'label' => 'required',
         ]);
 
-        $courses = Course::create($validated);
+        $course = Course::create($validated);
 
-        return response()->json($courses, 201);
+        return response()->json($course, 201);
     }
 
+    // Update a course
+    public function update(Request $request, $id)
+    {
+        $course = Course::find($id);
+
+        if (!$course) {
+            return response()->json(['message' => 'Course not found'], 404);
+        }
+
+        $validated = $request->validate([
+            'value' => 'required|unique:courses,value,' . $id,
+            'label' => 'required',
+        ]);
+
+        $course->update($validated);
+
+        return response()->json($course, 200);
+    }
+
+    // Delete a course
     public function destroy($id)
     {
         $course = Course::find($id);
@@ -41,5 +61,15 @@ class CourseController extends Controller
         return response()->json(['message' => 'Course deleted successfully'], 200);
     }
 
-    // Other methods for updating or deleting courses can be added as needed
+    // Show a specific course
+    public function show($id)
+    {
+        $course = Course::find($id);
+
+        if (!$course) {
+            return response()->json(['message' => 'Course not found'], 404);
+        }
+
+        return response()->json($course);
+    }
 }

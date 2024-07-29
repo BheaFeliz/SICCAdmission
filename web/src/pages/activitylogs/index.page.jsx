@@ -1,7 +1,8 @@
+import { Table } from 'flowbite-react'
 import React from 'react'
 
-import { useActivityLog } from '@/hooks/redux/useActivityLog'
 import Template from '@/components/templates/Template'
+import { useActivityLog } from '@/hooks/redux/useActivityLog'
 
 const ActivityLogComponent = () => {
   const { logs, isError, isLoading } = useActivityLog()
@@ -16,18 +17,28 @@ const ActivityLogComponent = () => {
 
   return (
     <Template>
-      <div>
-        <h1>Activity Logs</h1>
-        <ul>
-          {logs.map((log) => (
-            <li key={log.id}>
-              <p>Action: {log.action}</p>
-              <p>Schedule ID: {log.schedule_id}</p>
-              <p>Data: {log.data}</p>
-              <p>Timestamp: {log.created_at}</p>
-            </li>
-          ))}
-        </ul>
+      <div className='p-4'>
+        <h1 className='text-2xl font-semibold mb-4'>Activity Logs</h1>
+        <Table>
+          <Table.Head>
+            <Table.HeadCell>Username</Table.HeadCell>
+            <Table.HeadCell>Action</Table.HeadCell>
+            {/* <Table.HeadCell>Data</Table.HeadCell> */}
+            <Table.HeadCell>Timestamp</Table.HeadCell>
+          </Table.Head>
+          <Table.Body>
+            {logs.map((log) => (
+              <Table.Row key={log.id}>
+                <Table.Cell>{log.username || 'N/A'}</Table.Cell>
+                <Table.Cell>{log.action || 'N/A'}</Table.Cell>
+                {/* <Table.Cell>{JSON.stringify(log.data) || 'N/A'}</Table.Cell> */}
+                <Table.Cell>
+                  {new Date(log.created_at).toLocaleString() || 'N/A'}
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
       </div>
     </Template>
   )

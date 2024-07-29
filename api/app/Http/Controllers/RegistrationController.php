@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AdmissionFormRequest;
+use App\Models\ActivityLog;
 use App\Models\Registration;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class RegistrationController extends Controller
 {
@@ -132,6 +135,13 @@ class RegistrationController extends Controller
         $registration = Registration::with(['schedule' => function ($query) {
             $query->withTrashed();
         }])->findOrFail($id);
+
+        ActivityLog::create([
+            'user_id' => Auth::check() ? Auth::id() : null, // Handle unauthenticated users
+            'username' => Auth::check() ? Auth::user()->username : 'Unknown',
+            'action' => 'Viewed registration with ID: ' . $id,
+            'data' => json_encode($registration),
+        ]);
     
         return response()->json(['registration' => $registration], 200);
     }
@@ -214,15 +224,34 @@ class RegistrationController extends Controller
         }
 
         $registration->update($validatedData);
-
+        ActivityLog::create([
+            'user_id' => Auth::check() ? Auth::id() : null, // Handle unauthenticated users
+            'username' => Auth::check() ? Auth::user()->username : 'Unknown',
+            'action' => 'Updated registration with ID: ' . $id,
+            'data' => json_encode([
+                // 'old' => $oldData,
+                'new' => $validatedData,
+            ]),
+        ]);
+    
         return response()->json(['message' => 'Registration updated successfully', 'data' => $registration], 200);
     }
-
 
     public function destroy($id)
 {
     $registration = Registration::findOrFail($id);
+    
+    // Log the deletion activity
+    ActivityLog::create([
+        'user_id' => Auth::check() ? Auth::id() : null, // Handle unauthenticated users
+        'username' => Auth::check() ? Auth::user()->username : 'Unknown',
+        'action' => 'Deleted registration with ID: ' . $id,
+        'data' => null,
+    ]);
+
     $registration->delete();
+
     return response()->json(['message' => 'Registration deleted successfully'], 200);
 }
-}
+
+};
