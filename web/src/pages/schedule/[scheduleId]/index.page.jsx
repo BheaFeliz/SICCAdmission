@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { IoCalendarSharp } from 'react-icons/io5';
+import * as XLSX from 'xlsx'// Make sure to import XLSX
 
 import PageHeader from '@/components/organisms/PageHeader';
 import Table from '@/components/organisms/Table';
@@ -63,7 +64,25 @@ const Schedule = () => {
   ];
 
   const handleDownloadExcel = () => {
-    // Implement the download logic here
+    const dataToExport = filteredRegistrations.map((registration) => ({
+      'Contacts': registration.contactnumber,
+      'Last Name': registration.lname,
+      'First Name': registration.fname,
+      'Reference Number': registration.reference_number,
+      'Scheduled Date of Admission Test':
+        registration.schedule ?
+          new Date(registration.schedule.date).toLocaleDateString('en-US')
+        : 'N/A', // Include the schedule date
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Registrations');
+
+    // Create a filename based on the schedule name
+    const filename = `${scheduleName.replace(/[^a-zA-Z0-9]/g, '_')}_registrations.xlsx`;
+    // Write the file
+    XLSX.writeFile(workbook, filename);
   };
 
   return (
