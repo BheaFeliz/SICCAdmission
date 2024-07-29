@@ -17,7 +17,7 @@ const ActivityLogComponent = () => {
   return (
     <Template>
       <div>
-        <h1>Activity Logs</h1>
+        <h1>Activity Logss</h1>
         <ul>
           {logs.map((log) => (
             <li key={log.id}>
