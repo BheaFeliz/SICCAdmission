@@ -29,7 +29,7 @@ class UserController extends Controller
             // add other validation rules as necessary
         ]);
 
-        $validatedData['password'] = Hash::make('!p@ssword123');
+        $validatedData['password'] = Hash::make('@sicc2024');
         $user = User::create($validatedData);
 
         if (Auth::check()) {
