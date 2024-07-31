@@ -38,7 +38,20 @@ function CreateUserPage() {
             className='form-input'
             {...formState}
           />
-
+          <TextInput
+            name='password'
+            label='Create Password'
+            type='password'
+            className='form-input'
+            {...formState}
+          />
+          <TextInput
+            name='confirmPassword'
+            label='Confirm Password'
+            type='password'
+            className='form-input'
+            {...formState}
+          />
           <SelectInput
             name='role'
             options={[
@@ -48,7 +61,7 @@ function CreateUserPage() {
                 label: option.label,
               })),
             ]}
-            className='mt-4 mb-4' // Add top and bottom margin
+            className='mt-4 mb-4'
             {...formState}
           />
           <TextInput
