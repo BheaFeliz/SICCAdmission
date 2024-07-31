@@ -26,20 +26,20 @@ class UserController extends Controller
             'position' => 'nullable|string',
             'role' => 'nullable|string',
             'email' => 'required|email|unique:users',
-            // add other validation rules as necessary
+            'password' => 'required|string|min:8',
         ]);
 
-        $validatedData['password'] = Hash::make('@sicc2024');
-        $user = User::create($validatedData);
+        $validatedData['password'] = Hash::make($request->password);
+    $user = User::create($validatedData);
 
-        if (Auth::check()) {
-            $this->logActivity('User created: ' . $user->username);
-        } else {
-            Log::warning('Unauthorized user attempted to log activity on user creation.');
-        }
-
-        return response()->json(['user' => $user], 201);
+    if (Auth::check()) {
+        $this->logActivity('User created: ' . $user->username);
+    } else {
+        Log::warning('Unauthorized user attempted to log activity on user creation.');
     }
+
+    return response()->json(['user' => $user], 201);
+}
 
     public function destroy($id)
     {
