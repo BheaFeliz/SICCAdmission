@@ -17,9 +17,7 @@ const StaffNavbar = () => {
 
       <div className='flex gap-5 '>
         {user.name}
-
         <HiOutlineUserCircle className='cursor-pointer hover:text-orange-700 text-xl' />
-
         <Link href='/logout'>
           <HiLogout className='cursor-pointer hover:text-orange-700 text-xl'>
             Logout
