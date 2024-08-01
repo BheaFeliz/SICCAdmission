@@ -1,4 +1,4 @@
-import { Button, Card } from 'flowbite-react'
+import { Button, Card, Label } from 'flowbite-react'
 import React, { useState } from 'react'
 import { SiGoogleforms } from 'react-icons/si'
 
@@ -350,12 +350,20 @@ const Registration = () => {
 
             <div className='m-5'>
               <Card>
-                <FilePickerInput
-                  name='fileinput'
-                  label='Upload Picture'
-                  multiple
-                  {...formState}
-                />
+                <div>
+                  <div className='mb-2 block'>
+                    <Label
+                      htmlFor='file-upload'
+                      value='Upload a 2x2 Picture with Formal Attire and White Background '
+                    />
+                  </div>
+                  <FilePickerInput
+                    name='fileinput'
+                    label='Upload Picture'
+                    multiple
+                    {...formState}
+                  />
+                </div>
               </Card>
             </div>
             <div className='flex justify-end'>

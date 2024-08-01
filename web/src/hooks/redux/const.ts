@@ -201,17 +201,17 @@ export const SDistrict = [
   },
   {
     value: 'd1',
-    label: 'District I',
+    label: 'Babak District',
     showTextInput: false, // Added property to indicate if TextInput should be shown
   },
   {
     value: 'd2',
-    label: 'District II',
+    label: 'Samal District',
     showTextInput: false, // Added property to indicate if TextInput should be shown
   },
   {
     value: 'd3',
-    label: 'District III',
+    label: 'Kaputian District',
     showTextInput: false, // Added property to indicate if TextInput should be shown
   },
   {
