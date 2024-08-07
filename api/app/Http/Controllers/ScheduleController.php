@@ -48,6 +48,7 @@ class ScheduleController extends Controller
             'startTime' => 'required',
             'endTime' => 'required',
             'session' => 'required|string|max:255',
+            'max_registrations' => 'required|integer|min:0',
             'remark' => 'string|nullable|max:200',
         ]);
 
@@ -63,6 +64,7 @@ class ScheduleController extends Controller
         $schedule->startTime = $request->startTime;
         $schedule->endTime = $request->endTime;
         $schedule->session = $request->session;
+        $schedule->max_registrations = $request->max_registrations;
         $schedule->remark = $request->remark;
         $schedule->save();
 
@@ -78,6 +80,7 @@ class ScheduleController extends Controller
             'startTime' => 'string',
             'endTime' => 'string',
             'session' => 'string|max:255',
+            'max_registrations' => 'integer|min:0',
             'remark' => 'string|nullable|max:200',
         ]);
 
@@ -124,16 +127,19 @@ class ScheduleController extends Controller
         return response()->json(['message' => 'Schedule deleted successfully'], 200);
     }
 
-    public function updateAll(Request $request)
-    {
-        $validatedData = $request->validate([
-            'max_registrations' => 'required|integer|min:0',
-        ]);
+    public function updateScheduleMaxRegistrations(Request $request, $scheduleId)
+{
+    $validatedData = $request->validate([
+        'max_registrations' => 'required|integer|min:0',
+    ]);
 
-        // Update all schedules with the new max_registrations value
-        Schedule::query()->update(['max_registrations' => $validatedData['max_registrations']]);
+    // Find the specific schedule by ID and update its max_registrations value
+    $schedule = Schedule::findOrFail($scheduleId);
+    $schedule->max_registrations = $validatedData['max_registrations'];
+    $schedule->save();
 
-        $this->logActivity('update_all_schedules', null, $request->all());
-        return response()->json(['message' => 'All schedules updated successfully']);
-    }
+    $this->logActivity('update_schedule_max_registrations', $scheduleId, $request->all());
+    return response()->json(['message' => 'Schedule updated successfully']);
+}
+
 }

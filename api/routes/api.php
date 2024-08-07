@@ -80,5 +80,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/courses/{course}', [CourseController::class, 'destroy']);
 
     Route::delete('/admin/users/{id}', [UserController::class, 'destroy']);
+    Route::put('/schedules/{scheduleId}/max-registrations', [ScheduleController::class, 'updateScheduleMaxRegistrations']);
+
 
 });
