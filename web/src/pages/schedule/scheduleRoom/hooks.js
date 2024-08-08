@@ -1,5 +1,3 @@
-// src/pages/schedule/scheduleRoom/hooks.js
-
 import { yupResolver } from '@hookform/resolvers/yup'
 import { format } from 'date-fns'
 import { useRouter } from 'next/router'
@@ -36,7 +34,7 @@ const schema = yup.object().shape({
     .integer('Max Registrations must be an integer'),
 })
 
-const useHooks = () => {
+const useHooks = (onSuccess) => {
   const router = useRouter()
   const { handleError } = useHandleError()
   const [createScheduleMutation] = scheduleApi.useCreateScheduleMutation()
@@ -55,7 +53,15 @@ const useHooks = () => {
       await createScheduleMutation({
         ...data,
       }).unwrap()
-      router.push('/schedule')
+
+      if (onSuccess) {
+        onSuccess() // Trigger the success message callback
+      }
+
+      // Delay the navigation to allow the message to display
+      setTimeout(() => {
+        router.push('/schedule')
+      }, 3000) // 3-second delay
     } catch (error) {
       handleError(error)
     }
