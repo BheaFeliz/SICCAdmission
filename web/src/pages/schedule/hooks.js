@@ -18,12 +18,12 @@ export const useHooks = () => {
     }
   }
 
-  const handleUpdateMaxRegistrationsForAll = async (maxRegistrations) => {
+  const handleUpdateMaxRegistrations = async (scheduleId, maxRegistrations) => {
     try {
-      await updateAllSchedules({ max_registrations: maxRegistrations }).unwrap()
-      console.log('All schedules updated successfully')
+      await updateSchedule({ scheduleId, max_registrations: maxRegistrations }).unwrap()
+      console.log(`Schedule with id ${scheduleId} updated successfully`)
     } catch (error) {
-      console.error('Failed to update schedules:', error)
+      console.error(`Failed to update schedule with id ${scheduleId}:`, error)
     }
   }
 
@@ -32,7 +32,7 @@ export const useHooks = () => {
     isLoading,
     isError,
     handleDeleteSchedule,
-    handleUpdateMaxRegistrationsForAll, // Return the new function
+    handleUpdateMaxRegistrations, // Return the new function
   }
 }
 

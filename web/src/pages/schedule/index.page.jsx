@@ -26,14 +26,14 @@ const Schedule = () => {
     isError,
     isLoading,
     handleDeleteSchedule,
-    handleUpdateMaxRegistrationsForAll,
+  
   } = useHooks()
   const { user } = useUser()
   const [openModal, setOpenModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [selectedSchedule, setSelectedSchedule] = useState(null)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [maxRegistrations, setMaxRegistrations] = useState(0)
+  
   const [selectedDate, setSelectedDate] = useState('')
 
   // Function to convert 24-hour time to 12-hour time format
@@ -68,10 +68,6 @@ const Schedule = () => {
     return `${month} ${day}, ${year}`
   }
 
-  const handleOpenModal = () => {
-    setMaxRegistrations(0) // Reset input field
-    setOpenModal(true)
-  }
 
   const handleOpenDeleteModal = (schedule) => {
     setSelectedSchedule(schedule)
@@ -94,10 +90,7 @@ const Schedule = () => {
     }
   }
 
-  const handleSetSlotsForAll = async () => {
-    await handleUpdateMaxRegistrationsForAll(maxRegistrations)
-    handleCloseModal()
-  }
+  
 
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value)
@@ -141,11 +134,6 @@ const Schedule = () => {
               </Link>
             </div>
 
-            <div>
-              <Button size='lg' color='blue' onClick={handleOpenModal}>
-                Set Slots for All
-              </Button>
-            </div>
 
             <div>
               <Link href='/schedule/history'>
@@ -246,25 +234,6 @@ const Schedule = () => {
             </Modal>
           )}
 
-          <Modal show={openModal} size='md' onClose={handleCloseModal}>
-            <Modal.Header>
-              Set Maximum Registrations for All Schedules
-            </Modal.Header>
-            <Modal.Body>
-              <div className='flex flex-col space-y-4'>
-                <TextInput
-                  type='number'
-                  min='0'
-                  value={maxRegistrations}
-                  onChange={(e) => setMaxRegistrations(e.target.value)}
-                  placeholder='Enter maximum registrations'
-                />
-                <Button onClick={handleSetSlotsForAll} color='blue'>
-                  Set Slots for All
-                </Button>
-              </div>
-            </Modal.Body>
-          </Modal>
         </Template>
       : <StaffTemplate>
           <PageHeader breadcrumbs={breadcrumbs} />

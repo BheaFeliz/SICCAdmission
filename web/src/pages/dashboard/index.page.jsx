@@ -36,7 +36,7 @@ const Dashboard = () => {
 
   // Map courses to card data
   const cardData = (courses || []).map((course) => ({
-    title: `${registrationCounts[course.id] || 0} Admissions`,
+    title: `${registrationCounts[course.id] || 0} `,
     description: course.label,
     link: `/dashboard/filteredcourse?course=${course.id}`, // Assuming you want to link to the course details
   }))
@@ -77,7 +77,7 @@ const Dashboard = () => {
             }
             <div className='flex justify-end mt-4'>
               <CardItem
-                title={`${totalRegistrations} Admissions`}
+                title={`${totalRegistrations} `}
                 description={<strong>Total Admissions</strong>}
               />
             </div>
