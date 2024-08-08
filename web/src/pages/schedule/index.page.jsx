@@ -1,4 +1,4 @@
-import { Button, Card, Modal, TextInput } from 'flowbite-react'
+import { Button, Card, Modal } from 'flowbite-react'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
@@ -21,22 +21,13 @@ const breadcrumbs = [
 ]
 
 const Schedule = () => {
-  const {
-    schedules,
-    isError,
-    isLoading,
-    handleDeleteSchedule,
-  
-  } = useHooks()
+  const { schedules, isError, isLoading, handleDeleteSchedule } = useHooks()
   const { user } = useUser()
-  const [openModal, setOpenModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [selectedSchedule, setSelectedSchedule] = useState(null)
   const [isDeleting, setIsDeleting] = useState(false)
-  
   const [selectedDate, setSelectedDate] = useState('')
 
-  // Function to convert 24-hour time to 12-hour time format
   const convertTo12HourFormat = (time) => {
     const [hours, minutes] = time.split(':')
     const hour = parseInt(hours, 10)
@@ -45,7 +36,6 @@ const Schedule = () => {
     return `${adjustedHour}:${minutes} ${period}`
   }
 
-  // Function to convert date to month-day-year format with month in words
   const formatDate = (dateString) => {
     const date = new Date(dateString)
     const monthNames = [
@@ -62,12 +52,11 @@ const Schedule = () => {
       'November',
       'December',
     ]
-    const month = monthNames[date.getMonth()] // getMonth() returns zero-based month
+    const month = monthNames[date.getMonth()]
     const day = date.getDate()
     const year = date.getFullYear()
     return `${month} ${day}, ${year}`
   }
-
 
   const handleOpenDeleteModal = (schedule) => {
     setSelectedSchedule(schedule)
@@ -75,7 +64,6 @@ const Schedule = () => {
   }
 
   const handleCloseModal = () => {
-    setOpenModal(false)
     setOpenDeleteModal(false)
     setSelectedSchedule(null)
     setIsDeleting(false)
@@ -89,8 +77,6 @@ const Schedule = () => {
       handleCloseModal()
     }
   }
-
-  
 
   const handleDateChange = (event) => {
     setSelectedDate(event.target.value)
@@ -134,7 +120,6 @@ const Schedule = () => {
               </Link>
             </div>
 
-
             <div>
               <Link href='/schedule/history'>
                 <Button size='lg' color='failure'>
@@ -168,7 +153,7 @@ const Schedule = () => {
                 >
                   {isDeleting && selectedSchedule?.id === schedule.id && (
                     <div className='absolute inset-0 flex items-center justify-center'>
-                      <Loading /> {/* Show loading in card when deleting */}
+                      <Loading />
                     </div>
                   )}
                   <div className='relative'>
@@ -222,7 +207,7 @@ const Schedule = () => {
                     </h3>
                     <div className='flex justify-center gap-4'>
                       <Button color='failure' onClick={handleConfirmDelete}>
-                        {'Yes'}
+                        Yes
                       </Button>
                       <Button color='gray' onClick={handleCloseModal}>
                         No
@@ -233,7 +218,6 @@ const Schedule = () => {
               </Modal.Body>
             </Modal>
           )}
-
         </Template>
       : <StaffTemplate>
           <PageHeader breadcrumbs={breadcrumbs} />
@@ -272,7 +256,7 @@ const Schedule = () => {
                 >
                   {isDeleting && selectedSchedule?.id === schedule.id && (
                     <div className='absolute inset-0 flex items-center justify-center'>
-                      <Loading /> {/* Show loading in card when deleting */}
+                      <Loading />
                     </div>
                   )}
                   <div className='relative'>
