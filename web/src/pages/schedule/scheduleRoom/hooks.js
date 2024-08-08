@@ -1,3 +1,5 @@
+// src/pages/schedule/scheduleRoom/hooks.js
+
 import { yupResolver } from '@hookform/resolvers/yup'
 import { format } from 'date-fns'
 import { useRouter } from 'next/router'
@@ -8,6 +10,7 @@ import { scheduleApi } from '@/hooks/api/scheduleApi'
 import { useHandleError } from '@/hooks/useHandleError'
 
 const schema = yup.object().shape({
+  name: yup.string().required('Room Name is required'),
   date: yup.date().required('Date is required'),
   startTime: yup.string().required('Start time is required'),
   endTime: yup
@@ -26,6 +29,11 @@ const schema = yup.object().shape({
     .string()
     .nullable()
     .max(200, 'Remark cannot be more than 200 characters'),
+  max_registrations: yup
+    .number()
+    .required('Max Registrations is required')
+    .positive('Max Registrations must be a positive number')
+    .integer('Max Registrations must be an integer'),
 })
 
 const useHooks = () => {
