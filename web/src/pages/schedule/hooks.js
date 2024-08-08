@@ -7,7 +7,7 @@ import { useSchedules } from '@/hooks/redux/useSchedule'
 export const useHooks = () => {
   const { schedules, isLoading, isError } = useSchedules()
   const [deleteSchedule] = useDeleteScheduleMutation()
-  const [updateAllSchedules] = useUpdateAllSchedulesMutation() // Add mutation for updating all schedules
+  const [updateAllSchedules] = useUpdateAllSchedulesMutation() // Correct mutation hook
 
   const handleDeleteSchedule = async (scheduleId) => {
     try {
@@ -20,7 +20,10 @@ export const useHooks = () => {
 
   const handleUpdateMaxRegistrations = async (scheduleId, maxRegistrations) => {
     try {
-      await updateSchedule({ scheduleId, max_registrations: maxRegistrations }).unwrap()
+      await updateAllSchedules({
+        scheduleId,
+        max_registrations: maxRegistrations,
+      }).unwrap()
       console.log(`Schedule with id ${scheduleId} updated successfully`)
     } catch (error) {
       console.error(`Failed to update schedule with id ${scheduleId}:`, error)

@@ -1,4 +1,5 @@
 import { Button } from 'flowbite-react'
+import Link from 'next/link'
 import React, { useState } from 'react'
 import { IoCalendarSharp } from 'react-icons/io5'
 
@@ -6,7 +7,6 @@ import PageHeader from '@/components/organisms/PageHeader'
 import Template from '@/components/templates/Template'
 
 import useHooks from './hooks'
-import Link from 'next/link'
 
 const breadcrumbs = [
   {
@@ -20,33 +20,47 @@ const breadcrumbs = [
   },
 ]
 
-const Field = ({ id, label, type = 'text', register, errors, children }) => (
+const Field = ({
+  id,
+  label,
+  type = 'text',
+  register,
+  errors,
+  value,
+  onChange,
+  children,
+}) => (
   <div className='mb-4'>
     <label htmlFor={id} className='block text-sm font-semibold mb-2'>
       {label}
     </label>
-    {type === 'textarea' ? (
+    {type === 'textarea' ?
       <textarea
         id={id}
         {...register(id)}
+        value={value}
+        onChange={onChange}
         className={`w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 ${errors[id] ? 'border-red-500' : ''}`}
       />
-    ) : type === 'select' ? (
+    : type === 'select' ?
       <select
         id={id}
         {...register(id)}
+        value={value}
+        onChange={onChange}
         className={`w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 ${errors[id] ? 'border-red-500' : ''}`}
       >
         {children}
       </select>
-    ) : (
-      <input
+    : <input
         type={type}
         id={id}
         {...register(id)}
+        value={value}
+        onChange={onChange}
         className={`w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 ${errors[id] ? 'border-red-500' : ''}`}
       />
-    )}
+    }
     {errors[id] && <p className='text-red-500 text-sm'>{errors[id].message}</p>}
   </div>
 )
@@ -54,6 +68,10 @@ const Field = ({ id, label, type = 'text', register, errors, children }) => (
 const RoomSchedulingForm = () => {
   const { register, errors, handleSubmit } = useHooks()
   const [maxRegistrations, setMaxRegistrations] = useState(0)
+
+  const handleMaxRegistrationsChange = (event) => {
+    setMaxRegistrations(event.target.value)
+  }
 
   return (
     <Template>
@@ -110,6 +128,8 @@ const RoomSchedulingForm = () => {
           type='number'
           register={register}
           errors={errors}
+          value={maxRegistrations}
+          onChange={handleMaxRegistrationsChange}
         />
 
         <Field
@@ -119,13 +139,11 @@ const RoomSchedulingForm = () => {
           register={register}
           errors={errors}
         />
-        
+
         <div className='grid grid-cols-2 gap-2'>
           <div className='flex justify-start'>
             <Link href='/schedule'>
-              <Button color='failure'>
-                Back to Schedules
-              </Button>
+              <Button color='failure'>Back to Schedules</Button>
             </Link>
           </div>
           <div className='flex justify-end'>
@@ -140,4 +158,3 @@ const RoomSchedulingForm = () => {
 }
 
 export default RoomSchedulingForm
-
