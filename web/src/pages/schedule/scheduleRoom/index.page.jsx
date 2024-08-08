@@ -1,4 +1,4 @@
-import { Button } from 'flowbite-react'
+import { Alert, Button } from 'flowbite-react'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { IoCalendarSharp } from 'react-icons/io5'
@@ -66,8 +66,14 @@ const Field = ({
 )
 
 const RoomSchedulingForm = () => {
-  const { register, errors, handleSubmit } = useHooks()
   const [maxRegistrations, setMaxRegistrations] = useState(0)
+  const [successMessage, setSuccessMessage] = useState('')
+
+  const showSuccessMessage = () => {
+    setSuccessMessage('Schedule has been created successfully!')
+  }
+
+  const { register, errors, handleSubmit } = useHooks(showSuccessMessage)
 
   const handleMaxRegistrationsChange = (event) => {
     setMaxRegistrations(event.target.value)
@@ -79,6 +85,14 @@ const RoomSchedulingForm = () => {
       <div className='flex justify-center items-center mt-4'>
         <h2 className='text-2xl font-bold mb-4'>Schedule Room</h2>
       </div>
+
+      {/* Success Message */}
+      {successMessage && (
+        <Alert color='success' className='mb-4'>
+          {successMessage}
+        </Alert>
+      )}
+
       <form onSubmit={handleSubmit} className='max-w-md mx-auto'>
         <Field
           id='name'
