@@ -118,22 +118,23 @@ const Schedule = () => {
             </Button>
           </Link>
         </div>
-      </div>
+      
 
-      <div className='flex justify-start mb-4'>
-        <select
-          value={selectedDate}
-          onChange={handleDateChange}
-          className='p-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-800 dark:text-white'
-        >
-          <option value=''>All Dates</option>
-          {uniqueDates.map((date, index) => (
-            <option key={index} value={date}>
-              {formatDisplayDate(date)}
-            </option>
-          ))}
-        </select>
-      </div>
+        <div className='flex justify-start mb-4'>
+  <select
+    value={selectedDate}
+    onChange={handleDateChange}
+    className='p-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-800 dark:text-white text-lg'
+  >
+    <option value=''>All Dates</option>
+    {uniqueDates.map((date, index) => (
+      <option key={index} value={date}>
+        {formatDisplayDate(date)}
+      </option>
+    ))}
+  </select>
+</div>
+</div>
 
       <div className='grid grid-cols-3 gap-2'>
         {filteredSchedules.length > 0 ? (
