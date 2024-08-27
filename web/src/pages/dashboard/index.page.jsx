@@ -52,9 +52,12 @@ const Dashboard = () => {
     },
   ]
 
+  // Safeguard user object
+  const role = user?.role
+
   return (
     <div>
-      {user.role === 'admin' ?
+      {role === 'admin' ?
         <Template>
           <PageHeader breadcrumbs={breadcrumbs} />
           <div className='mx-auto max-w-screen-lg mt-12'>

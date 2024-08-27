@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+
 import { useUsers } from '@/hooks/redux/useUsers'
 
 const useHooks = () => {

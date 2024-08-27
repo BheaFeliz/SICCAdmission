@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+
 import { userApi } from '../api/userApi'
 
 export const useUsers = () => {
