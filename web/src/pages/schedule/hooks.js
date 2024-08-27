@@ -12,9 +12,8 @@ export const useHooks = () => {
   const handleDeleteSchedule = async (scheduleId) => {
     try {
       await deleteSchedule(scheduleId).unwrap()
-      console.log(`Schedule with id ${scheduleId} deleted successfully`)
     } catch (error) {
-      console.error(`Failed to delete schedule with id ${scheduleId}:`, error)
+      // Handle the error appropriately
     }
   }
 
@@ -24,9 +23,8 @@ export const useHooks = () => {
         scheduleId,
         max_registrations: maxRegistrations,
       }).unwrap()
-      console.log(`Schedule with id ${scheduleId} updated successfully`)
     } catch (error) {
-      console.error(`Failed to update schedule with id ${scheduleId}:`, error)
+      // Handle the error appropriately
     }
   }
 

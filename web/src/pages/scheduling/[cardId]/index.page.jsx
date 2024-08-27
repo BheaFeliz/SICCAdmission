@@ -33,7 +33,7 @@ const Scheduling = ({ cardId }) => {
 
   // Ensure registrations is an array
   if (!Array.isArray(registrations)) {
-    console.error('Registrations is not an array:', registrations)
+    // console.error('Registrations is not an array:', registrations)
     return null // Or render an error message
   }
 

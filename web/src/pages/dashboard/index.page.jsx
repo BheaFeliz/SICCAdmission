@@ -3,11 +3,11 @@ import { TbLayoutDashboard } from 'react-icons/tb'
 import Loading from '@/components/atoms/Loading'
 import CardItem from '@/components/organisms/Card'
 import PageHeader from '@/components/organisms/PageHeader'
-import Template from '@/components/templates/Template'
 import StaffTemplate from '@/components/templates/StaffTemplate'
+import Template from '@/components/templates/Template'
+import { useUser } from '@/hooks/redux/auth'
 import { useCourses } from '@/hooks/redux/useCourses'
 import { useStudents } from '@/hooks/redux/useStudents'
-import { useUser } from '@/hooks/redux/auth'
 
 const Dashboard = () => {
   const { user } = useUser()
@@ -54,7 +54,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      {user.role === 'admin' ? 
+      {user.role === 'admin' ?
         <Template>
           <PageHeader breadcrumbs={breadcrumbs} />
           <div className='mx-auto max-w-screen-lg mt-12'>
@@ -83,8 +83,7 @@ const Dashboard = () => {
             </div>
           </div>
         </Template>
-      : 
-        <StaffTemplate>
+      : <StaffTemplate>
           <PageHeader breadcrumbs={breadcrumbs} />
           <div className='mx-auto max-w-screen-lg mt-12'>
             {isLoading ?

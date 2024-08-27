@@ -24,7 +24,7 @@ const useHooks = (scheduleId) => {
 
   // Console logging
   useEffect(() => {
-    console.log('Registrations data:', data)
+    // console.log('Registrations data:', data)
   }, [scheduling, data, scheduleError, studentsError])
 
   // Use data?.registrations || [] if the API response includes a registrations key
