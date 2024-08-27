@@ -33,13 +33,13 @@ const Registration = () => {
   const { courses } = useCourses()
   const breadcrumbs = [
     {
-      href: '/registration',
-      title: 'Registrations',
+      href: '/students',
+      title: 'Students',
       icon: FaUser,
     },
     {
       href: '#',
-      title: 'Registration Detail',
+      title: 'Students Edit',
     },
   ]
 
