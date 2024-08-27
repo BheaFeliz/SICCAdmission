@@ -1,29 +1,30 @@
-import { useRouter } from 'next/router';
-import { IoAccessibilitySharp } from 'react-icons/io5';
+import { Button } from 'flowbite-react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { IoAccessibilitySharp } from 'react-icons/io5'
 
-import Paginations from '@/components/atoms/Pagination';
-import PageHeader from '@/components/organisms/PageHeader';
-import Table from '@/components/organisms/Table';
-import Template from '@/components/templates/Template';
-import StaffTemplate from '@/components/templates/StaffTemplate'; // Import the StaffTemplate component
-import { capitalizeFirstLetter } from '@/hooks/lib/util';
-import { Scourse, SDistrict } from '@/hooks/redux/const';
-import Loading from '@/components/atoms/Loading';
-import { useUser } from '@/hooks/redux/auth'; // Import the useUser hook
+import Loading from '@/components/atoms/Loading'
+import Paginations from '@/components/atoms/Pagination'
+import PageHeader from '@/components/organisms/PageHeader'
+import Table from '@/components/organisms/Table'
+import StaffTemplate from '@/components/templates/StaffTemplate' // Import the StaffTemplate component
+import Template from '@/components/templates/Template'
+import { capitalizeFirstLetter } from '@/hooks/lib/util'
+import { useUser } from '@/hooks/redux/auth' // Import the useUser hook
+import { Scourse, SDistrict } from '@/hooks/redux/const'
 
-import useHooks from './hooks';
-import Link from 'next/link';
-import { Button } from 'flowbite-react';
+import useHooks from './hooks'
 
 const FilteredCourse = () => {
-  const router = useRouter();
-  const { course: courseId } = router.query;
-  const numericCourseId = Number(courseId); // Convert courseId to a number
+  const router = useRouter()
+  const { course: courseId } = router.query
+  const numericCourseId = Number(courseId) // Convert courseId to a number
 
-  const { user } = useUser(); // Get the user data
-  const { registrations, currentPage, onPageChange, isLoading } = useHooks(numericCourseId);
+  const { user } = useUser() // Get the user data
+  const { registrations, currentPage, onPageChange, isLoading } =
+    useHooks(numericCourseId)
 
-  const TemplateComponent = user.role === 'admin' ? Template : StaffTemplate; // Choose the template based on user role
+  const TemplateComponent = user.role === 'admin' ? Template : StaffTemplate // Choose the template based on user role
 
   const breadcrumbs = [
     {
@@ -35,17 +36,17 @@ const FilteredCourse = () => {
       href: '#/dashboard/filteredcourse',
       title: 'Student',
     },
-  ];
+  ]
 
   const courseLabelMap = Scourse.reduce((acc, course) => {
-    acc[course.value] = course.label;
-    return acc;
-  }, {});
+    acc[course.value] = course.label
+    return acc
+  }, {})
 
   const districtLabelMap = SDistrict.reduce((acc, district) => {
-    acc[district.value] = district.label;
-    return acc;
-  }, {});
+    acc[district.value] = district.label
+    return acc
+  }, {})
 
   const rows = [
     { key: 'lname', header: 'Last Name', render: (item) => item.lname },
@@ -77,31 +78,31 @@ const FilteredCourse = () => {
       header: 'District',
       render: (item) => districtLabelMap[item.district] || item.district,
     },
-  ];
+  ]
 
-  const filteredRegistrations = numericCourseId
-    ? registrations.filter(
-        (registration) => registration.courseId === numericCourseId
+  const filteredRegistrations =
+    numericCourseId ?
+      registrations.filter(
+        (registration) => registration.courseId === numericCourseId,
       )
-    : registrations;
+    : registrations
 
-  const totalCourses = filteredRegistrations.length;
+  const totalCourses = filteredRegistrations.length
 
-  const itemsPerPage = 10;
-  const startIdx = (currentPage - 1) * itemsPerPage;
-  const endIdx = startIdx + itemsPerPage;
-  const paginatedData = filteredRegistrations.slice(startIdx, endIdx);
+  const itemsPerPage = 10
+  const startIdx = (currentPage - 1) * itemsPerPage
+  const endIdx = startIdx + itemsPerPage
+  const paginatedData = filteredRegistrations.slice(startIdx, endIdx)
 
   return (
     <TemplateComponent>
       <PageHeader breadcrumbs={breadcrumbs} />
 
-      {isLoading ? (
+      {isLoading ?
         <div className='flex justify-center items-center h-64'>
           <Loading />
         </div>
-      ) : (
-        <>
+      : <>
           <div className='mb-4'>
             <p>Total Registered: {totalCourses}</p>
           </div>
@@ -112,11 +113,13 @@ const FilteredCourse = () => {
             <Paginations
               currentPage={currentPage}
               onPageChange={onPageChange}
-              totalPages={Math.ceil(filteredRegistrations.length / itemsPerPage)}
+              totalPages={Math.ceil(
+                filteredRegistrations.length / itemsPerPage,
+              )}
             />
           </div>
         </>
-      )}
+      }
       <div className='mt-5 flex justify-end mr-6'>
         <Link href='/dashboard'>
           <Button size='lg' color='blue'>
@@ -125,7 +128,7 @@ const FilteredCourse = () => {
         </Link>
       </div>
     </TemplateComponent>
-  );
-};
+  )
+}
 
-export default FilteredCourse;
+export default FilteredCourse

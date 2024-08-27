@@ -32,7 +32,6 @@ const CourseList = () => {
           <TableHead>
             <TableHeadCell>Label</TableHeadCell>
             <TableHeadCell>Value</TableHeadCell>
-            <TableHeadCell> </TableHeadCell>
             <TableHeadCell>Action</TableHeadCell>
           </TableHead>
           <TableBody>

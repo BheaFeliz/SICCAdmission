@@ -68,7 +68,7 @@ export function useHooks() {
       addToast({ message })
       router.push('/registration/referenceView') // Redirect to success page
     } catch (error) {
-      console.error('Error creating student:', error)
+      // console.error('Error creating student:', error)
       // Handle error
       addToast({ message: 'Failed to submit registration' }) // Example of error handling with toast message
     }

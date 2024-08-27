@@ -6,8 +6,8 @@ import { IoCalendarSharp } from 'react-icons/io5'
 import Loading from '@/components/atoms/Loading'
 import PageHeader from '@/components/organisms/PageHeader'
 import Template from '@/components/templates/Template'
-import { useUser } from '@/hooks/redux/auth'
 
+// import { useUser } from '@/hooks/redux/auth'
 import useHooks from './hooks'
 
 const breadcrumbs = [
@@ -20,7 +20,7 @@ const breadcrumbs = [
 
 const Schedule = () => {
   const { schedules, isError, isLoading, handleDeleteSchedule } = useHooks()
-  const { user } = useUser()
+  // const { user } = useUser()
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [selectedSchedule, setSelectedSchedule] = useState(null)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -42,7 +42,18 @@ const Schedule = () => {
   const formatDisplayDate = (dateString) => {
     const date = new Date(dateString)
     const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ]
     const month = monthNames[date.getMonth()]
     const day = date.getDate()
@@ -74,8 +85,9 @@ const Schedule = () => {
     setSelectedDate(event.target.value)
   }
 
-  const filteredSchedules = selectedDate
-    ? schedules.filter((schedule) => formatDate(schedule.date) === selectedDate)
+  const filteredSchedules =
+    selectedDate ?
+      schedules.filter((schedule) => formatDate(schedule.date) === selectedDate)
     : schedules
 
   if (isLoading) {
@@ -96,7 +108,9 @@ const Schedule = () => {
     )
   }
 
-  const uniqueDates = [...new Set(schedules.map(schedule => formatDate(schedule.date)))]
+  const uniqueDates = [
+    ...new Set(schedules.map((schedule) => formatDate(schedule.date))),
+  ]
 
   return (
     <Template>
@@ -118,26 +132,25 @@ const Schedule = () => {
             </Button>
           </Link>
         </div>
-      
 
         <div className='flex justify-start mb-4'>
-  <select
-    value={selectedDate}
-    onChange={handleDateChange}
-    className='p-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-800 dark:text-white text-lg'
-  >
-    <option value=''>All Dates</option>
-    {uniqueDates.map((date, index) => (
-      <option key={index} value={date}>
-        {formatDisplayDate(date)}
-      </option>
-    ))}
-  </select>
-</div>
-</div>
+          <select
+            value={selectedDate}
+            onChange={handleDateChange}
+            className='p-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-800 dark:text-white text-lg'
+          >
+            <option value=''>All Dates</option>
+            {uniqueDates.map((date, index) => (
+              <option key={index} value={date}>
+                {formatDisplayDate(date)}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
 
       <div className='grid grid-cols-3 gap-2'>
-        {filteredSchedules.length > 0 ? (
+        {filteredSchedules.length > 0 ?
           filteredSchedules.map((schedule) => (
             <Card
               key={schedule.id}
@@ -173,9 +186,7 @@ const Schedule = () => {
               </div>
             </Card>
           ))
-        ) : (
-          <p>No schedules available.</p>
-        )}
+        : <p>No schedules available.</p>}
       </div>
 
       <Modal show={openDeleteModal} onClose={handleCloseModal}>

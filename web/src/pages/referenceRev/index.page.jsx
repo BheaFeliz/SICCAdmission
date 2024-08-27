@@ -1,14 +1,14 @@
 import { Button, Card, Table } from 'flowbite-react'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
+import Loading from '@/components/atoms/Loading'
 import PageHeader from '@/components/organisms/PageHeader'
 import Template from '@/components/templates/StudentTemplate'
 import { useGetScheduleByIdQuery } from '@/hooks/api/scheduleApi'
 import { useGetRegistrationsQuery } from '@/hooks/api/studentApi'
 import { useCourses } from '@/hooks/redux/useCourses'
-import Link from 'next/link'
-import Loading from '@/components/atoms/Loading'
 
 function convertTo12HourFormat(time24) {
   const [hour, minute] = time24.split(':')
