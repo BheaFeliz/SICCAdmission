@@ -144,7 +144,7 @@ function Component() {
 
   useEffect(() => {
     if (scheduleData) {
-      console.log('Schedule Data:', scheduleData)
+      // console.log('Schedule Data:', scheduleData)
     }
   }, [scheduleData])
 
