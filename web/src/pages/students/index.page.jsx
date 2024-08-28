@@ -50,12 +50,12 @@ const Dashboard = () => {
     )
   }
 
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedCourse, setSelectedCourse] = useState('')
-  const [selectedDistrict, setSelectedDistrict] = useState('')
-  const [selectedAge, setSelectedAge] = useState('')
-  const [selectedSex, setSelectedSex] = useState('')
-  const [selectedGender, setSelectedGender] = useState('')
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState('');
+  const [selectedDistrict, setSelectedDistrict] = useState('');
+  const [selectedAge, setSelectedAge] = useState('');
+  const [selectedSex, setSelectedSex] = useState('');
+  const [selectedGender, setSelectedGender] = useState('');
 
   const districtLabelMap = SDistrict.reduce((acc, district) => {
     acc[district.value] = district.label
@@ -65,6 +65,7 @@ const Dashboard = () => {
   const uniqueAges = [...new Set(registrations.map((reg) => reg.age))].map(
     (age) => ({ value: age, label: age }),
   )
+
   const uniqueSexes = [...new Set(registrations.map((reg) => reg.sex))].map(
     (sex) => ({ value: sex, label: capitalizeFirstLetter(sex) }),
   )
@@ -73,9 +74,14 @@ const Dashboard = () => {
   ].map((gender) => ({ value: gender, label: capitalizeFirstLetter(gender) }))
 
   const courseMap = courses.reduce((map, course) => {
-    map[course.id] = course.label
-    return map
-  }, {})
+    map[course.id] = course.label;
+    return map;
+  }, {});
+
+  const uniqueCourses = registrations
+  .map((reg) => reg.courseId)
+  .filter((value, index, self) => self.indexOf(value) === index)
+  .map((courseId) => ({ value: courseId, label: courseMap[courseId] || 'Unknown' }));
 
   const rows = [
     {
@@ -135,23 +141,22 @@ const Dashboard = () => {
 
   const applyFilters = (registrations) => {
     return registrations.filter((reg) => {
-      const matchesSearch =
-        searchQuery ?
-          reg.lname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      const matchesSearch = searchQuery
+        ? reg.lname.toLowerCase().includes(searchQuery.toLowerCase()) ||
           reg.fname.toLowerCase().includes(searchQuery.toLowerCase())
-        : true
+        : true;
 
       return (
         matchesSearch &&
-        (!selectedCourse || reg.courseId === selectedCourse) &&
+        (!selectedCourse || reg.courseId.toString() === selectedCourse) &&
         (!selectedDistrict || reg.district === selectedDistrict) &&
         (!selectedAge || reg.age.toString() === selectedAge) &&
         (!selectedSex || reg.sex.toLowerCase() === selectedSex.toLowerCase()) &&
-        (!selectedGender ||
-          reg.gender.toLowerCase() === selectedGender.toLowerCase())
-      )
-    })
-  }
+        (!selectedGender || reg.gender.toLowerCase() === selectedGender.toLowerCase())
+      );
+    });
+  };
+  
 
   const generatePdf = async (item) => {
     const url = '/Admission_Application-Form1.pdf'
@@ -756,19 +761,20 @@ const Dashboard = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
               <SelectInput
-                options={[{ value: '', label: 'Course' }, ...Scourse]}
-                name='course'
+                name="Course"
+                options={[{ value: '', label: 'Course' }, ...uniqueCourses]}
                 value={selectedCourse}
                 onChange={(e) => setSelectedCourse(e.target.value)}
               />
+
               <SelectInput
-                options={[{ value: '', label: 'District' }, ...SDistrict]}
+                options={SDistrict}
                 name='district'
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
               />
               <SelectInput
-                options={[{ value: '', label: 'Age' }, ...uniqueAges]}
+                options={uniqueAges}
                 name='age'
                 value={selectedAge}
                 onChange={(e) => setSelectedAge(e.target.value)}
@@ -818,8 +824,8 @@ const Dashboard = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
               <SelectInput
-                options={[{ value: '', label: 'Course' }, ...Scourse]}
-                name='course'
+                name="Course"
+                options={[{ value: '', label: 'Gender' }, ...uniqueCourses]}
                 value={selectedCourse}
                 onChange={(e) => setSelectedCourse(e.target.value)}
               />
