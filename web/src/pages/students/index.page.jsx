@@ -15,7 +15,7 @@ import StaffTemplate from '@/components/templates/StaffTemplate'
 import Template from '@/components/templates/Template'
 import { capitalizeFirstLetter } from '@/hooks/lib/util'
 import { useUser } from '@/hooks/redux/auth'
-import { Scourse, SDistrict } from '@/hooks/redux/const'
+import { SDistrict } from '@/hooks/redux/const'
 import { useCourses } from '@/hooks/redux/useCourses'
 
 import useHooks from './hooks'
