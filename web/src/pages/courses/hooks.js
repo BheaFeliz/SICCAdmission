@@ -1,5 +1,6 @@
 // hooks.js
 import { useRouter } from 'next/router'
+
 import { useCourses, useDeleteCourseMutation } from '@/hooks/redux/useCourses' // Correct import
 
 const useHooks = () => {
@@ -12,7 +13,7 @@ const useHooks = () => {
     try {
       await deleteCourse(courseId).unwrap()
     } catch (error) {
-      console.error('Failed to delete the course:', error)
+      ('Failed to delete the course:', error)
     }
   }
 

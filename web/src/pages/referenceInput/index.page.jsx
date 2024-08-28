@@ -3,15 +3,14 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import BreadCrumbs from '@/components/atoms/BreadCrumbs';
+import Loading from '@/components/atoms/Loading';
 import PageHeader from '@/components/organisms/PageHeader';
 import Template from '@/components/templates/StudentTemplate';
-import Loading from '@/components/atoms/Loading';
 
 function Component() {
   const [referenceNumber, setReferenceNumber] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false);
 
   const router = useRouter();
 
@@ -32,27 +31,20 @@ function Component() {
       return;
     }
 
-    // Start loading state
     setLoading(true);
     setError('');
 
     try {
-      // Simulate data fetching
       await fetchData(referenceNumber);
-      // Once data is fetched, update the state
-      setDataLoaded(true);
-      // Navigate to the new route
       router.push(`/referenceRev?ref=${referenceNumber}`);
     } catch (error) {
       setError('Failed to load data');
     } finally {
-      // End loading state
       setLoading(false);
     }
   };
 
-  // Simulate data fetching
-  const fetchData = (ref) => {
+  const fetchData = () => {
     return new Promise((resolve) => setTimeout(resolve, 2000));
   };
 
@@ -62,40 +54,34 @@ function Component() {
         <BreadCrumbs />
       </PageHeader>
       {loading ? (
-                <Loading /> // Display loading component while data is being fetched
-              ) : (
-
-      <div className='flex justify-center items-right'>
-        <Card className='w-96 mb-20'>
-          <div className='flex flex-col'>
-            <label className='text-sm font-medium text-gray-900 dark:text-white'>
-              Input Reference Number:
-            </label>
-            <h5 className='mb-1 text-xl font-medium text-gray-900 dark:text-white'>
+        <Loading />
+      ) : (
+        <div className='flex justify-center items-center'>
+          <Card className='w-96 mb-20'>
+            <div className='flex flex-col'>
+              <label htmlFor='referenceNumber' className='text-sm font-medium text-gray-900 dark:text-white'>
+                Input Reference Number:
+              </label>
               <TextInput
-                label='name'
+                id='referenceNumber'
                 type='text'
-                id='name'
                 value={referenceNumber}
                 onChange={handleInputChange}
-                variant="outlined"
-                className={error ? 'border-red-500' : ''}
+                className={`mt-1 ${error ? 'border-red-500' : ''}`}
               />
               {error && <p className='text-red-500 text-sm mt-1'>{error}</p>}
-            </h5>
 
-            <div className='w-full px-1 mt-2 flex justify-end'>
-              
+              <div className='w-full px-1 mt-4 flex justify-end'>
                 <button
                   onClick={handleSubmit}
-                  className='mt-12 inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-center text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-700'
+                  className='inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-center text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-700'
                 >
                   Submit
                 </button>
+              </div>
             </div>
-          </div>
-        </Card>
-      </div>
+          </Card>
+        </div>
       )}
     </Template>
   );

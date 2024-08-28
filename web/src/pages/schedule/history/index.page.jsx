@@ -3,10 +3,10 @@ import Link from 'next/link';
 import React from 'react';
 import { IoCalendarSharp } from 'react-icons/io5';
 
-import PageHeader from '@/components/organisms/PageHeader';
-import Template from '@/components/templates/Template';
-import StaffTemplate from '@/components/templates/StaffTemplate'; // Import the StaffTemplate component
 import Loading from '@/components/atoms/Loading'; // Import the Loading component
+import PageHeader from '@/components/organisms/PageHeader';
+import StaffTemplate from '@/components/templates/StaffTemplate'; // Import the StaffTemplate component
+import Template from '@/components/templates/Template';
 import { useUser } from '@/hooks/redux/auth'; // Import the useUser hook
 
 import { useDeletedSchedules } from './hooks';
