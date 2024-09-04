@@ -7,6 +7,10 @@ import { useUser } from '@/hooks/redux/auth'
 const StaffNavbar = () => {
   const { user } = useUser()
 
+  if (!user) {
+    return null // or a loading state, or a placeholder
+  }
+
   return (
     <nav className='p-3 px-8 flex justify-between items-center bg-blue-100 dark:bg-blue-900 text-gray-800 dark:text-white'>
       <Link href='/' className='font-bold flex items-center'>
