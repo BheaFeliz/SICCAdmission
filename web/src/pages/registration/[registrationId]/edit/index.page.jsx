@@ -299,7 +299,9 @@ const EditRegistration = ({ registrationId }) => {
                 {...formState}
               />
             </div>
+            <div className='flex justify-end'>
             <Button type='submit'>Save</Button>
+            </div>
           </div>
         </form>
       </Template>
