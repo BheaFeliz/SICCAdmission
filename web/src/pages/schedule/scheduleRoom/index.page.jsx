@@ -1,6 +1,6 @@
 import { Alert, Button } from 'flowbite-react'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoCalendarSharp } from 'react-icons/io5'
 
 import PageHeader from '@/components/organisms/PageHeader'
@@ -40,7 +40,9 @@ const Field = ({
         {...register(id)}
         value={value}
         onChange={onChange}
-        className={`w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 ${errors[id] ? 'border-red-500' : ''}`}
+        className={`w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 ${
+          errors[id] ? 'border-red-500' : ''
+        }`}
       />
     : type === 'select' ?
       <select
@@ -48,7 +50,9 @@ const Field = ({
         {...register(id)}
         value={value}
         onChange={onChange}
-        className={`w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 ${errors[id] ? 'border-red-500' : ''}`}
+        className={`w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 ${
+          errors[id] ? 'border-red-500' : ''
+        }`}
       >
         {children}
       </select>
@@ -58,7 +62,9 @@ const Field = ({
         {...register(id)}
         value={value}
         onChange={onChange}
-        className={`w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 ${errors[id] ? 'border-red-500' : ''}`}
+        className={`w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 ${
+          errors[id] ? 'border-red-500' : ''
+        }`}
       />
     }
     {errors[id] && <p className='text-red-500 text-sm'>{errors[id].message}</p>}
@@ -66,6 +72,9 @@ const Field = ({
 )
 
 const RoomSchedulingForm = () => {
+  const [session, setSession] = useState('')
+  const [startTime, setStartTime] = useState('')
+  const [endTime, setEndTime] = useState('')
   const [maxRegistrations, setMaxRegistrations] = useState(0)
   const [successMessage, setSuccessMessage] = useState('')
 
@@ -74,6 +83,42 @@ const RoomSchedulingForm = () => {
   }
 
   const { register, errors, handleSubmit } = useHooks(showSuccessMessage)
+
+  const handleSessionChange = (e) => {
+    const selectedSession = e.target.value
+    setSession(selectedSession)
+
+    if (selectedSession === 'Morning Session') {
+      setStartTime('09:00')
+      setEndTime('10:00')
+    } else if (selectedSession === 'Morning-Afternoon Session') {
+      setStartTime('11:00')
+      setEndTime('12:00')
+    } else if (selectedSession === 'Afternoon Session') {
+      setStartTime('13:30')
+      setEndTime('14:30')
+    } else {
+      setStartTime('')
+      setEndTime('')
+    }
+  }
+
+  useEffect(() => {
+    if (!startTime) return
+
+    const startHour = parseInt(startTime.split(':')[0])
+    const startPeriod = startHour < 12 ? 'AM' : 'PM'
+
+    if (startPeriod === 'AM' && startHour >= 6 && startHour < 11) {
+      setSession('Morning Session')
+    } else if (startPeriod === 'AM' && startHour >= 11 && startHour < 13) {
+      setSession('Morning-Afternoon Session')
+    } else if (startPeriod === 'PM' && startHour >= 13 && startHour < 20) {
+      setSession('Afternoon Session')
+    } else {
+      setSession('')
+    }
+  }, [startTime])
 
   const handleMaxRegistrationsChange = (event) => {
     setMaxRegistrations(event.target.value)
@@ -86,7 +131,6 @@ const RoomSchedulingForm = () => {
         <h2 className='text-2xl font-bold mb-4'>Schedule Room</h2>
       </div>
 
-      {/* Success Message */}
       {successMessage && (
         <Alert color='success' className='mb-4'>
           {successMessage}
@@ -113,6 +157,8 @@ const RoomSchedulingForm = () => {
           type='time'
           register={register}
           errors={errors}
+          value={startTime}
+          onChange={(e) => setStartTime(e.target.value)}
         />
         <Field
           id='endTime'
@@ -120,6 +166,8 @@ const RoomSchedulingForm = () => {
           type='time'
           register={register}
           errors={errors}
+          value={endTime}
+          onChange={(e) => setEndTime(e.target.value)}
         />
         <Field
           id='session'
@@ -127,6 +175,8 @@ const RoomSchedulingForm = () => {
           type='select'
           register={register}
           errors={errors}
+          value={session}
+          onChange={handleSessionChange}
         >
           <option value=''>Select Session</option>
           <option value='Morning Session'>Morning Session</option>
