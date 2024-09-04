@@ -80,8 +80,9 @@ const Dashboard = () => {
             }
             <div className='flex justify-end mt-4'>
               <CardItem
-                title={`${totalRegistrations} `}
+                title={`${totalRegistrations} Admissions`}
                 description={<strong>Total Admissions</strong>}
+                link="/students" // Add link to /students here
               />
             </div>
           </div>
@@ -110,6 +111,7 @@ const Dashboard = () => {
               <CardItem
                 title={`${totalRegistrations} Admissions`}
                 description={<strong>Total Admissions</strong>}
+                link="/students" // Add link to /students here
               />
             </div>
           </div>
