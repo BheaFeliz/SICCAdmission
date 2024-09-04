@@ -1,11 +1,19 @@
-import { Datepicker } from 'flowbite-react'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker as MUIDatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import * as React from 'react';
 
-const DatePicker = () => {
+const DatePicker = ({ label = "Basic date picker", value, onChange, ...props }) => {
   return (
-    <>
-      <Datepicker autoHide={false} />
-    </>
-  )
-}
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <MUIDatePicker 
+        label={label}
+        value={value}
+        onChange={onChange}
+        {...props}
+      />
+    </LocalizationProvider>
+  );
+};
 
-export default DatePicker
+export default DatePicker;

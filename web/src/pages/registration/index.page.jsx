@@ -1,7 +1,9 @@
 import { Button, Card, Label } from 'flowbite-react'
+import Link from 'next/link'
 import React, { useState } from 'react'
 import { SiGoogleforms } from 'react-icons/si'
 
+import CustomDatePicker from '@/components/organisms/DatePicker'
 import FilePickerInput from '@/components/organisms/FilePickerInput '
 import PageHeader from '@/components/organisms/PageHeader'
 import SelectInput from '@/components/organisms/SelectInput'
@@ -12,7 +14,6 @@ import {
   famBackground,
   Gender,
   IndigentP,
-  Monthoption,
   Ofw,
   Scategory,
   SDistrict,
@@ -104,15 +105,11 @@ const Registration = () => {
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
               <TextInput label='Age' name='age' {...formState} />
-              <div className='grid grid-cols-3 gap-1'>
-                <SelectInput
-                  options={Monthoption}
-                  name='monthoption'
+              <CustomDatePicker
+                  label='Date of Birth'
+                  name='Bdate'
                   {...formState}
                 />
-                <TextInput label='Day' name='date' {...formState} />
-                <TextInput label='Year' name='year' {...formState} />
-              </div>
               <SelectInput options={sex} name='sex' {...formState} />
               <SelectInput options={Gender} name='gender' {...formState} />
             </div>
@@ -366,8 +363,12 @@ const Registration = () => {
                 </div>
               </Card>
             </div>
-            <div className='flex justify-end'>
+            <div className='flex justify-end gap-2'>
+            <Link href='/studentdashboard'>
+              <Button color='failure'>Cancel </Button>
+            </Link>
               <Button type='submit'>Finish</Button>
+
             </div>
           </div>
         </form>
