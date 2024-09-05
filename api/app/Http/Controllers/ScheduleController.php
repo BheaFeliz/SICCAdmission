@@ -142,4 +142,44 @@ class ScheduleController extends Controller
     return response()->json(['message' => 'Schedule updated successfully']);
 }
 
+public function getDeletedAndNonDeletedRegistrations()
+{
+    // Retrieve deleted schedules and their deleted registrations
+    $deletedRegistrations = Schedule::onlyTrashed()
+        ->with(['registrations' => function ($query) {
+            $query->onlyTrashed(); // Fetch only soft-deleted registrations
+        }])
+        ->get()
+        ->pluck('registrations')
+        ->flatten(); // Flatten to merge all registration arrays into one list
+
+    // Retrieve non-deleted schedules and their non-deleted registrations
+    $nonDeletedRegistrations = Schedule::with(['registrations' => function ($query) {
+        $query->whereNull('deleted_at'); // Fetch only non-deleted registrations
+    }])
+    ->get()
+    ->pluck('registrations')
+    ->flatten(); // Flatten to merge all registration arrays into one list
+
+    // Return both deleted and non-deleted registrations in the response
+    return response()->json([
+        'deleted_registrations' => $deletedRegistrations,
+        'non_deleted_registrations' => $nonDeletedRegistrations
+    ], 200);
 }
+
+public function getActiveSchedules()
+{
+    $schedules = Schedule::with(['registrations' => function ($query) {
+        $query->whereNull('deleted_at'); // Fetch only non-deleted registrations
+    }])
+    ->whereNull('deleted_at') // Fetch only non-deleted schedules
+    ->get();
+
+    return response()->json($schedules);
+}
+
+
+}
+
+

@@ -89,11 +89,11 @@ const RoomSchedulingForm = () => {
     setSession(selectedSession)
 
     if (selectedSession === 'Morning Session') {
-      setStartTime('09:00')
+      setStartTime('01:00')
       setEndTime('10:00')
     } else if (selectedSession === 'Morning-Afternoon Session') {
-      setStartTime('11:00')
-      setEndTime('12:00')
+      setStartTime('10:00')
+      setEndTime('13:00')
     } else if (selectedSession === 'Afternoon Session') {
       setStartTime('13:30')
       setEndTime('14:30')

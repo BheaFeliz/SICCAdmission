@@ -49,6 +49,10 @@ export const scheduleApi = baseApi.injectEndpoints({
       query: () => '/deleted-schedules',
       providesTags: ['scheduling'],
     }),
+    getActiveSchedules: build.query({
+      query: () => '/active-schedules',
+      providesTags: ['scheduling'],
+    }),
   }),
   overrideExisting: false,
 })
@@ -59,6 +63,7 @@ export const {
   useDeleteScheduleMutation,
   useGetScheduleByIdQuery,
   useGetDeletedSchedulesQuery,
+  useGetActiveSchedulesQuery, // Export the new hook
   useUpdateAllSchedulesMutation,
   useUpdateScheduleMutation,
 } = scheduleApi
