@@ -3,7 +3,7 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import { SiGoogleforms } from 'react-icons/si'
 
-import CustomDatePicker from '@/components/organisms/DatePicker'
+import DatePicker from '@/components/organisms/DatePicker'
 import FilePickerInput from '@/components/organisms/FilePickerInput '
 import PageHeader from '@/components/organisms/PageHeader'
 import SelectInput from '@/components/organisms/SelectInput'
@@ -81,6 +81,28 @@ const Registration = () => {
     setShowWorkingStudentInput(value === 'Wstudent')
   }
 
+  const [birthDate, setBirthDate] = useState(null)
+  const [age, setAge] = useState('')
+
+  const calculateAge = (birthDate) => {
+    const today = new Date()
+    const birth = new Date(birthDate)
+    let age = today.getFullYear() - birth.getFullYear()
+    const monthDiff = today.getMonth() - birth.getMonth()
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--
+    }
+
+    return age
+  }
+
+  const handleDateChange = (date) => {
+    setBirthDate(date)
+    const calculatedAge = calculateAge(date)
+    setAge(calculatedAge)
+  }
+
   return (
     <Template>
       <PageHeader breadcrumbs={breadcrumbs} />
@@ -104,12 +126,14 @@ const Registration = () => {
               <SelectInput options={suffixoption} name='pref' {...formState} />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-              <TextInput label='Age' name='age' {...formState} />
-              <CustomDatePicker
-                  label='Date of Birth'
-                  name='Bdate'
-                  {...formState}
-                />
+            <DatePicker
+              label='Date of Birth'
+              name='Bdate'
+              selected={birthDate}
+              onChange={handleDateChange}
+              {...formState}
+            />
+            <TextInput label='Age' name='age' value={age} readOnly />
               <SelectInput options={sex} name='sex' {...formState} />
               <SelectInput options={Gender} name='gender' {...formState} />
             </div>
