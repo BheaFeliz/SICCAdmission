@@ -1,5 +1,12 @@
 import { Sidebar as FlowbiteSidebar } from 'flowbite-react'
-import { HiArrowSmRight, HiChartPie, HiInbox, HiShoppingBag, HiTable, HiUser } from 'react-icons/hi'
+import {
+  HiArrowSmRight,
+  HiChartPie,
+  HiInbox,
+  HiShoppingBag,
+  HiTable,
+  HiUser,
+} from 'react-icons/hi'
 
 const Sidebar = () => {
   return (
@@ -7,24 +14,30 @@ const Sidebar = () => {
       <FlowbiteSidebar>
         <FlowbiteSidebar.Items>
           <FlowbiteSidebar.ItemGroup>
-            <FlowbiteSidebar.Item href="/dashboard" icon={HiChartPie}>
+            <FlowbiteSidebar.Item href='/dashboard' icon={HiChartPie}>
               Dashboard
             </FlowbiteSidebar.Item>
-            <FlowbiteSidebar.Item href="/schedule" icon={HiInbox}>
+            <FlowbiteSidebar.Item href='/schedule' icon={HiInbox}>
               Scheduling
             </FlowbiteSidebar.Item>
-            <FlowbiteSidebar.Collapse icon={HiUser} label="Students">
-              <FlowbiteSidebar.Item href="/students">All Students</FlowbiteSidebar.Item>
-              <FlowbiteSidebar.Item href="#">Sales</FlowbiteSidebar.Item>
-              <FlowbiteSidebar.Item href="#">Refunds</FlowbiteSidebar.Item>
+            <FlowbiteSidebar.Collapse icon={HiUser} label='Students'>
+              <FlowbiteSidebar.Item href='/students'>
+                All Students
+              </FlowbiteSidebar.Item>
+              <FlowbiteSidebar.Item href='/students/ongoing'>
+                On-Going Admissions
+              </FlowbiteSidebar.Item>
+              <FlowbiteSidebar.Item href='/students/deleted'>
+                Closed Admissions
+              </FlowbiteSidebar.Item>
             </FlowbiteSidebar.Collapse>
-            <FlowbiteSidebar.Item href="/users" icon={HiShoppingBag}>
+            <FlowbiteSidebar.Item href='/users' icon={HiShoppingBag}>
               Create Users
             </FlowbiteSidebar.Item>
-            <FlowbiteSidebar.Item href="/courses" icon={HiArrowSmRight}>
+            <FlowbiteSidebar.Item href='/courses' icon={HiArrowSmRight}>
               Course Management
             </FlowbiteSidebar.Item>
-            <FlowbiteSidebar.Item href="/activitylogs" icon={HiTable}>
+            <FlowbiteSidebar.Item href='/activitylogs' icon={HiTable}>
               Activity Management
             </FlowbiteSidebar.Item>
           </FlowbiteSidebar.ItemGroup>

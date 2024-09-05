@@ -81,6 +81,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::delete('/admin/users/{id}', [UserController::class, 'destroy']);
     Route::put('/schedules/{scheduleId}/max-registrations', [ScheduleController::class, 'updateScheduleMaxRegistrations']);
-
+    Route::get('/registrations/deleted-non-deleted', [ScheduleController::class, 'getDeletedAndNonDeletedRegistrations']);
+    route::get('/active-schedules', [ScheduleController::class, 'getActiveSchedules']);
 
 });
