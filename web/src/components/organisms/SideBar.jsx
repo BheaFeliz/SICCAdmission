@@ -1,58 +1,35 @@
-import Link from 'next/link'
-import { AiOutlineUserAdd } from 'react-icons/ai'
-import { HiOutlineCalendar, HiOutlineUsers, HiTemplate } from 'react-icons/hi'
-import { RxActivityLog } from 'react-icons/rx'
-
-const links = [
-  {
-    label: 'Dashboard',
-    icon: <HiTemplate />,
-    link: '/dashboard',
-  },
-  {
-    label: 'Scheduling',
-    icon: <HiOutlineCalendar />,
-    link: '/schedule',
-  },
-  {
-    label: 'Students',
-    icon: <HiOutlineUsers />,
-    link: '/students',
-  },
-  {
-    label: 'Create Users',
-    icon: <AiOutlineUserAdd />,
-    link: '/users',
-  },
-  {
-    label: 'Course Management',
-    icon: <RxActivityLog />,
-    link: '/courses',
-  },
-  {
-    label: 'Activity Management',
-    icon: <RxActivityLog />,
-    link: '/activitylogs',
-  },
-]
+import { Sidebar as FlowbiteSidebar } from 'flowbite-react'
+import { HiArrowSmRight, HiChartPie, HiInbox, HiShoppingBag, HiTable, HiUser } from 'react-icons/hi'
 
 const Sidebar = () => {
   return (
-    <aside className='pt-2 w-64 overflow-y-auto bg-gray-50 dark:bg-gray-800'>
-      <ul className='space-y-2'>
-        {links.map((item) => (
-          <li key={item.label}>
-            <Link
-              href={item.link}
-              passHref
-              className='pl-4 py-2 flex items-center hover:bg-gray-100 dark:hover:bg-gray-700'
-            >
-              {item.icon}
-              <span className='ml-3'>{item.label}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <aside className='pt-2 w-64 bg-gray-50 dark:bg-gray-800'>
+      <FlowbiteSidebar>
+        <FlowbiteSidebar.Items>
+          <FlowbiteSidebar.ItemGroup>
+            <FlowbiteSidebar.Item href="/dashboard" icon={HiChartPie}>
+              Dashboard
+            </FlowbiteSidebar.Item>
+            <FlowbiteSidebar.Item href="/schedule" icon={HiInbox}>
+              Scheduling
+            </FlowbiteSidebar.Item>
+            <FlowbiteSidebar.Collapse icon={HiUser} label="Students">
+              <FlowbiteSidebar.Item href="/students">All Students</FlowbiteSidebar.Item>
+              <FlowbiteSidebar.Item href="#">Sales</FlowbiteSidebar.Item>
+              <FlowbiteSidebar.Item href="#">Refunds</FlowbiteSidebar.Item>
+            </FlowbiteSidebar.Collapse>
+            <FlowbiteSidebar.Item href="/users" icon={HiShoppingBag}>
+              Create Users
+            </FlowbiteSidebar.Item>
+            <FlowbiteSidebar.Item href="/courses" icon={HiArrowSmRight}>
+              Course Management
+            </FlowbiteSidebar.Item>
+            <FlowbiteSidebar.Item href="/activitylogs" icon={HiTable}>
+              Activity Management
+            </FlowbiteSidebar.Item>
+          </FlowbiteSidebar.ItemGroup>
+        </FlowbiteSidebar.Items>
+      </FlowbiteSidebar>
     </aside>
   )
 }
