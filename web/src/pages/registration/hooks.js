@@ -10,7 +10,7 @@ const registrationSchema = Yup.object().shape({
   fname: Yup.string().required('First Name is required'),
   lname: Yup.string().required('Last Name is required'),
   age: Yup.string().required('Age is required'),
-  date: Yup.string().required('Date is required'),
+  birthdate: Yup.date().required('Birthdate is required'),
   year: Yup.string().required('Year is required'),
   contactnumber: Yup.string().required('Contact Number is required'),
   email: Yup.string()
@@ -45,6 +45,10 @@ export function useHooks() {
     // Iterate over form data keys
     Object.keys(data).forEach((key) => {
       const value = data[key]
+
+      if (birthDate) {
+        payload.append('birthDate', birthDate)
+      }
 
       if (key === 'fileinput') {
         // Handle fileinput (image) field

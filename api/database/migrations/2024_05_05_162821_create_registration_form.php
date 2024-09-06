@@ -22,7 +22,7 @@ class CreateRegistrationForm extends Migration
             $table->string('mname')->nullable();
             $table->string('pref')->nullable();
             $table->integer('age')->nullable();
-            $table->string('monthoption')->nullable();
+            $table->date('birthDate')->nullable();
             $table->integer('date')->nullable();
             $table->integer('year')->nullable();
             $table->string('sex')->nullable();

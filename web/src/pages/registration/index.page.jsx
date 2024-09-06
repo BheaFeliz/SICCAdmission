@@ -90,7 +90,10 @@ const Registration = () => {
     let age = today.getFullYear() - birth.getFullYear()
     const monthDiff = today.getMonth() - birth.getMonth()
 
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birth.getDate())
+    ) {
       age--
     }
 
@@ -126,14 +129,15 @@ const Registration = () => {
               <SelectInput options={suffixoption} name='pref' {...formState} />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-            <DatePicker
-              label='Date of Birth'
-              name='Bdate'
-              selected={birthDate}
-              onChange={handleDateChange}
-              {...formState}
-            />
-            <TextInput label='Age' name='age' value={age} readOnly />
+              <DatePicker
+                label='Date of Birth'
+                name='date' // This should match Yup schema
+                selected={birthDate}
+                onChange={handleDateChange}
+                {...formState}
+              />
+
+              <TextInput label='Age' name='age' value={age} readOnly />
               <SelectInput options={sex} name='sex' {...formState} />
               <SelectInput options={Gender} name='gender' {...formState} />
             </div>
@@ -388,11 +392,10 @@ const Registration = () => {
               </Card>
             </div>
             <div className='flex justify-end gap-2'>
-            <Link href='/studentdashboard'>
-              <Button color='failure'>Cancel </Button>
-            </Link>
+              <Link href='/studentdashboard'>
+                <Button color='failure'>Cancel </Button>
+              </Link>
               <Button type='submit'>Finish</Button>
-
             </div>
           </div>
         </form>
