@@ -33,9 +33,11 @@ function Component() {
             <p>
               We have successfully received your Admission Application. Your
               Reference No.{' '}
-              <span style={{ fontWeight: 'bold', fontSize: '18px' }}>
-                {mostRecentRegistration.reference_number}
-              </span>
+              <Link href={`/referenceRev?ref=${mostRecentRegistration.reference_number}`}>
+                <span style={{ fontWeight: 'bold', fontSize: '18px', color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>
+                  {mostRecentRegistration.reference_number}
+                </span>
+              </Link>
             </p>
             <p>
               The documents you submitted, if any, will be verified by the
