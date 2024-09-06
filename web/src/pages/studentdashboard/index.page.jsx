@@ -18,7 +18,7 @@ const studentStatusDashboard = () => {
     {
       title: 'Online Application Form',
       description: 'Visit this site to fill up your admission form here.',
-      link: '/registration',
+      link: '/Registration',
     },
     {
       title: 'Check Your Admission Test Information',

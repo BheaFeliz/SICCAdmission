@@ -66,7 +66,7 @@ export function useHooks() {
     try {
       const { message } = await CreateRegistrationMutation(payload).unwrap()
       addToast({ message })
-      router.push('/registration/referenceView') // Redirect to success page
+      router.push('/Registration/referenceView') // Redirect to success page
     } catch (error) {
       console.error('Error creating student:', error)
       // Handle error
