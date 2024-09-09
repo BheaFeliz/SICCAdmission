@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/useToast'
 const registrationSchema = Yup.object().shape({
   fname: Yup.string().required('First Name is required'),
   lname: Yup.string().required('Last Name is required'),
-  age: Yup.string().required('Age is required'),
+  // age: Yup.string().required('Age is required'),
   date: Yup.string().required('Date is required'),
   year: Yup.string().required('Year is required'),
   contactnumber: Yup.string().required('Contact Number is required'),
@@ -68,8 +68,6 @@ export function useHooks() {
       addToast({ message })
       router.push('/registration/referenceView') // Redirect to success page
     } catch (error) {
-      // console.error('Error creating student:', error)
-      // Handle error
       addToast({ message: 'Failed to submit registration' }) // Example of error handling with toast message
     }
   }

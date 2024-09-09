@@ -2,10 +2,10 @@ import {
   useDeleteScheduleMutation,
   useUpdateAllSchedulesMutation,
 } from '@/hooks/api/scheduleApi'
-import { useSchedules } from '@/hooks/redux/useSchedule'
+import { useActiveSchedules } from '@/hooks/redux/useSchedule'
 
 export const useHooks = () => {
-  const { schedules, isLoading, isError } = useSchedules()
+  const { schedules, isLoading, isError } = useActiveSchedules  ()
   const [deleteSchedule] = useDeleteScheduleMutation()
   const [updateAllSchedules] = useUpdateAllSchedulesMutation() // Correct mutation hook
 

@@ -1,9 +1,7 @@
 import { Button, Card, Label } from 'flowbite-react'
-import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect,useState } from 'react'
 import { SiGoogleforms } from 'react-icons/si'
 
-import DatePicker from '@/components/organisms/DatePicker'
 import FilePickerInput from '@/components/organisms/FilePickerInput '
 import PageHeader from '@/components/organisms/PageHeader'
 import SelectInput from '@/components/organisms/SelectInput'
@@ -14,6 +12,7 @@ import {
   famBackground,
   Gender,
   IndigentP,
+  Monthoption,
   Ofw,
   Scategory,
   SDistrict,
@@ -44,6 +43,11 @@ const Registration = () => {
   const [showWorkingStudentInput, setShowWorkingStudentInput] = useState(false)
   const [showFreshmenInput, setShowFreshmenInput] = useState(false)
   const [showTransfereeInput, setShowTransfereeInput] = useState(false)
+
+  const [selectedMonth, setSelectedMonth] = useState('')
+  const [selectedDate, setSelectedDate] = useState('')
+  const [selectedYear, setSelectedYear] = useState('')
+  const [age, setAge] = useState('')
 
   const handleStudentTypeChange = (e) => {
     const value = e.target.value
@@ -81,26 +85,36 @@ const Registration = () => {
     setShowWorkingStudentInput(value === 'Wstudent')
   }
 
-  const [birthDate, setBirthDate] = useState(null)
-  const [age, setAge] = useState('')
+  const calculateAge = (month, date, year) => {
+    if (!month || !date || !year) return
 
-  const calculateAge = (birthDate) => {
+    const birthDate = new Date(`${year}-${month}-01`) // Assuming the date is the first day of the month for simplicity
     const today = new Date()
-    const birth = new Date(birthDate)
-    let age = today.getFullYear() - birth.getFullYear()
-    const monthDiff = today.getMonth() - birth.getMonth()
 
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-      age--
+    let calculatedAge = today.getFullYear() - birthDate.getFullYear()
+    const monthDifference = today.getMonth() - birthDate.getMonth()
+
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      calculatedAge--
     }
 
-    return age
+    setAge(calculatedAge)
+  }
+  useEffect(() => {
+    calculateAge(selectedMonth, selectedDate, selectedYear);
+  }, [selectedMonth, selectedDate, selectedYear]);
+  
+
+  const handleMonthChange = (e) => {
+    setSelectedMonth(e.target.value)
   }
 
-  const handleDateChange = (date) => {
-    setBirthDate(date)
-    const calculatedAge = calculateAge(date)
-    setAge(calculatedAge)
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value)
+  }
+
+  const handleYearChange = (e) => {
+    setSelectedYear(e.target.value)
   }
 
   return (
@@ -126,14 +140,17 @@ const Registration = () => {
               <SelectInput options={suffixoption} name='pref' {...formState} />
             </div>
             <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-            <DatePicker
-              label='Date of Birth'
-              name='Bdate'
-              selected={birthDate}
-              onChange={handleDateChange}
-              {...formState}
-            />
-            <TextInput label='Age' name='age' value={age} readOnly />
+              <div className='grid grid-cols-3 gap-1'>
+                <SelectInput
+                  options={Monthoption}
+                  name='monthoption'
+                  onChange={handleMonthChange}
+                  {...formState}
+                />
+                <TextInput label='Day' name='date' onChange={handleDateChange} {...formState}/>
+                <TextInput label='Year' name='year' onChange={handleYearChange} {...formState}/>
+              </div>
+              <TextInput label='Age' name='age' value={age} readOnly />
               <SelectInput options={sex} name='sex' {...formState} />
               <SelectInput options={Gender} name='gender' {...formState} />
             </div>
@@ -387,12 +404,8 @@ const Registration = () => {
                 </div>
               </Card>
             </div>
-            <div className='flex justify-end gap-2'>
-            <Link href='/studentdashboard'>
-              <Button color='failure'>Cancel </Button>
-            </Link>
+            <div className='flex justify-end'>
               <Button type='submit'>Finish</Button>
-
             </div>
           </div>
         </form>
