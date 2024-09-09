@@ -36,15 +36,27 @@ class RegistrationController extends Controller
 
     public function store(Request $request)
     {
+        $month = $request->input('monthoption');
+        $date = $request->input('date');
+        $year = $request->input('year');
+        
+        if ($month && $date && $year) {
+            $birthDate = new \DateTime("$year-$month-$date");
+            $today = new \DateTime();
+            $age = $today->diff($birthDate)->y; // Compute age in years
+        } else {
+            $age = null; // Set to null if date details are missing
+        }
+
         $validatedData = $request->validate([
             'fname' => 'required|string|max:255',
             'lname' => 'required|string|max:255',
             'mname' => 'nullable|string|max:255',
             'pref' => 'nullable|string|max:255',
-            'age' => 'nullable|integer',
-            'monthoption' => 'nullable|string|max:255',
+            'monthoption' => 'required|string|max:255',
             'date' => 'nullable|integer',
             'year' => 'nullable|integer',
+            'age' => 'nullable|integer', 
             'sex' => 'nullable|string|max:255',
             'gender' => 'nullable|string|max:255',
             'civilstatus' => 'nullable|string|max:255',
@@ -88,6 +100,7 @@ class RegistrationController extends Controller
 
         $scheduleId = $this->determineScheduleId();
         $validatedData['schedule_id'] = $scheduleId;
+        $validatedData['age'] = $age;
 
         $registration = Registration::create($validatedData);
 
@@ -155,10 +168,10 @@ class RegistrationController extends Controller
             'lname' => 'required|string|max:255',
             'mname' => 'nullable|string|max:255',
             'pref' => 'nullable|string|max:255',
-            'age' => 'nullable|integer',
-            'monthoption' => 'nullable|string|max:255',
+            'monthoption' => 'required|string|max:255',
             'date' => 'nullable|integer',
             'year' => 'nullable|integer',
+            'age' => 'nullable|string',
             'sex' => 'nullable|string|max:255',
             'gender' => 'nullable|string|max:255',
             'civilstatus' => 'nullable|string|max:255',

@@ -14,7 +14,7 @@ class Registration extends Model
     protected $guarded = [];
 
     protected $fillable = [
-        'fname', 'lname', 'mname', 'pref', 'age', 'monthoption', 'date', 'year',
+        'fname', 'lname', 'mname', 'pref', 'monthoption', 'date', 'year', 'age',
         'sex', 'gender', 'civilstatus', 'contactnumber', 'email', 'pbirth', 'indigentP',
         'indigentPy', 'pbs', 'district', 'barangay', 'cityM', 'province', 'Zcode', 'familyB',
         'sincewhen', 'Nsibling', 'supstudy', 'ofw', 'ofwprofession', 'studenttype',
