@@ -28,7 +28,7 @@ const Sidebar = () => {
                 On-Going Admissions
               </FlowbiteSidebar.Item>
               <FlowbiteSidebar.Item href='/students/deleted'>
-                Closed Admissions
+                Settled Admissions
               </FlowbiteSidebar.Item>
             </FlowbiteSidebar.Collapse>
             <FlowbiteSidebar.Item href='/users' icon={HiShoppingBag}>
