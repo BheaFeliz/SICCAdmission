@@ -56,8 +56,8 @@ export const Monthoption = [
     label: 'January',
   },
   {
-    value: 'febuary',
-    label: 'Febuary',
+    value: 'february',
+    label: 'February',
   },
   {
     value: 'march',

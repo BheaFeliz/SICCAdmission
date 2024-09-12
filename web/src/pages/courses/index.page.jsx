@@ -45,7 +45,7 @@ const CourseList = () => {
                       color='failure'
                       onClick={() => handleDelete(course.id)}
                     >
-                      Delete
+                      Deactivate
                     </Button>
                   </TableCell>
                 </TableRow>

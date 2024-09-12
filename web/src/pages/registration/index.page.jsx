@@ -1,5 +1,5 @@
 import { Button, Card, Label } from 'flowbite-react'
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SiGoogleforms } from 'react-icons/si'
 
 import FilePickerInput from '@/components/organisms/FilePickerInput '
@@ -94,16 +94,18 @@ const Registration = () => {
     let calculatedAge = today.getFullYear() - birthDate.getFullYear()
     const monthDifference = today.getMonth() - birthDate.getMonth()
 
-    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
       calculatedAge--
     }
 
     setAge(calculatedAge)
   }
   useEffect(() => {
-    calculateAge(selectedMonth, selectedDate, selectedYear);
-  }, [selectedMonth, selectedDate, selectedYear]);
-  
+    calculateAge(selectedMonth, selectedDate, selectedYear)
+  }, [selectedMonth, selectedDate, selectedYear])
 
   const handleMonthChange = (e) => {
     setSelectedMonth(e.target.value)
@@ -147,8 +149,18 @@ const Registration = () => {
                   onChange={handleMonthChange}
                   {...formState}
                 />
-                <TextInput label='Day' name='date' onChange={handleDateChange} {...formState}/>
-                <TextInput label='Year' name='year' onChange={handleYearChange} {...formState}/>
+                <TextInput
+                  label='Day'
+                  name='date'
+                  onChange={handleDateChange}
+                  {...formState}
+                />
+                <TextInput
+                  label='Year'
+                  name='year'
+                  onChange={handleYearChange}
+                  {...formState}
+                />
               </div>
               <TextInput label='Age' name='age' value={age} readOnly />
               <SelectInput options={sex} name='sex' {...formState} />
