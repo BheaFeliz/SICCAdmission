@@ -183,7 +183,7 @@ const Schedule = () => {
                         color='failure'
                         onClick={() => handleOpenDeleteModal(schedule)}
                       >
-                        Delete Schedule
+                        Schedule Done
                       </Button>
                     </div>
                   </div>
