@@ -133,6 +133,20 @@ const Dashboard = () => {
       render: (item) => districtLabelMap[item.district] || item.district,
     },
     {
+      key: 'status',
+      header: 'Status',
+      render: (item) => {
+        const status = item.deleted_at ? 'Settled' : 'Ongoing';
+        const statusColor = item.deleted_at ? 'text-green-500 ' : 'text-red-500';
+        
+        return (
+          <span className={statusColor}>
+            {status}
+          </span>
+        );
+      },
+    },
+    {
       key: 'actions',
       header: 'Actions',
       render: getAction,
