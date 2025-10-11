@@ -1,5 +1,6 @@
 import { Card } from 'flowbite-react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React from 'react'
 
 import PageHeader from '@/components/organisms/PageHeader'
@@ -7,6 +8,7 @@ import Template from '@/components/templates/StudentTemplate'
 import { useGetRegistrationsQuery } from '@/hooks/api/studentApi'
 
 function Component() {
+  const router = useRouter()
   const { data, isLoading, error } = useGetRegistrationsQuery()
 
   if (isLoading) {
@@ -18,8 +20,15 @@ function Component() {
   }
 
   const registrations = Array.isArray(data) ? data : data?.registrations || []
-  const mostRecentRegistration =
-    registrations.length > 0 ? registrations[registrations.length - 1] : null
+  const { ref } = router.query || {}
+  const mostRecentRegistration = (() => {
+    if (ref) {
+      return registrations.find((r) => r.reference_number === ref) || null
+    }
+    return registrations.length > 0
+      ? registrations[registrations.length - 1]
+      : null
+  })()
 
   return (
     <Template>

@@ -8,13 +8,13 @@ const Template = ({ children, contentSx }) => {
   const { setMode } = useThemeMode()
 
   useEffect(() => {
-    // Automatically set the theme mode to "auto" to use the system preference
-    setMode('auto')
+    // Force light mode only
+    setMode('light')
   }, [setMode])
 
   return (
     <Flowbite>
-      <div className='flex flex-col min-h-screen bg-white text-gray-800 dark:bg-gray-900 dark:text-white'>
+      <div className='flex flex-col min-h-screen bg-white text-gray-800'>
         <Navbar />
         <div className='flex-1 flex stretch'>
           <Sidebar />

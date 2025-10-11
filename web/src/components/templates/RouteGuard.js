@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 
+import { PUBLIC_ROUTES } from '@/constants/routes'
 import { useUser } from '@/hooks/redux/auth'
 
 const RouteGuard = ({ children }) => {
@@ -11,14 +12,13 @@ const RouteGuard = ({ children }) => {
 
   const authCheck = useCallback(
     (url) => {
-      const publicPaths = ['/login']
       const path = url.split('?')[0]
 
       if (isAuthOff) {
         return setAuthorized(true)
       }
 
-      if (!user && !publicPaths.includes(path)) {
+      if (!user && !PUBLIC_ROUTES.includes(path)) {
         setAuthorized(false)
         logout()
         router.push({

@@ -64,9 +64,16 @@ export function useHooks() {
     })
 
     try {
-      const { message } = await CreateRegistrationMutation(payload).unwrap()
+      const { message, reference_number } = await CreateRegistrationMutation(
+        payload,
+      ).unwrap()
       addToast({ message })
-      router.push('/registration/referenceView') // Redirect to success page
+      // Redirect to the reference view with the specific reference number
+      if (reference_number) {
+        router.push(`/registration/referenceView?ref=${reference_number}`)
+      } else {
+        router.push('/registration/referenceView')
+      }
     } catch (error) {
       addToast({ message: 'Failed to submit registration' }) // Example of error handling with toast message
     }
