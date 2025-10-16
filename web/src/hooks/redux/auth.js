@@ -2,10 +2,15 @@ import { useCallback, useMemo } from 'react'
 
 import { authApi } from '@/hooks/api/authApi'
 import { baseApi } from '@/hooks/api/baseApi'
-import { removeToken, setToken } from '@/hooks/lib/tokenStorage'
+import { getToken, removeToken, setToken } from '@/hooks/lib/tokenStorage'
 
 export const useUser = () => {
-  const { data, isError, isLoading } = authApi.useGetUserQuery()
+  // Avoid calling /auth on public pages when no token exists
+  const token = typeof window !== 'undefined' ? getToken() : null
+  const { data, isError, isLoading, isUninitialized } = authApi.useGetUserQuery(
+    undefined,
+    { skip: !token },
+  )
   // const [logoutMutation] = authApi.useLogoutMutation()
 
   const user = useMemo(() => data || null, [data])
@@ -24,7 +29,8 @@ export const useUser = () => {
   return {
     user,
     isError,
-    isLoading,
+    // Treat uninitialized (skipped) as not loading
+    isLoading: isUninitialized ? false : isLoading,
     login,
     logout,
   }

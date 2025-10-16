@@ -13,12 +13,15 @@ class ScheduleController extends Controller
 {
     private function logActivity($action, $schedule = null, $data = null)
     {
-        ActivityLog::create([
-            'action' => $action,
-            'data' => $data ? json_encode($data) : null,
-            'user_id' => Auth::id(), // Assuming you are using Laravel's authentication
-            'username' => Auth::user() ? Auth::user()->username : 'guest',
-        ]);
+        // Only log when authenticated to avoid FK constraint issues for guests
+        if (Auth::check()) {
+            ActivityLog::create([
+                'action' => $action,
+                'data' => $data ? json_encode($data) : null,
+                'user_id' => Auth::id(),
+                'username' => Auth::user()->username,
+            ]);
+        }
     }
 
     public function index()
@@ -181,5 +184,4 @@ public function getActiveSchedules()
 
 
 }
-
 

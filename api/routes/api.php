@@ -29,6 +29,14 @@ Route::get('/ping', function () {
 Route::post('/login', [AuthController::class, 'login']);
 
 
+// Public endpoints
+Route::get('/courses', [CourseController::class, 'index']);
+// Allow public registration submission and listing for reference check
+Route::post('/registration', [RegistrationController::class, 'store']);
+Route::get('/registration', [RegistrationController::class, 'index']);
+// Allow public access to view a schedule by id (for reference check page)
+Route::get('/scheduling/{id}', [ScheduleController::class, 'show']);
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::prefix('auth')
@@ -56,7 +64,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
     Route::get('/categories', [CategoryController::class, 'index']);
 
-    Route::resource('/registration', RegistrationController::class);
+    // Keep registration management protected, but allow public index/store
+    Route::resource('/registration', RegistrationController::class)
+        ->except(['index', 'store']);
     
     Route::get('/stores', [StoreController::class, 'index']);
 
@@ -69,7 +79,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
     Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard.show');
 
-    Route::get('/courses', [CourseController::class, 'index']);
     Route::post('/courses', [CourseController::class, 'store']);
     Route::patch('/schedules', [ScheduleController::class, 'updateAll']);
 
