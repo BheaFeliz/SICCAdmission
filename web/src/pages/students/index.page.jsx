@@ -89,16 +89,27 @@ const Dashboard = () => {
       header: 'Image',
       render: (item) => (
         <div className='flex space-x-2'>
-          {item.images.map((image) => (
-            <Image
-              key={image.id}
-              src={`http://localhost:8000${image.path}`}
-              alt='Registration Image'
-              width={64} // Width of the image (adjust as needed)
-              height={64} // Height of the image (adjust as needed)
-              className='object-cover'
-            />
-          ))}
+          {item.images.map((image) => {
+            const raw = image?.url || image?.path || ''
+            if (!raw) return null
+            // Normalize to a valid public URL
+            const src = (/^(https?:)?\/\//i.test(raw)
+              ? raw
+              : raw.startsWith('/storage') || raw.startsWith('/')
+              ? raw
+              : `/storage/${raw.replace(/^\/+/, '')}`)
+
+            return (
+              <Image
+                key={image.id}
+                src={src}
+                alt='Registration Image'
+                width={64}
+                height={64}
+                className='object-cover'
+              />
+            )
+          })}
         </div>
       ),
     },

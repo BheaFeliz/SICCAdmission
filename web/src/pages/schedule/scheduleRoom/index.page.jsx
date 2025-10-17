@@ -5,6 +5,7 @@ import { IoCalendarSharp } from 'react-icons/io5'
 
 import PageHeader from '@/components/organisms/PageHeader'
 import Template from '@/components/templates/Template'
+import { useGetCoursesQuery } from '@/hooks/api/courseApi'
 
 import useHooks from './hooks'
 
@@ -83,6 +84,7 @@ const RoomSchedulingForm = () => {
   }
 
   const { register, errors, handleSubmit } = useHooks(showSuccessMessage)
+  const { data: coursesData } = useGetCoursesQuery()
 
   const handleSessionChange = (e) => {
     const selectedSession = e.target.value
@@ -203,6 +205,33 @@ const RoomSchedulingForm = () => {
           register={register}
           errors={errors}
         />
+
+        <div className='mb-4'>
+          <label className='block text-sm font-semibold mb-2'>
+            Allowed Courses
+          </label>
+          <div className='grid grid-cols-1 gap-2'>
+            {coursesData?.courses?.map((course) => (
+              <label
+                key={course.id}
+                className='inline-flex items-center space-x-2'
+              >
+                <input
+                  type='checkbox'
+                  value={course.id}
+                  {...register('allowed_courses')}
+                  className='rounded border-gray-300 text-blue-600 focus:ring-blue-500'
+                />
+                <span>{course.label}</span>
+              </label>
+            ))}
+          </div>
+          {errors?.allowed_courses && (
+            <p className='text-red-500 text-sm'>
+              {errors.allowed_courses.message}
+            </p>
+          )}
+        </div>
 
         <div className='grid grid-cols-2 gap-2'>
           <div className='flex justify-start'>

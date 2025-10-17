@@ -98,7 +98,7 @@ class RegistrationController extends Controller
             ],
         ]);
 
-        $scheduleId = $this->determineScheduleId();
+        $scheduleId = $this->determineScheduleId($validatedData['courseId']);
         $validatedData['schedule_id'] = $scheduleId;
         $validatedData['age'] = $age;
 
@@ -107,15 +107,15 @@ class RegistrationController extends Controller
         if ($request->hasFile('fileinput')) {
             foreach ($request->file('fileinput') as $file) {
                 $path = $file->store('registrations', 'public');
-                $url = Storage::url($path);
-                $registration->images()->create(['path' => $url]);
+                // Save relative path; URL computed via accessor
+                $registration->images()->create(['path' => $path]);
             }
         }
 
         return response()->json(['message' => 'Registration successful', 'reference_number' => $registration->reference_number], 201);
     }
 
-    private function determineScheduleId()
+    private function determineScheduleId($courseId)
     {
         // Get the list of schedules and their current registration counts
         $registrationsPerSchedule = Registration::select('schedule_id', DB::raw('count(*) as count'))
@@ -123,14 +123,20 @@ class RegistrationController extends Controller
             ->get()
             ->pluck('count', 'schedule_id')
             ->toArray();
-    
+
         // Fetch all schedules ordered by their ID
         $schedules = Schedule::orderBy('id')->get();
-    
+
         foreach ($schedules as $schedule) {
+            // If schedule has allowed_courses set, ensure course is permitted
+            if (!empty($schedule->allowed_courses) && is_array($schedule->allowed_courses)) {
+                if (!in_array($courseId, $schedule->allowed_courses)) {
+                    continue;
+                }
+            }
             // Get current registration count for this schedule
             $currentCount = $registrationsPerSchedule[$schedule->id] ?? 0;
-    
+
             // Check if this schedule can accommodate more registrations
             if ($currentCount < $schedule->max_registrations) {
                 return $schedule->id;
@@ -223,15 +229,15 @@ class RegistrationController extends Controller
         if ($request->hasFile('fileinput')) {
             // Delete old files if needed
             foreach ($registration->images as $image) {
-                Storage::disk('public')->delete($image->path);
+                $relative = ltrim(str_replace('/storage/', '', $image->path), '/');
+                Storage::disk('public')->delete($relative);
                 $image->delete();
             }
 
             // Store new files
             foreach ($request->file('fileinput') as $file) {
                 $path = $file->store('registrations', 'public');
-                $url = Storage::url($path);
-                $registration->images()->create(['path' => $url]);
+                $registration->images()->create(['path' => $path]);
             }
             unset($validatedData['fileinput']);
         }

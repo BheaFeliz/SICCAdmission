@@ -53,6 +53,8 @@ class ScheduleController extends Controller
             'session' => 'required|string|max:255',
             'max_registrations' => 'required|integer|min:0',
             'remark' => 'string|nullable|max:200',
+            'allowed_courses' => 'nullable|array',
+            'allowed_courses.*' => 'integer|exists:courses,id',
         ]);
 
         if ($validator->fails()) {
@@ -69,6 +71,7 @@ class ScheduleController extends Controller
         $schedule->session = $request->session;
         $schedule->max_registrations = $request->max_registrations;
         $schedule->remark = $request->remark;
+        $schedule->allowed_courses = $request->allowed_courses;
         $schedule->save();
 
         $this->logActivity('create_schedule', $schedule, $request->all());
@@ -85,6 +88,8 @@ class ScheduleController extends Controller
             'session' => 'string|max:255',
             'max_registrations' => 'integer|min:0',
             'remark' => 'string|nullable|max:200',
+            'allowed_courses' => 'nullable|array',
+            'allowed_courses.*' => 'integer|exists:courses,id',
         ]);
 
         if ($validator->fails()) {
@@ -184,4 +189,3 @@ public function getActiveSchedules()
 
 
 }
-
