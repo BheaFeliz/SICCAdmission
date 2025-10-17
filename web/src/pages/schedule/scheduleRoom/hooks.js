@@ -32,6 +32,10 @@ const schema = yup.object().shape({
     .required('Max Registrations is required')
     .positive('Max Registrations must be a positive number')
     .integer('Max Registrations must be an integer'),
+  allowed_courses: yup
+    .array()
+    .of(yup.mixed())
+    .min(1, 'Select at least one course'),
 })
 
 const useHooks = (onSuccess) => {
@@ -49,6 +53,10 @@ const useHooks = (onSuccess) => {
     try {
       // Format the date to 'yyyy-MM-dd' before sending it to the server
       data.date = format(new Date(data.date), 'yyyy-MM-dd')
+      // Coerce allowed_courses values to numbers (IDs)
+      if (Array.isArray(data.allowed_courses)) {
+        data.allowed_courses = data.allowed_courses.map((v) => Number(v))
+      }
 
       await createScheduleMutation({
         ...data,
