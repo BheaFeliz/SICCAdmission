@@ -169,6 +169,10 @@ export const Civilstatus = [
     value: 'livein',
     label: 'Cohabiting/Live-in',
   },
+  {
+    value: 'separated',
+    label: 'Separated',
+  },
 ]
 
 export const IndigentP = [
@@ -310,7 +314,7 @@ export const Studenttype = [
   },
   {
     value: 'college1',
-    label: '1st year College',
+    label: 'New Student',
   },
   {
     value: 'trans',
@@ -323,6 +327,46 @@ export const Studenttype = [
   {
     value: 'crossenrolle',
     label: 'Cross-enrollee',
+  },
+]
+
+export const SemesterOptions = [
+  {
+    value: '',
+    label: 'Select Semester',
+    disabled: true,
+    selected: true,
+    hidden: true,
+  },
+  {
+    value: '1st',
+    label: '1st Semester',
+  },
+  {
+    value: '2nd',
+    label: '2nd Semester',
+  },
+  {
+    value: 'summer',
+    label: 'Summer',
+  },
+]
+
+export const YesNoOptions = [
+  {
+    value: '',
+    label: 'Please select',
+    disabled: true,
+    selected: true,
+    hidden: true,
+  },
+  {
+    value: 'yes',
+    label: 'Yes',
+  },
+  {
+    value: 'no',
+    label: 'No',
   },
 ]
 

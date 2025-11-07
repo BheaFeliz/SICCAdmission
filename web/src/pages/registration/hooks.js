@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
 import { studentApi } from '@/hooks/api/studentApi'
@@ -9,20 +9,50 @@ import { useToast } from '@/hooks/useToast'
 const registrationSchema = Yup.object().shape({
   fname: Yup.string().required('First Name is required'),
   lname: Yup.string().required('Last Name is required'),
-  // age: Yup.string().required('Age is required'),
-  date: Yup.string().required('Date is required'),
-  year: Yup.string().required('Year is required'),
+  birthdate: Yup.string().required('Birthdate is required'),
   contactnumber: Yup.string().required('Contact Number is required'),
   email: Yup.string()
     .email('Invalid email format')
     .required('Email is required'),
   pbirth: Yup.string().required('Place of Birth is required'),
-  barangay: Yup.string().required('Barangay is required'),
-  cityM: Yup.string().required('City/Municipality is required'),
-  province: Yup.string().required('Province is required'),
-  Zcode: Yup.number().required('Zip Code is required'),
-  fileinput: Yup.mixed().nullable(),
+  home_address: Yup.string().required('Home address is required'),
+  present_address: Yup.string().required('Present address is required'),
+  studenttype: Yup.string().required('Student application is required'),
+  StudentCat: Yup.string().required('Student category is required'),
+  father_name: Yup.string().required("Father's name is required"),
+  mother_maiden_name: Yup.string().required("Mother's maiden name is required"),
+  total_monthly_income: Yup.string().required('Total monthly income is required'),
+  family_members: Yup.array()
+    .of(
+      Yup.object().shape({
+        name: Yup.string().nullable(),
+        relationship: Yup.string().nullable(),
+        age: Yup.string().nullable(),
+        mobile: Yup.string().nullable(),
+        education: Yup.string().nullable(),
+        occupation: Yup.string().nullable(),
+        income: Yup.string().nullable(),
+      }),
+    )
+    .min(1, 'Please add at least one household member'),
+  fileinput: Yup.mixed().test(
+    'file-required',
+    'ID photo is required',
+    (value) => value && value.length > 0,
+  ),
+  psa_certificate: Yup.mixed().nullable(),
+  marriage_certificate: Yup.mixed().nullable(),
   courseId: Yup.string().required('Course is required'),
+})
+
+const emptyFamilyMember = () => ({
+  name: '',
+  relationship: '',
+  age: '',
+  mobile: '',
+  education: '',
+  occupation: '',
+  income: '',
 })
 
 export function useHooks() {
@@ -31,9 +61,20 @@ export function useHooks() {
   const {
     register,
     handleSubmit,
+    control,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(registrationSchema),
+    defaultValues: {
+      family_members: [emptyFamilyMember()],
+    },
+  })
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'family_members',
   })
 
   const [CreateRegistrationMutation] =
@@ -57,9 +98,27 @@ export function useHooks() {
           // Handle single file upload
           payload.append('fileinput[]', value)
         }
+      } else if (key === 'family_members' && Array.isArray(value)) {
+        value.forEach((member, index) => {
+          if (!member) return
+          Object.entries(member).forEach(([memberKey, memberValue]) => {
+            payload.append(
+              `family_members[${index}][${memberKey}]`,
+              memberValue ?? '',
+            )
+          })
+        })
+      } else if (['psa_certificate', 'marriage_certificate'].includes(key)) {
+        if (value instanceof FileList) {
+          if (value.length > 0) {
+            payload.append(key, value[0])
+          }
+        } else if (value instanceof File) {
+          payload.append(key, value)
+        }
       } else {
         // Append other form data fields
-        payload.append(key, value)
+        payload.append(key, value ?? '')
       }
     })
 
@@ -85,5 +144,13 @@ export function useHooks() {
       errors,
       register,
     },
+    familyMembers: fields,
+    addFamilyMember: () => append(emptyFamilyMember()),
+    removeFamilyMember: (index) => {
+      if (fields.length === 1) return
+      remove(index)
+    },
+    watch,
+    setValue,
   }
 }

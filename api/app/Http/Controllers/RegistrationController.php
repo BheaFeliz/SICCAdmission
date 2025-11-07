@@ -6,6 +6,7 @@ use App\Http\Requests\AdmissionFormRequest;
 use App\Models\ActivityLog;
 use App\Models\Registration;
 use App\Models\Schedule;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -36,83 +37,29 @@ class RegistrationController extends Controller
 
     public function store(Request $request)
     {
-        $month = $request->input('monthoption');
-        $date = $request->input('date');
-        $year = $request->input('year');
-        
-        if ($month && $date && $year) {
-            $birthDate = new \DateTime("$year-$month-$date");
-            $today = new \DateTime();
-            $age = $today->diff($birthDate)->y; // Compute age in years
-        } else {
-            $age = null; // Set to null if date details are missing
-        }
+        $validatedData = $request->validate($this->validationRules());
 
-        $validatedData = $request->validate([
-            'fname' => 'required|string|max:255',
-            'lname' => 'required|string|max:255',
-            'mname' => 'nullable|string|max:255',
-            'pref' => 'nullable|string|max:255',
-            'monthoption' => 'required|string|max:255',
-            'date' => 'nullable|integer',
-            'year' => 'nullable|integer',
-            'age' => 'nullable|integer', 
-            'sex' => 'nullable|string|max:255',
-            'gender' => 'nullable|string|max:255',
-            'civilstatus' => 'nullable|string|max:255',
-            'contactnumber' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'pbirth' => 'nullable|string|max:255',
-            'indigentP' => 'nullable|string|max:255',
-            'indigentPy' => 'nullable|string|max:255',
-            'pbs' => 'nullable|string|max:255',
-            'district' => 'nullable|string|max:255',
-            'barangay' => 'nullable|string|max:255',
-            'cityM' => 'nullable|string|max:255',
-            'province' => 'nullable|string|max:255',
-            'Zcode' => 'nullable|integer',
-            'familyB' => 'nullable|string|max:255',
-            'sincewhen' => 'nullable|string|max:255',
-            'Nsibling' => 'nullable|string|max:255',
-            'supstudy' => 'nullable|string|max:255',
-            'ofw' => 'nullable|string|max:255',
-            'ofwprofession' => 'nullable|string|max:255',
-            'studenttype' => 'nullable|string|max:255',
-            'Nwork' => 'nullable|string|max:255',
-            'StudentCat' => 'nullable|string|max:255',
-            'F_nameSchool' => 'nullable|string|max:255',
-            'F_Atrack' => 'nullable|string|max:255',
-            'F_AMprovince' => 'nullable|string|max:255',
-            'F_Ygrad' => 'nullable|string|max:255',
-            'T_nameSchool' => 'nullable|string|max:255',
-            'T_Atrack' => 'nullable|string|max:255',
-            'T_AMprovince' => 'nullable|string|max:255',
-            'T_Ygrad' => 'nullable|string|max:255',
-            'courseId' => 'required|exists:courses,id',
-            'fileinput' => 'required|array',
-            'fileinput.*' => [
-                'required',
-                'image',
-                'mimes:jpeg,png,jpg',
-                'max:2048',
-            ],
-        ]);
+        $validatedData = $this->prepareRegistrationPayload($request, $validatedData);
+        unset($validatedData['psa_certificate'], $validatedData['marriage_certificate']);
 
         $scheduleId = $this->determineScheduleId($validatedData['courseId']);
         $validatedData['schedule_id'] = $scheduleId;
-        $validatedData['age'] = $age;
 
-        $registration = Registration::create($validatedData);
+        $documentPaths = $this->handleDocumentUploads($request);
+
+        $registration = Registration::create(array_merge($validatedData, $documentPaths));
 
         if ($request->hasFile('fileinput')) {
             foreach ($request->file('fileinput') as $file) {
                 $path = $file->store('registrations', 'public');
-                // Save relative path; URL computed via accessor
                 $registration->images()->create(['path' => $path]);
             }
         }
 
-        return response()->json(['message' => 'Registration successful', 'reference_number' => $registration->reference_number], 201);
+        return response()->json([
+            'message' => 'Registration successful',
+            'reference_number' => $registration->reference_number,
+        ], 201);
     }
 
     private function determineScheduleId($courseId)
@@ -147,6 +94,227 @@ class RegistrationController extends Controller
         throw new \Exception('All schedules are full.');
     }
 
+    private function validationRules(bool $requireFiles = true): array
+    {
+        $rules = [
+            'fname' => 'required|string|max:255',
+            'lname' => 'required|string|max:255',
+            'mname' => 'nullable|string|max:255',
+            'pref' => 'nullable|string|max:255',
+            'monthoption' => 'nullable|string|max:255',
+            'date' => 'nullable|integer',
+            'year' => 'nullable|integer',
+            'birthdate' => 'required|date',
+            'age' => 'nullable|integer',
+            'sex' => 'nullable|string|max:255',
+            'gender' => 'nullable|string|max:255',
+            'civilstatus' => 'nullable|string|max:255',
+            'contactnumber' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'pbirth' => 'nullable|string|max:255',
+            'indigentP' => 'nullable|string|max:255',
+            'indigentPy' => 'nullable|string|max:255',
+            'pbs' => 'nullable|string|max:255',
+            'home_address' => 'required|string|max:255',
+            'present_address' => 'required|string|max:255',
+            'district' => 'nullable|string|max:255',
+            'barangay' => 'nullable|string|max:255',
+            'cityM' => 'nullable|string|max:255',
+            'province' => 'nullable|string|max:255',
+            'Zcode' => 'nullable|integer',
+            'familyB' => 'nullable|string|max:255',
+            'sincewhen' => 'nullable|string|max:255',
+            'Nsibling' => 'nullable|string|max:255',
+            'supstudy' => 'nullable|string|max:255',
+            'ofw' => 'nullable|string|max:255',
+            'ofwprofession' => 'nullable|string|max:255',
+            'studenttype' => 'required|string|max:255',
+            'Nwork' => 'nullable|string|max:255',
+            'StudentCat' => 'nullable|string|max:255',
+            'semester' => 'nullable|string|max:255',
+            'academic_year_start' => 'nullable|string|max:255',
+            'academic_year_end' => 'nullable|string|max:255',
+            'application_date' => 'nullable|date',
+            'pwd' => 'nullable',
+            'year_graduated' => 'nullable|string|max:255',
+            'senior_high_track' => 'nullable|string|max:255',
+            'strand' => 'nullable|string|max:255',
+            'lrn' => 'nullable|string|max:255',
+            'gpa' => 'nullable|string|max:255',
+            'father_name' => 'required|string|max:255',
+            'mother_maiden_name' => 'required|string|max:255',
+            'family_members' => 'nullable|array',
+            'family_members.*.name' => 'nullable|string|max:255',
+            'family_members.*.relationship' => 'nullable|string|max:255',
+            'family_members.*.age' => 'nullable|string|max:255',
+            'family_members.*.mobile' => 'nullable|string|max:255',
+            'family_members.*.education' => 'nullable|string|max:255',
+            'family_members.*.occupation' => 'nullable|string|max:255',
+            'family_members.*.income' => 'nullable|string|max:255',
+            'dswd_member' => 'nullable',
+            'dswd_member_details' => 'nullable|string|max:255',
+            'social_assistance_beneficiary' => 'nullable',
+            'social_assistance_details' => 'nullable|string|max:255',
+            'total_monthly_income' => 'nullable|string|max:255',
+            'F_nameSchool' => 'nullable|string|max:255',
+            'F_Atrack' => 'nullable|string|max:255',
+            'F_AMprovince' => 'nullable|string|max:255',
+            'F_Ygrad' => 'nullable|string|max:255',
+            'T_nameSchool' => 'nullable|string|max:255',
+            'T_Atrack' => 'nullable|string|max:255',
+            'T_AMprovince' => 'nullable|string|max:255',
+            'T_Ygrad' => 'nullable|string|max:255',
+            'courseId' => 'required|exists:courses,id',
+        ];
+
+        $rules['fileinput'] = $requireFiles ? 'required|array' : 'nullable|array';
+        $rules['fileinput.*'] = [
+            $requireFiles ? 'required' : 'nullable',
+            'image',
+            'mimes:jpeg,png,jpg',
+            'max:2048',
+        ];
+        $rules['psa_certificate'] = [
+            'nullable',
+            'file',
+            'mimes:pdf,jpeg,png,jpg',
+            'max:4096',
+        ];
+        $rules['marriage_certificate'] = [
+            'nullable',
+            'file',
+            'mimes:pdf,jpeg,png,jpg',
+            'max:4096',
+        ];
+
+        return $rules;
+    }
+
+    private function prepareRegistrationPayload(Request $request, array $validatedData): array
+    {
+        $birthdateInput = $validatedData['birthdate'] ?? $request->input('birthdate');
+
+        if ($birthdateInput) {
+            $birthDate = Carbon::parse($birthdateInput);
+            $validatedData['birthdate'] = $birthDate;
+            $validatedData['monthoption'] = strtolower($birthDate->format('F'));
+            $validatedData['date'] = (int) $birthDate->format('d');
+            $validatedData['year'] = (int) $birthDate->format('Y');
+            $validatedData['age'] = $birthDate->age;
+        } else {
+            $validatedData['age'] = $this->calculateAgeFromParts(
+                $validatedData['monthoption'] ?? null,
+                $validatedData['date'] ?? null,
+                $validatedData['year'] ?? null
+            );
+        }
+
+        $validatedData['application_date'] = isset($validatedData['application_date'])
+            ? Carbon::parse($validatedData['application_date'])
+            : now();
+
+        foreach (['pwd', 'dswd_member', 'social_assistance_beneficiary'] as $field) {
+            if (array_key_exists($field, $validatedData)) {
+                $validatedData[$field] = $this->normalizeBoolean($validatedData[$field]);
+            }
+        }
+
+        if (isset($validatedData['family_members']) && is_array($validatedData['family_members'])) {
+            $validatedData['family_members'] = array_values(array_filter(
+                array_map(function ($member) {
+                    if (!is_array($member)) {
+                        return null;
+                    }
+
+                    $cleaned = [];
+                    foreach ($member as $key => $value) {
+                        $cleaned[$key] = is_string($value) ? trim($value) : $value;
+                    }
+
+                    foreach ($cleaned as $value) {
+                        if ($value !== null && $value !== '') {
+                            return $cleaned;
+                        }
+                    }
+
+                    return null;
+                }, $validatedData['family_members'])
+            ));
+        }
+
+        return $validatedData;
+    }
+
+    private function normalizeBoolean($value): ?bool
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        if (is_bool($value)) {
+            return $value;
+        }
+
+        $value = strtolower((string) $value);
+
+        if (in_array($value, ['1', 'true', 'yes', 'y'], true)) {
+            return true;
+        }
+
+        if (in_array($value, ['0', 'false', 'no', 'n'], true)) {
+            return false;
+        }
+
+        return null;
+    }
+
+    private function calculateAgeFromParts(?string $month, ?int $day, ?int $year): ?int
+    {
+        if (!$month || !$year) {
+            return null;
+        }
+
+        if (is_numeric($month)) {
+            $monthNumber = (int) $month;
+        } else {
+            $timestamp = strtotime($month);
+            if ($timestamp === false) {
+                return null;
+            }
+            $monthNumber = (int) date('n', $timestamp);
+        }
+        $day = $day ?: 1;
+
+        try {
+            $birthDate = Carbon::createFromDate($year, $monthNumber, $day);
+        } catch (\Exception $e) {
+            return null;
+        }
+
+        return $birthDate->age;
+    }
+
+    private function handleDocumentUploads(Request $request, ?Registration $registration = null): array
+    {
+        $paths = [];
+
+        if ($request->hasFile('psa_certificate')) {
+            if ($registration && $registration->psa_certificate_path) {
+                Storage::disk('public')->delete($registration->psa_certificate_path);
+            }
+            $paths['psa_certificate_path'] = $request->file('psa_certificate')->store('registrations/documents', 'public');
+        }
+
+        if ($request->hasFile('marriage_certificate')) {
+            if ($registration && $registration->marriage_certificate_path) {
+                Storage::disk('public')->delete($registration->marriage_certificate_path);
+            }
+            $paths['marriage_certificate_path'] = $request->file('marriage_certificate')->store('registrations/documents', 'public');
+        }
+
+        return $paths;
+    }
+
 
 
     public function show($id)
@@ -169,55 +337,11 @@ class RegistrationController extends Controller
     {
         $registration = Registration::findOrFail($id);
 
-        $validatedData = $request->validate([
-            'fname' => 'required|string|max:255',
-            'lname' => 'required|string|max:255',
-            'mname' => 'nullable|string|max:255',
-            'pref' => 'nullable|string|max:255',
-            'monthoption' => 'required|string|max:255',
-            'date' => 'nullable|integer',
-            'year' => 'nullable|integer',
-            'age' => 'nullable|string',
-            'sex' => 'nullable|string|max:255',
-            'gender' => 'nullable|string|max:255',
-            'civilstatus' => 'nullable|string|max:255',
-            'contactnumber' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'pbirth' => 'nullable|string|max:255',
-            'indigentP' => 'nullable|string|max:255',
-            'indigentPy' => 'nullable|string|max:255',
-            'pbs' => 'nullable|string|max:255',
-            'district' => 'nullable|string|max:255',
-            'barangay' => 'nullable|string|max:255',
-            'cityM' => 'nullable|string|max:255',
-            'province' => 'nullable|string|max:255',
-            'Zcode' => 'nullable|integer',
-            'familyB' => 'nullable|string|max:255',
-            'sincewhen' => 'nullable|string|max:255',
-            'Nsibling' => 'nullable|string|max:255',
-            'supstudy' => 'nullable|string|max:255',
-            'ofw' => 'nullable|string|max:255',
-            'ofwprofession' => 'nullable|string|max:255',
-            'studenttype' => 'nullable|string|max:255',
-            'Nwork' => 'nullable|string|max:255',
-            'StudentCat' => 'nullable|string|max:255',
-            'F_nameSchool' => 'nullable|string|max:255',
-            'F_Atrack' => 'nullable|string|max:255',
-            'F_AMprovince' => 'nullable|string|max:255',
-            'F_Ygrad' => 'nullable|string|max:255',
-            'T_nameSchool' => 'nullable|string|max:255',
-            'T_Atrack' => 'nullable|string|max:255',
-            'T_AMprovince' => 'nullable|string|max:255',
-            'T_Ygrad' => 'nullable|string|max:255',
-            'courseId' => 'required|exists:courses,id',
-            'fileinput' => 'nullable|array',
-            'fileinput.*' => [
-                'nullable',
-                'image',
-                'mimes:jpeg,png,jpg',
-                'max:2048',
-            ],
-        ]);
+        $validatedData = $request->validate($this->validationRules(false));
+        $validatedData = $this->prepareRegistrationPayload($request, $validatedData);
+        unset($validatedData['psa_certificate'], $validatedData['marriage_certificate']);
+        $documentPaths = $this->handleDocumentUploads($request, $registration);
+        $validatedData = array_merge($validatedData, $documentPaths);
 
         // Update schedule_id if provided
         if (isset($validatedData['schedule_id'])) {
