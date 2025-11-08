@@ -15,7 +15,9 @@ export const useStudents = () => {
 };
 
 export const useStudent = (registrationId) => {
-  const { data, isError, isLoading } = useGetRegistrationByIdQuery(registrationId)
+  const { data, isError, isLoading } = useGetRegistrationByIdQuery(registrationId, {
+    skip: !registrationId,
+  })
   const registration = useMemo(() => data?.registration || [], [data]);
 
   return {
