@@ -1,25 +1,11 @@
-import { Button, Card, Label } from 'flowbite-react'
-import React, { useEffect, useState } from 'react'
+import { Button, Card } from 'flowbite-react'
+import React from 'react'
 import { SiGoogleforms } from 'react-icons/si'
 
 import FilePickerInput from '@/components/organisms/FilePickerInput '
 import PageHeader from '@/components/organisms/PageHeader'
-import SelectInput from '@/components/organisms/SelectInput'
-import TextInput from '@/components/organisms/TextInput'
+import RegistrationManualForm from '@/components/organisms/RegistrationManualForm'
 import Template from '@/components/templates/StudentTemplate'
-import {
-  Civilstatus,
-  famBackground,
-  Gender,
-  IndigentP,
-  Monthoption,
-  Ofw,
-  Scategory,
-  SDistrict,
-  sex,
-  Studenttype,
-  suffixoption,
-} from '@/hooks/redux/const'
 import { useCourses } from '@/hooks/redux/useCourses'
 
 import { useHooks } from './hooks'
@@ -33,379 +19,80 @@ const Registration = () => {
     },
   ]
 
-  const { formState, handleSubmit } = useHooks()
+  const {
+    formState,
+    handleSubmit,
+    familyMembers,
+    addFamilyMember,
+    removeFamilyMember,
+    watch,
+    setValue,
+  } = useHooks()
   const { courses } = useCourses()
-
-  const [showTextInput, setShowTextInput] = useState(false)
-  const [showFamilyBackgroundInput, setShowFamilyBackgroundInput] =
-    useState(false)
-  const [showOFWInput, setShowOFWInput] = useState(false)
-  const [showWorkingStudentInput, setShowWorkingStudentInput] = useState(false)
-  const [showFreshmenInput, setShowFreshmenInput] = useState(false)
-  const [showTransfereeInput, setShowTransfereeInput] = useState(false)
-
-  const [selectedMonth, setSelectedMonth] = useState('')
-  const [selectedDate, setSelectedDate] = useState('')
-  const [selectedYear, setSelectedYear] = useState('')
-  const [age, setAge] = useState('')
-
-  const handleStudentTypeChange = (e) => {
-    const value = e.target.value
-    setShowFreshmenInput(value === 'college1')
-    setShowTransfereeInput(value === 'trans')
-  }
-
-  const handleIndigentChange = (e) => {
-    const value = e.target.value
-    const selectedOption = IndigentP.find((option) => option.value === value)
-    setShowTextInput(selectedOption && selectedOption.showTextInput)
-  }
-
-  const handleFamilyBackgroundChange = (e) => {
-    const value = e.target.value
-    const selectedOption = famBackground.find(
-      (option) => option.value === value,
-    )
-    setShowFamilyBackgroundInput(selectedOption && selectedOption.showTextInput)
-  }
-
-  const handleOFWChange = (e) => {
-    const value = e.target.value
-    const selectedOption = Ofw.find((option) => option.value === value)
-
-    if (selectedOption && selectedOption.showTextInput) {
-      setShowOFWInput(true)
-    } else {
-      setShowOFWInput(false)
-    }
-  }
-
-  const handleStudentCategoryChange = (e) => {
-    const value = e.target.value
-    setShowWorkingStudentInput(value === 'Wstudent')
-  }
-
-  const calculateAge = (month, date, year) => {
-    if (!month || !date || !year) return
-
-    const birthDate = new Date(`${year}-${month}-01`) // Assuming the date is the first day of the month for simplicity
-    const today = new Date()
-
-    let calculatedAge = today.getFullYear() - birthDate.getFullYear()
-    const monthDifference = today.getMonth() - birthDate.getMonth()
-
-    if (
-      monthDifference < 0 ||
-      (monthDifference === 0 && today.getDate() < birthDate.getDate())
-    ) {
-      calculatedAge--
-    }
-
-    setAge(calculatedAge)
-  }
-  useEffect(() => {
-    calculateAge(selectedMonth, selectedDate, selectedYear)
-  }, [selectedMonth, selectedDate, selectedYear])
-
-  const handleMonthChange = (e) => {
-    setSelectedMonth(e.target.value)
-  }
-
-  const handleDateChange = (e) => {
-    setSelectedDate(e.target.value)
-  }
-
-  const handleYearChange = (e) => {
-    setSelectedYear(e.target.value)
-  }
 
   return (
     <Template>
-      <PageHeader breadcrumbs={breadcrumbs} />
-      <Card>
-        <form onSubmit={handleSubmit}>
-          <div className='m-2'>
-            <Card>
-              <p>
-                Fill out this form carefully and TYPE all the information
-                requested. Select the appropriate choices. If the item is not
-                applicable indicate select or type N/A. INCOMPLETE FORMS WILL
-                NOT BE PROCESSED.
-              </p>
-            </Card>
-          </div>
-          <div className='style=min-height: 140px;'>
-            <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-              <TextInput label='Last Name' name='lname' {...formState} />
-              <TextInput label='First Name' name='fname' {...formState} />
-              <TextInput label='Middle Name' name='mname' {...formState} />
-              <SelectInput options={suffixoption} name='pref' {...formState} />
-            </div>
-            <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-              <div className='grid grid-cols-3 gap-1'>
-                <SelectInput
-                  options={Monthoption}
-                  name='monthoption'
-                  onChange={handleMonthChange}
-                  {...formState}
-                />
-                <TextInput
-                  label='Day'
-                  name='date'
-                  onChange={handleDateChange}
-                  {...formState}
-                />
-                <TextInput
-                  label='Year'
-                  name='year'
-                  onChange={handleYearChange}
-                  {...formState}
-                />
-              </div>
-              <TextInput label='Age' name='age' value={age} readOnly />
-              <SelectInput options={sex} name='sex' {...formState} />
-              <SelectInput options={Gender} name='gender' {...formState} />
-            </div>
-            <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-              <SelectInput
-                options={Civilstatus}
-                name='civilstatus'
-                {...formState}
-              />
-              <TextInput
-                label='Mobile Number'
-                name='contactnumber'
-                {...formState}
-              />
-              <TextInput label='Email Address' name='email' {...formState} />
-              <TextInput
-                label='Place of Birth (City/Municipality)'
-                name='pbirth'
-                {...formState}
-              />
-            </div>
-            <div className='m-5 grid gap-5 mb-6 md:grid-cols-2'>
-              <SelectInput
-                options={IndigentP}
-                name='indigentP'
-                onChange={handleIndigentChange}
-                {...formState}
-              />
-              {showTextInput && (
-                <TextInput
-                  label='If yes, specify the Indigenous group you belong to.'
-                  type='text'
-                  name='indigentPy'
-                  className='form-input'
-                  {...formState}
-                />
-              )}
-            </div>
-            <div className='p-4'>
-              <p>Demographic Data:</p>
-            </div>
-            <div className='m-5 grid gap-5 mb-6 md:grid-cols-3'>
-              <TextInput label='Purok/Block/Sitio' name='pbs' {...formState} />
-              <SelectInput
-                options={SDistrict}
-                label='District'
-                name='district'
-                {...formState}
-              />
-              <TextInput label='Barangay' name='barangay' {...formState} />
-              <TextInput
-                label='City/Municipality'
-                name='cityM'
-                {...formState}
-              />
-              <TextInput label='Province' name='province' {...formState} />
-              <TextInput label='Zip Code' name='Zcode' {...formState} />
-            </div>
-            <div className='p-4'>
-              <p>Family Background:</p>
-            </div>
-            <div className='m-5 grid gap-5 mb-6 md:grid-cols-3'>
-              <SelectInput
-                options={famBackground}
-                name='familyB'
-                onChange={handleFamilyBackgroundChange}
-                {...formState}
-              />
-              {showFamilyBackgroundInput && (
-                <TextInput
-                  label='Specify since when? (Year Only)'
-                  type='text'
-                  name='sincewhen'
-                  className='form-input'
-                  {...formState}
-                />
-              )}
-              <TextInput
-                label='Number of siblings in the family'
-                name='Nsibling'
-                {...formState}
-              />
-              <TextInput
-                label='Who will support your study?'
-                name='supstudy'
-                {...formState}
-              />
-            </div>
-            <div className='m-5 grid gap-5 mb-6 md:grid-cols-2'>
-              <SelectInput
-                options={Ofw}
-                onChange={handleOFWChange}
-                name='ofw'
-                {...formState}
-              />
-              {showOFWInput && (
-                <TextInput
-                  label='Specify the job/profession of a family member abroad.'
-                  type='text'
-                  name='ofwprofession'
-                  className='form-input'
-                  {...formState}
-                />
-              )}
-              <SelectInput
-                options={Scategory}
-                label='Student Category'
-                name='StudentCat'
-                onChange={handleStudentCategoryChange}
-                {...formState}
-              />
-              {showWorkingStudentInput && (
-                <TextInput
-                  label='Nature of work'
-                  type='text'
-                  name='Nwork'
-                  className='form-input'
-                  {...formState}
-                />
-              )}
-            </div>
-            <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
-              <SelectInput
-                options={Studenttype}
-                name='studenttype'
-                onChange={handleStudentTypeChange}
-                {...formState}
-              />
-            </div>
-            {showFreshmenInput && (
-              <div name='Freshmen'>
-                <p>Freshmen:</p>
-                <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-                  <TextInput
-                    label='Last School Attended'
-                    type='text'
-                    name='F_nameSchool'
-                    className='form-input'
-                    {...formState}
-                  />
-                  <TextInput
-                    label='Academic track'
-                    type='text'
-                    name='F_Atrack'
-                    className='form-input'
-                    {...formState}
-                  />
-                  <TextInput
-                    label='Address City/Municipality/Province'
-                    type='text'
-                    name='F_AMprovince'
-                    className='form-input'
-                    {...formState}
-                  />
-                  <TextInput
-                    label='Year Graduate'
-                    type='text'
-                    name='F_Ygrad'
-                    className='form-input'
-                    {...formState}
-                  />
-                </div>
-              </div>
-            )}
-            {showTransfereeInput && (
-              <div>
-                <p>Transferee:</p>
-                <div className='m-5 grid gap-5 mb-6 md:grid-cols-4'>
-                  <TextInput
-                    label='Last School Attended'
-                    type='text'
-                    name='T_nameSchool'
-                    className='form-input'
-                    {...formState}
-                  />
-                  <TextInput
-                    label='Course'
-                    type='text'
-                    name='T_Atrack'
-                    className='form-input'
-                    {...formState}
-                  />
-                  <TextInput
-                    label='Address City/Municipality/Province'
-                    type='text'
-                    name='T_AMprovince'
-                    className='form-input'
-                    {...formState}
-                  />
-                  <TextInput
-                    label='Year Attended'
-                    type='text'
-                    name='T_Ygrad'
-                    className='form-input'
-                    {...formState}
-                  />
-                </div>
-              </div>
-            )}
-            <div className='m-5 grid gap-5 mb-6 md:grid-cols-1'>
-              <SelectInput
-                name='courseId'
-                options={[
-                  { value: '', label: 'Select a course', isDisabled: true },
-                  ...courses.map((course) => ({
-                    value: course.id,
-                    label: course.label,
-                  })),
-                ]}
-                {...formState}
-              />
-            </div>
-
-            <div className='m-2'>
-              <Card>
-                <p>
-                  CONFORME: I hereby certify that all the information written in
-                  this application are complete and accurate. I agree to update
-                  the Office of Admissions and the Registrars Office for any
-                  changes. I acknowledge that I have read and understood the
-                  Samal Island City College (SICC) Admissions Privacy Notice
-                  posted in the office premises understand that by applying for
-                  admission/registering as a student of this institutuion, I
-                  allow SICC through the Office of Admissions to collect,
-                  record, organize, update or modif retrieve, consult, utilize,
-                  consolidate, block, erase or delete any information which are
-                  a part of my personal data for historical, statistical,
-                  research and evaluation purposes pursuant to the provisions of
-                  the Republic Act No. 10173 of the Philippines, Data Privacy
-                  Act of 2012 and its corresponding Implementing Rules and
-                  Regulations.
-                </p>
-              </Card>
-            </div>
-
-            <div className='m-5'>
-              <Card>
+      <div className='bg-slate-50 py-6'>
+        <div className='mx-auto flex max-w-6xl flex-col gap-6 px-4 sm:px-6 lg:px-8'>
+          <PageHeader breadcrumbs={breadcrumbs} />
+          <form onSubmit={handleSubmit} className='space-y-6'>
+            <Card className='border-none bg-gradient-to-br from-indigo-50 via-white to-blue-50 shadow-sm'>
+              <div className='flex flex-col gap-4 md:flex-row md:items-center md:justify-between'>
                 <div>
-                  <div className='mb-2 block'>
-                    <Label
-                      htmlFor='file-upload'
-                      value='Upload a 2x2 Picture with Formal Attire and White Background '
-                    />
+                  <p className='text-base font-medium text-slate-800'>
+                    Carefully review every field before submitting.
+                  </p>
+                  <p className='text-sm text-slate-600'>
+                    Incomplete entries, missing signatures, or unreadable uploads delay admission
+                    processing. Prepare your household details and valid 2x2 photo ahead of time.
+                  </p>
+                </div>
+                <div className='rounded-lg border border-white/70 bg-white/80 px-4 py-3 text-sm text-slate-600 shadow'>
+                  <p className='font-semibold text-slate-800'>Need help?</p>
+                  <p>Reach Admissions via registrar@sicc.edu.ph or (082) 123-4567.</p>
+                </div>
+              </div>
+            </Card>
+
+            <RegistrationManualForm
+              formState={formState}
+              courses={courses}
+              familyMembers={familyMembers}
+              onAddFamilyMember={addFamilyMember}
+              onRemoveFamilyMember={removeFamilyMember}
+              watch={watch}
+              setValue={setValue}
+            />
+
+            <div className='grid gap-6 lg:grid-cols-[2fr,1fr]'>
+              <Card className='h-full border border-slate-200 shadow-sm'>
+                <div className='space-y-4 text-sm leading-relaxed text-slate-600'>
+                  <p className='font-semibold text-slate-900'>Conforme & Data Privacy</p>
+                  <p>
+                    I certify that the information provided is complete and accurate. I agree to
+                    notify the Office of Admissions/Registrar for any changes.
+                  </p>
+                  <p>
+                    I understand that Samal Island City College (SICC) may collect, store, and
+                    process my personal data for admission, historical, statistical, research, or
+                    evaluation purposes pursuant to RA 10173 (Data Privacy Act of 2012) and its IRR.
+                  </p>
+                  <ul className='list-inside list-disc space-y-1 text-slate-500'>
+                    <li>Provide only truthful and updated information.</li>
+                    <li>Uploads must be clear, recent, and follow the stated format.</li>
+                    <li>Applications with missing requirements will not be processed.</li>
+                  </ul>
+                </div>
+              </Card>
+
+              <div className='space-y-6'>
+                <Card className='space-y-4 border border-slate-200 shadow-sm'>
+                  <div>
+                    <p className='text-base font-semibold text-slate-900'>2x2 ID Photo</p>
+                    <p className='text-sm text-slate-500'>
+                      Formal attire, white background, no filters, maximum of 2MB per image. You may
+                      upload multiple angles if needed.
+                    </p>
                   </div>
                   <FilePickerInput
                     name='fileinput'
@@ -413,15 +100,51 @@ const Registration = () => {
                     multiple
                     {...formState}
                   />
-                </div>
-              </Card>
+                </Card>
+
+                <Card className='space-y-4 border border-slate-200 shadow-sm'>
+                  <div>
+                    <p className='text-base font-semibold text-slate-900'>Supporting Documents</p>
+                    <p className='text-sm text-slate-500'>
+                      Optional uploads. Accepts PDF or clear image scans up to 4MB each.
+                    </p>
+                  </div>
+                  <div className='space-y-2'>
+                    <p className='text-sm font-medium text-slate-700'>PSA / Birth Certificate</p>
+                    <FilePickerInput
+                      name='psa_certificate'
+                      label='Upload PSA or Birth Certificate'
+                      accept='application/pdf,image/jpeg,image/png'
+                      {...formState}
+                    />
+                  </div>
+                  <div className='space-y-2'>
+                    <p className='text-sm font-medium text-slate-700'>
+                      Marriage Certificate (if married)
+                    </p>
+                    <FilePickerInput
+                      name='marriage_certificate'
+                      label='Upload Marriage Certificate'
+                      accept='application/pdf,image/jpeg,image/png'
+                      {...formState}
+                    />
+                  </div>
+                </Card>
+              </div>
             </div>
-            <div className='flex justify-end'>
-              <Button type='submit'>Finish</Button>
+
+            <div className='flex flex-col gap-3 pb-5 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between'>
+              <p>
+                Submitting this form serves as your digital acknowledgment of the Conforme and Data
+                Privacy statements above.
+              </p>
+              <Button type='submit' size='lg' className='w-full sm:w-auto'>
+                Submit Application
+              </Button>
             </div>
-          </div>
-        </form>
-      </Card>
+          </form>
+        </div>
+      </div>
     </Template>
   )
 }

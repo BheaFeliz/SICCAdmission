@@ -23,7 +23,9 @@ export const PRIVATE_ROUTES = [
   '/profile',
 ]
 
-export default {
+const routes = {
   PUBLIC_ROUTES,
   PRIVATE_ROUTES,
 }
+
+export default routes

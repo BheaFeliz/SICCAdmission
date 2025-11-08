@@ -15,38 +15,66 @@ You will follow only 1 Option, either `Option 1. Using Docker` or
 
 Intallation Link: [Click here](https://docs.docker.com/engine/install/)
 
-After installation, Run:
+After installation, run the stack (MySQL + Laravel API + Next.js FE):
 
 ```
-docker-compose up --build -d
+docker compose up --build -d
 ```
 
-### 1.B. Backend Setup:
+The containers expose:
 
-Update `api/.env` file:
+- API: [http://localhost:8000/](http://localhost:8000/)
+- Frontend: [http://localhost:3000/](http://localhost:3000/)
+- Database: localhost:3306 (root/admin)
+- phpMyAdmin: [http://localhost:8080/](http://localhost:8080/) (root/admin)
 
-```
-DB_CONNECTION=mysql
-DB_HOST=db
-DB_PORT=3306
-DB_DATABASE=pcbee-db
-DB_USERNAME=root
-DB_PASSWORD=admin
-```
+The API container automatically installs Composer dependencies, copies `.env.example`,
+generates `APP_KEY`, runs migrations, and links storage on boot. If you need to
+re-run database seeders:
 
 ```
-docker-compose exec app composer install
-docker-compose exec app php artisan key:generate
-docker-compose exec app php artisan migrate
+docker compose exec api php artisan db:seed
 ```
 
-You should be able to access: [http://localhost:8000/](http://localhost:8000/)
-
-Seed for Admin Login
+Tail logs with:
 
 ```
-docker-compose exec app php artisan db:seed
+docker compose logs -f api
+docker compose logs -f web
 ```
+
+phpMyAdmin connects automatically to the `db` container. Sign in with the root
+credentials above to inspect or import/export database tables via the browser.
+
+Shut everything down (and keep database data) with:
+
+```
+docker compose down
+```
+
+Remove the database volume as well:
+
+```
+docker compose down -v
+```
+
+## Registration Form Update
+
+- The online registration form now mirrors the 2025–2026 manual admission sheet, including
+  semester/A.Y. details, socio-economic data, household table, and guardian information.
+- Optional uploads for PSA/Birth Certificates and Marriage Certificates (if applicable) are now
+  supported alongside the required 2x2 photo.
+- Run the latest migrations to add the new fields before using the form:
+
+  ```
+  php artisan migrate
+  ```
+
+  or, when using Docker:
+
+  ```
+  docker compose exec api php artisan migrate
+  ```
 
 ##
 
@@ -93,7 +121,7 @@ You should be able to access: [http://localhost:8000/](http://localhost:8000/)
 Seed for Admin Login
 
 ```
-docker-compose exec app php artisan db:seed
+php artisan db:seed
 ```
 
 ### 3. Frontend Setup:
@@ -129,7 +157,7 @@ Default Admin Credential
 
 ```
 Username: admin
-Password: !p@ssword123
+Password: P@ssword123
 ```
 
 ## BE Possible errors

@@ -1,7 +1,14 @@
 import { FileInput } from 'flowbite-react'
 
 const FilePickerInput = (props) => {
-  const { multiple, errors, name, register, ...rest } = props
+  const {
+    multiple,
+    errors,
+    name,
+    register,
+    accept = 'image/jpeg, image/png, image/jpg',
+    ...rest
+  } = props
 
   const formRegister = name && register && { ...register(name) }
 
@@ -11,7 +18,7 @@ const FilePickerInput = (props) => {
     <>
       <FileInput
         multiple={multiple}
-        accept='image/jpeg, image/png, image/jpg'
+        accept={accept}
         {...formRegister}
         {...rest}
         color={error ? 'error' : 'default'}
