@@ -1,6 +1,6 @@
-import { Button, Card, Modal } from 'flowbite-react'
+import { Button, Modal } from 'flowbite-react'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { IoCalendarSharp } from 'react-icons/io5'
 
 import Loading from '@/components/atoms/Loading'
@@ -19,6 +19,91 @@ const breadcrumbs = [
   },
 ]
 
+const ScheduleCard = ({
+  schedule,
+  onDelete,
+  isDeleting,
+  convertTo12HourFormat,
+  formatDisplayDate,
+  isAdmin,
+}) => (
+  <div className='relative overflow-hidden rounded-2xl border border-slate-200 bg-white/95 p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800/90'>
+    {isDeleting && (
+      <div className='absolute inset-0 z-10 flex items-center justify-center bg-white/80 dark:bg-gray-900/70'>
+        <Loading />
+      </div>
+    )}
+    <p className='text-xs font-semibold uppercase tracking-[0.3em] text-blue-500'>
+      {schedule.session || 'Schedule'}
+    </p>
+    <h2 className='mt-2 text-xl font-semibold text-slate-900 dark:text-white'>
+      {schedule.name}
+    </h2>
+    <dl className='mt-4 space-y-2 text-sm text-slate-600 dark:text-slate-200'>
+      <div className='flex justify-between'>
+        <dt className='font-semibold text-slate-500'>Date</dt>
+        <dd>{formatDisplayDate(schedule.date)}</dd>
+      </div>
+      <div className='flex justify-between'>
+        <dt className='font-semibold text-slate-500'>Time</dt>
+        <dd>
+          {convertTo12HourFormat(schedule.startTime)} –{' '}
+          {convertTo12HourFormat(schedule.endTime)}
+        </dd>
+      </div>
+      <div className='flex justify-between'>
+        <dt className='font-semibold text-slate-500'>Capacity</dt>
+        <dd>{schedule.max_registrations} slots</dd>
+      </div>
+      {schedule.remark && (
+        <div>
+          <dt className='font-semibold text-slate-500'>Notes</dt>
+          <dd>{schedule.remark}</dd>
+        </div>
+      )}
+    </dl>
+    <div className='mt-6 flex flex-wrap gap-3'>
+      <Link
+        href={`/schedule/${schedule.id}`}
+        className='inline-flex flex-1 min-w-[140px] items-center justify-center rounded-2xl border border-blue-100 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 transition hover:border-blue-200 hover:bg-blue-100 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200'
+      >
+        View details
+      </Link>
+      {isAdmin && (
+        <button
+          type='button'
+          onClick={() => onDelete(schedule)}
+          className='inline-flex flex-1 min-w-[140px] items-center justify-center rounded-2xl border border-red-100 bg-red-50 px-3 py-2 text-sm font-semibold text-red-600 transition hover:border-red-200 hover:bg-red-100 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200'
+        >
+          Schedule done
+        </button>
+      )}
+    </div>
+  </div>
+)
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  return date.toISOString().split('T')[0]
+}
+
+const convertTo12HourFormat = (time) => {
+  const [hours, minutes] = time.split(':')
+  const hour = parseInt(hours, 10)
+  const period = hour >= 12 ? 'PM' : 'AM'
+  const adjustedHour = hour % 12 || 12
+  return `${adjustedHour}:${minutes} ${period}`
+}
+
+const formatDisplayDate = (dateString) => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  })
+}
+
 const Schedule = () => {
   const { schedules, isError, isLoading, handleDeleteSchedule } = useHooks()
   const { user } = useUser()
@@ -26,41 +111,6 @@ const Schedule = () => {
   const [selectedSchedule, setSelectedSchedule] = useState(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const [selectedDate, setSelectedDate] = useState('')
-
-  const convertTo12HourFormat = (time) => {
-    const [hours, minutes] = time.split(':')
-    const hour = parseInt(hours, 10)
-    const period = hour >= 12 ? 'PM' : 'AM'
-    const adjustedHour = hour % 12 || 12
-    return `${adjustedHour}:${minutes} ${period}`
-  }
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString)
-    return date.toISOString().split('T')[0] // e.g., "2024-08-18"
-  }
-
-  const formatDisplayDate = (dateString) => {
-    const date = new Date(dateString)
-    const monthNames = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ]
-    const month = monthNames[date.getMonth()]
-    const day = date.getDate()
-    const year = date.getFullYear()
-    return `${month} ${day}, ${year}`
-  }
 
   const handleOpenDeleteModal = (schedule) => {
     setSelectedSchedule(schedule)
@@ -86,210 +136,171 @@ const Schedule = () => {
     setSelectedDate(event.target.value)
   }
 
-  const filteredSchedules =
-    selectedDate ?
-      schedules.filter((schedule) => formatDate(schedule.date) === selectedDate)
-    : schedules
+  const normalizedSchedules = useMemo(() => schedules || [], [schedules])
+
+  const uniqueDates = useMemo(() => {
+    if (!normalizedSchedules.length) return []
+    const formattedDates = normalizedSchedules.map((schedule) =>
+      formatDate(schedule.date),
+    )
+    return [...new Set(formattedDates)]
+  }, [normalizedSchedules])
+
+  const filteredSchedules = useMemo(() => {
+    if (!selectedDate) return normalizedSchedules
+    return normalizedSchedules.filter(
+      (schedule) => formatDate(schedule.date) === selectedDate,
+    )
+  }, [normalizedSchedules, selectedDate])
+
+  const role = user?.role
+
+  const Layout = role === 'admin' ? Template : StaffTemplate
 
   if (isLoading) {
     return (
-      <Template>
-        <div className='flex justify-center items-center h-screen'>
+      <Layout>
+        <div className='flex h-64 items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-white/60'>
           <Loading />
         </div>
-      </Template>
+      </Layout>
     )
   }
 
   if (isError) {
     return (
-      <Template>
-        <p>Error fetching schedules.</p>
-      </Template>
+      <Layout>
+        <div className='rounded-3xl border border-red-200 bg-red-50 p-6 text-sm text-red-700'>
+          Error fetching schedules. Please try again later.
+        </div>
+      </Layout>
     )
   }
 
-  const uniqueDates = [
-    ...new Set(schedules.map((schedule) => formatDate(schedule.date))),
-  ]
-
-  const role = user?.role
+  const totalSchedules = normalizedSchedules.length
+  const filteredCount = filteredSchedules.length
 
   return (
-    <>
-      {role === 'admin' ?
-        <Template>
-          <PageHeader breadcrumbs={breadcrumbs} />
-          <div className='flex justify-start mb-8 space-x-4'>
+    <Layout>
+      <div className='space-y-8'>
+        <PageHeader breadcrumbs={breadcrumbs} />
+        <section className='rounded-3xl border border-blue-100 bg-white/95 p-6 shadow-sm lg:p-8 dark:border-gray-800 dark:bg-gray-900/80'>
+          <div className='flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between'>
             <div>
-              <Link href='/schedule/scheduleRoom'>
-                <Button size='lg' color='blue'>
-                  Add Schedule
-                </Button>
+              <p className='text-xs font-semibold uppercase tracking-[0.35em] text-blue-500'>
+                Scheduling hub
+              </p>
+              <h1 className='mt-3 text-3xl font-semibold text-slate-900 dark:text-white'>
+                Manage admissions schedules
+              </h1>
+              <p className='mt-3 max-w-2xl text-sm text-slate-500 dark:text-slate-300'>
+                Filter sessions by date, review capacity, and keep staff informed
+                from any device. All cards adapt to smaller screens for quick
+                mobile checks.
+              </p>
+            </div>
+            <div className='grid gap-3 sm:grid-cols-2'>
+              <div className='rounded-2xl border border-slate-200 bg-white/90 p-4 text-center dark:border-gray-700 dark:bg-gray-800/80'>
+                <p className='text-xs uppercase tracking-[0.3em] text-slate-400'>
+                  Total sessions
+                </p>
+                <p className='mt-2 text-3xl font-semibold text-slate-900 dark:text-white'>
+                  {totalSchedules}
+                </p>
+              </div>
+              <div className='rounded-2xl border border-slate-200 bg-white/90 p-4 text-center dark:border-gray-700 dark:bg-gray-800/80'>
+                <p className='text-xs uppercase tracking-[0.3em] text-slate-400'>
+                  Showing now
+                </p>
+                <p className='mt-2 text-3xl font-semibold text-slate-900 dark:text-white'>
+                  {filteredCount}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className='mt-8 flex flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50/60 p-4 dark:border-gray-700 dark:bg-gray-800/60 sm:flex-row sm:items-center sm:justify-between'>
+            <div className='flex flex-wrap gap-3'>
+              {role === 'admin' && (
+                <Link
+                  href='/schedule/scheduleRoom'
+                  className='inline-flex items-center rounded-2xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-500'
+                >
+                  Add schedule
+                </Link>
+              )}
+              <Link
+                href='/schedule/history'
+                className='inline-flex items-center rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:text-blue-700 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-50'
+              >
+                View history
               </Link>
             </div>
-            <div>
-              <Link href='/schedule/history'>
-                <Button size='lg' color='failure'>
-                  View History
-                </Button>
-              </Link>
-            </div>
-            <div className='flex justify-start mb-4'>
+            <div className='flex items-center gap-3'>
+              <label className='text-sm font-semibold text-slate-500 dark:text-slate-200'>
+                Filter by date
+              </label>
               <select
                 value={selectedDate}
                 onChange={handleDateChange}
-                className='p-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-800 dark:text-white text-lg'
+                className='rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 shadow-sm focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-100 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100'
               >
                 <option value=''>All Dates</option>
-                {uniqueDates.map((date, index) => (
-                  <option key={index} value={date}>
+                {uniqueDates.map((date) => (
+                  <option key={date} value={date}>
                     {formatDisplayDate(date)}
                   </option>
                 ))}
               </select>
             </div>
           </div>
-          <div className='grid grid-cols-3 gap-2'>
-            {filteredSchedules.length > 0 ?
-              filteredSchedules.map((schedule) => (
-                <Card
+        </section>
+
+        <section className='space-y-4'>
+          <h2 className='text-xl font-semibold text-slate-900 dark:text-white'>
+            Upcoming sessions
+          </h2>
+          {filteredSchedules.length > 0 ?
+            <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-3'>
+              {filteredSchedules.map((schedule) => (
+                <ScheduleCard
                   key={schedule.id}
-                  className='p-2 relative dark:bg-gray-800 dark:text-white'
-                >
-                  {isDeleting && selectedSchedule?.id === schedule.id && (
-                    <div className='absolute inset-0 flex items-center justify-center'>
-                      <Loading />
-                    </div>
-                  )}
-                  <div className='relative'>
-                    <h2 className='text-lg font-bold'>{schedule.name}</h2>
-                    <p>Date: {formatDisplayDate(schedule.date)}</p>
-                    <p>
-                      Start Time: {convertTo12HourFormat(schedule.startTime)}
-                    </p>
-                    <p>End Time: {convertTo12HourFormat(schedule.endTime)}</p>
-                    <p>Max Registrations: {schedule.max_registrations}</p>
-                    <p>{schedule.session}</p>
-                    <p>{schedule.remark}</p>
-                    <div className='flex space-x-2 mt-2'>
-                      <Link href={`/schedule/${schedule.id}`} passHref>
-                        <Button as='a' size='lg' color='blue'>
-                          View Details
-                        </Button>
-                      </Link>
-                      <Button
-                        size='lg'
-                        color='failure'
-                        onClick={() => handleOpenDeleteModal(schedule)}
-                      >
-                        Schedule Done
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              ))
-            : <p>No schedules available.</p>}
-          </div>
-          <Modal show={openDeleteModal} onClose={handleCloseModal}>
-            <Modal.Header>Confirm Deletion</Modal.Header>
-            <Modal.Body>
-              <p>Are you sure you want to delete this schedule?</p>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button color='gray' onClick={handleCloseModal}>
-                Cancel
-              </Button>
-              <Button
-                color='failure'
-                onClick={handleConfirmDelete}
-                disabled={isDeleting}
-              >
-                {isDeleting ? 'Deleting...' : 'Delete'}
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </Template>
-      : <StaffTemplate>
-          <PageHeader breadcrumbs={breadcrumbs} />
-          <div className='flex justify-start mb-8 space-x-4'>
-            <div>
-              <Link href='/schedule/history'>
-                <Button size='lg' color='failure'>
-                  View History
-                </Button>
-              </Link>
+                  schedule={schedule}
+                  onDelete={handleOpenDeleteModal}
+                  isDeleting={
+                    isDeleting && selectedSchedule?.id === schedule.id
+                  }
+                  convertTo12HourFormat={convertTo12HourFormat}
+                  formatDisplayDate={formatDisplayDate}
+                  isAdmin={role === 'admin'}
+                />
+              ))}
             </div>
-            <div className='flex justify-start mb-4'>
-              <select
-                value={selectedDate}
-                onChange={handleDateChange}
-                className='p-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-800 dark:text-white text-lg'
-              >
-                <option value=''>All Dates</option>
-                {uniqueDates.map((date, index) => (
-                  <option key={index} value={date}>
-                    {formatDisplayDate(date)}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className='grid grid-cols-3 gap-2'>
-            {filteredSchedules.length > 0 ?
-              filteredSchedules.map((schedule) => (
-                <Card
-                  key={schedule.id}
-                  className='p-2 relative dark:bg-gray-800 dark:text-white'
-                >
-                  {isDeleting && selectedSchedule?.id === schedule.id && (
-                    <div className='absolute inset-0 flex items-center justify-center'>
-                      <Loading />
-                    </div>
-                  )}
-                  <div className='relative'>
-                    <h2 className='text-lg font-bold'>{schedule.name}</h2>
-                    <p>Date: {formatDisplayDate(schedule.date)}</p>
-                    <p>
-                      Start Time: {convertTo12HourFormat(schedule.startTime)}
-                    </p>
-                    <p>End Time: {convertTo12HourFormat(schedule.endTime)}</p>
-                    <p>Max Registrations: {schedule.max_registrations}</p>
-                    <p>{schedule.session}</p>
-                    <p>{schedule.remark}</p>
-                    <div className='flex space-x-2 mt-2'>
-                      <Link href={`/schedule/${schedule.id}`} passHref>
-                        <Button as='a' size='lg' color='blue'>
-                          View Details
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                </Card>
-              ))
-            : <p>No schedules available.</p>}
-          </div>
-          <Modal show={openDeleteModal} onClose={handleCloseModal}>
-            <Modal.Header>Confirm Deletion</Modal.Header>
-            <Modal.Body>
-              <p>Are you sure you want to delete this schedule?</p>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button color='gray' onClick={handleCloseModal}>
-                Cancel
-              </Button>
-              <Button
-                color='failure'
-                onClick={handleConfirmDelete}
-                disabled={isDeleting}
-              >
-                {isDeleting ? 'Deleting...' : 'Delete'}
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </StaffTemplate>
-      }
-    </>
+          : <div className='rounded-3xl border border-dashed border-slate-200 bg-white/80 p-10 text-center text-sm text-slate-500 dark:border-gray-700 dark:bg-gray-800/70'>
+              No schedules available for the selected date.
+            </div>}
+        </section>
+      </div>
+
+      <Modal show={openDeleteModal} onClose={handleCloseModal}>
+        <Modal.Header>Confirm deletion</Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to mark this schedule as done?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button color='gray' onClick={handleCloseModal}>
+            Cancel
+          </Button>
+          <Button
+            color='failure'
+            onClick={handleConfirmDelete}
+            disabled={isDeleting}
+          >
+            {isDeleting ? 'Deleting...' : 'Delete'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </Layout>
   )
 }
 
