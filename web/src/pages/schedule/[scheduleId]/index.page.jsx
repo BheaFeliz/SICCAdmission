@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { IoCalendarSharp } from 'react-icons/io5'
-import * as XLSX from 'xlsx' // Import XLSX
 
 import Loading from '@/components/atoms/Loading' // Import the Loading component
 import PageHeader from '@/components/organisms/PageHeader'
@@ -68,7 +67,15 @@ const Schedule = () => {
     },
   ]
 
-  const handleDownloadExcel = () => {
+  const escapeForCsv = (value) => {
+    if (value === null || value === undefined) return ''
+    const stringValue = value.toString()
+    return /[",\n]/.test(stringValue) ?
+        `"${stringValue.replace(/"/g, '""')}"`
+      : stringValue
+  }
+
+  const handleDownloadCsv = () => {
     const dataToExport = filteredRegistrations.map((registration) => ({
       Contacts: registration.contactnumber,
       'Last Name': registration.lname,
@@ -77,17 +84,32 @@ const Schedule = () => {
       'Scheduled Date of Admission Test':
         registration.schedule ?
           new Date(registration.schedule.date).toLocaleDateString('en-US')
-        : 'N/A', // Include the schedule date
+        : 'N/A',
     }))
 
-    const worksheet = XLSX.utils.json_to_sheet(dataToExport)
-    const workbook = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Registrations')
+    if (!dataToExport.length) return
 
-    // Create a filename based on the schedule name
-    const filename = `${scheduleName.replace(/[^a-zA-Z0-9]/g, '_')}_registrations.xlsx`
-    // Write the file
-    XLSX.writeFile(workbook, filename)
+    const headers = Object.keys(dataToExport[0])
+    const csvRows = [
+      headers.join(','),
+      ...dataToExport.map((row) =>
+        headers.map((header) => escapeForCsv(row[header])).join(','),
+      ),
+    ]
+    const csvContent = csvRows.join('\n')
+    const filename = `${scheduleName.replace(/[^a-zA-Z0-9]/g, '_')}_registrations.csv`
+
+    const blob = new Blob([`\uFEFF${csvContent}`], {
+      type: 'text/csv;charset=utf-8;',
+    })
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', filename)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
   }
 
   return (
@@ -100,8 +122,8 @@ const Schedule = () => {
         <Link href='/schedule'>
           <Button color='blue'>Back to Schedules</Button>
         </Link>
-        <Button onClick={handleDownloadExcel} className='btn-download'>
-          Download Excel
+        <Button onClick={handleDownloadCsv} className='btn-download'>
+          Download CSV
         </Button>
       </div>
 
