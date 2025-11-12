@@ -1,9 +1,9 @@
 import { Table } from 'flowbite-react'
 import React from 'react'
-import { useGetDeletedSchedulesQuery } from 'src/hooks/api/scheduleApi'
 
 import AdminGuard from '@/components/templates/AdminGuard'
 import Template from '@/components/templates/Template'
+import { useGetDeletedSchedulesQuery } from '@/hooks/api/scheduleApi'
 
 const DeletedRegistrationsTable = () => {
   const {

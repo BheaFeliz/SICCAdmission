@@ -1,4 +1,4 @@
-import { Flowbite } from 'flowbite-react'
+import { ThemeProvider } from 'flowbite-react'
 
 const customTheme = {
   button: {
@@ -9,7 +9,11 @@ const customTheme = {
 }
 
 const Theme = ({ children }) => {
-  return <Flowbite theme={{ theme: customTheme }}>{children}</Flowbite>
+  return (
+    <ThemeProvider theme={{ theme: customTheme }}>
+      {children}
+    </ThemeProvider>
+  )
 }
 
 export default Theme
