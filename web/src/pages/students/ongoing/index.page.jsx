@@ -1,4 +1,11 @@
-import { Table } from 'flowbite-react'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeadCell,
+  TableRow,
+} from 'flowbite-react'
 import React from 'react'
 
 import AdminGuard from '@/components/templates/AdminGuard'
@@ -27,32 +34,32 @@ const ActiveRegistrationsTable = () => {
           <h1 className='text-2xl font-semibold mb-4'>Active Registrations</h1>
           {activeSchedules.length > 0 ?
             <Table>
-              <Table.Head>
-                <Table.HeadCell>Schedule Name</Table.HeadCell>
-                <Table.HeadCell>Reference Number</Table.HeadCell>
-                <Table.HeadCell>Last Name</Table.HeadCell>
-                <Table.HeadCell>First Name</Table.HeadCell>
-                <Table.HeadCell>Registration Date</Table.HeadCell>
-              </Table.Head>
-              <Table.Body>
+              <TableHead>
+                <TableHeadCell>Schedule Name</TableHeadCell>
+                <TableHeadCell>Reference Number</TableHeadCell>
+                <TableHeadCell>Last Name</TableHeadCell>
+                <TableHeadCell>First Name</TableHeadCell>
+                <TableHeadCell>Registration Date</TableHeadCell>
+              </TableHead>
+              <TableBody>
                 {activeSchedules.map((schedule) =>
                   schedule.registrations
                     .filter((registration) => !registration.deleted_at)
                     .map((registration) => (
-                      <Table.Row key={registration.id}>
-                        <Table.Cell>{schedule.name}</Table.Cell>
-                        <Table.Cell>{registration.reference_number}</Table.Cell>
-                        <Table.Cell>{registration.lname}</Table.Cell>
-                        <Table.Cell>{registration.fname}</Table.Cell>
-                        <Table.Cell>
+                      <TableRow key={registration.id}>
+                        <TableCell>{schedule.name}</TableCell>
+                        <TableCell>{registration.reference_number}</TableCell>
+                        <TableCell>{registration.lname}</TableCell>
+                        <TableCell>{registration.fname}</TableCell>
+                        <TableCell>
                           {new Date(
                             registration.created_at,
                           ).toLocaleDateString()}
-                        </Table.Cell>
-                      </Table.Row>
+                        </TableCell>
+                      </TableRow>
                     )),
                 )}
-              </Table.Body>
+              </TableBody>
             </Table>
           : <p>No active registrations available.</p>}
         </div>

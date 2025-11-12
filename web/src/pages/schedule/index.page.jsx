@@ -1,4 +1,4 @@
-import { Button, Modal } from 'flowbite-react'
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'flowbite-react'
 import Link from 'next/link'
 import React, { useMemo, useState } from 'react'
 import { IoCalendarSharp } from 'react-icons/io5'
@@ -283,22 +283,25 @@ const Schedule = () => {
       </div>
 
       <Modal show={openDeleteModal} onClose={handleCloseModal}>
-        <Modal.Header>Confirm deletion</Modal.Header>
-        <Modal.Body>
-          <p>Are you sure you want to mark this schedule as done?</p>
-        </Modal.Body>
-        <Modal.Footer>
+        <ModalHeader>Mark schedule as settled?</ModalHeader>
+        <ModalBody>
+          <p>
+            Confirm that this admission session is done so all registrations move
+            to settled status.
+          </p>
+        </ModalBody>
+        <ModalFooter>
           <Button color='gray' onClick={handleCloseModal}>
-            Cancel
+            Keep open
           </Button>
           <Button
             color='failure'
             onClick={handleConfirmDelete}
             disabled={isDeleting}
           >
-            {isDeleting ? 'Deleting...' : 'Delete'}
+            {isDeleting ? 'Marking…' : 'Mark as Done'}
           </Button>
-        </Modal.Footer>
+        </ModalFooter>
       </Modal>
     </Layout>
   )
