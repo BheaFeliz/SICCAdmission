@@ -1,12 +1,12 @@
-import '@/app/globals.css'
+import '@/styles/globals.css'
 
 import { Provider } from 'react-redux'
 
-import RootLayout from '@/app/layout'
-import Theme from '@/app/theme'
 import RouteGuard from '@/components/templates/RouteGuard'
 import ToastProvider from '@/components/templates/ToastProvider'
 import { store } from '@/hooks/store'
+import RootLayout from '@/layout/RootLayout'
+import Theme from '@/layout/theme'
 
 export const metadata = {
   title: 'PCBee ',
