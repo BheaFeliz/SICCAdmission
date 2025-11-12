@@ -1,4 +1,10 @@
-import { Sidebar as FlowbiteSidebar } from 'flowbite-react'
+import {
+  Sidebar as FlowbiteSidebar,
+  SidebarCollapse,
+  SidebarItem,
+  SidebarItemGroup,
+  SidebarItems,
+} from 'flowbite-react'
 import {
   HiArrowSmRight,
   HiChartPie,
@@ -12,36 +18,34 @@ const Sidebar = () => {
   return (
     <aside className='pt-2 w-64 bg-gray-50 dark:bg-gray-800'>
       <FlowbiteSidebar>
-        <FlowbiteSidebar.Items>
-          <FlowbiteSidebar.ItemGroup>
-            <FlowbiteSidebar.Item href='/dashboard' icon={HiChartPie}>
+        <SidebarItems>
+          <SidebarItemGroup>
+            <SidebarItem href='/dashboard' icon={HiChartPie}>
               Dashboard
-            </FlowbiteSidebar.Item>
-            <FlowbiteSidebar.Item href='/schedule' icon={HiInbox}>
+            </SidebarItem>
+            <SidebarItem href='/schedule' icon={HiInbox}>
               Scheduling
-            </FlowbiteSidebar.Item>
-            <FlowbiteSidebar.Collapse icon={HiUser} label='Students'>
-              <FlowbiteSidebar.Item href='/students'>
-                All Students
-              </FlowbiteSidebar.Item>
-              <FlowbiteSidebar.Item href='/students/ongoing'>
+            </SidebarItem>
+            <SidebarCollapse icon={HiUser} label='Students'>
+              <SidebarItem href='/students'>All Students</SidebarItem>
+              <SidebarItem href='/students/ongoing'>
                 On-Going Admissions
-              </FlowbiteSidebar.Item>
-              <FlowbiteSidebar.Item href='/students/deleted'>
+              </SidebarItem>
+              <SidebarItem href='/students/deleted'>
                 Settled Admissions
-              </FlowbiteSidebar.Item>
-            </FlowbiteSidebar.Collapse>
-            <FlowbiteSidebar.Item href='/users' icon={HiShoppingBag}>
+              </SidebarItem>
+            </SidebarCollapse>
+            <SidebarItem href='/users' icon={HiShoppingBag}>
               Create Users
-            </FlowbiteSidebar.Item>
-            <FlowbiteSidebar.Item href='/courses' icon={HiArrowSmRight}>
+            </SidebarItem>
+            <SidebarItem href='/courses' icon={HiArrowSmRight}>
               Course Management
-            </FlowbiteSidebar.Item>
-            <FlowbiteSidebar.Item href='/activitylogs' icon={HiTable}>
+            </SidebarItem>
+            <SidebarItem href='/activitylogs' icon={HiTable}>
               Activity Management
-            </FlowbiteSidebar.Item>
-          </FlowbiteSidebar.ItemGroup>
-        </FlowbiteSidebar.Items>
+            </SidebarItem>
+          </SidebarItemGroup>
+        </SidebarItems>
       </FlowbiteSidebar>
     </aside>
   )

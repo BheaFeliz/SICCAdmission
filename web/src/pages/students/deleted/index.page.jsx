@@ -1,5 +1,13 @@
-import { Table } from 'flowbite-react'
-import React from 'react'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeadCell,
+  TableRow,
+} from 'flowbite-react'
+import { useRouter } from 'next/router'
+import React, { useMemo } from 'react'
 
 import AdminGuard from '@/components/templates/AdminGuard'
 import Template from '@/components/templates/Template'
@@ -7,10 +15,23 @@ import { useGetDeletedSchedulesQuery } from '@/hooks/api/scheduleApi'
 
 const DeletedRegistrationsTable = () => {
   const {
-    data: deletedSchedules,
+    data: deletedSchedules = [],
     isLoading,
     isError,
   } = useGetDeletedSchedulesQuery()
+  const router = useRouter()
+  const { scheduleId } = router.query
+
+  const filteredSchedules = useMemo(() => {
+    if (!scheduleId) return deletedSchedules
+    return deletedSchedules.filter(
+      (schedule) => String(schedule.id) === String(scheduleId),
+    )
+  }, [deletedSchedules, scheduleId])
+
+  const hasSettledRegistrations = filteredSchedules.some(
+    (schedule) => schedule.registrations && schedule.registrations.length > 0,
+  )
 
   if (isLoading) return <div>Loading...</div>
   if (isError) return <div>Failed to load deleted schedules</div>
@@ -19,34 +40,43 @@ const DeletedRegistrationsTable = () => {
     <AdminGuard>
       <Template>
         <div className='p-4'>
-          <h1 className='text-2xl font-semibold mb-4'>Deleted Registrations</h1>
-          {deletedSchedules && deletedSchedules.length > 0 ?
+          <h1 className='text-2xl font-semibold mb-2'>Settled Registrations</h1>
+          {scheduleId && filteredSchedules.length > 0 && (
+            <p className='mb-4 text-sm text-gray-500'>
+              Showing settled registrations for <strong>{filteredSchedules[0].name}</strong>
+            </p>
+          )}
+          {hasSettledRegistrations ?
             <Table>
-              <Table.Head>
-                <Table.HeadCell>Schedule Name</Table.HeadCell>
-                <Table.HeadCell>Reference Number</Table.HeadCell>
-                <Table.HeadCell>Last Name</Table.HeadCell>
-                <Table.HeadCell>First Name</Table.HeadCell>
-                <Table.HeadCell>Date Deleted</Table.HeadCell>
-              </Table.Head>
-              <Table.Body>
-                {deletedSchedules.map((schedule) =>
-                  schedule.registrations.map((registration) => (
-                    <Table.Row key={registration.id}>
-                      <Table.Cell>{schedule.name}</Table.Cell>
-                      <Table.Cell>{registration.reference_number}</Table.Cell>
-                      <Table.Cell>{registration.lname}</Table.Cell>
-                      <Table.Cell>{registration.fname}</Table.Cell>
+              <TableHead>
+                <TableHeadCell>Schedule Name</TableHeadCell>
+                <TableHeadCell>Reference Number</TableHeadCell>
+                <TableHeadCell>Last Name</TableHeadCell>
+                <TableHeadCell>First Name</TableHeadCell>
+                <TableHeadCell>Date Deleted</TableHeadCell>
+              </TableHead>
+              <TableBody>
+                {filteredSchedules.map((schedule) =>
+                  (schedule.registrations || []).map((registration) => (
+                    <TableRow key={registration.id}>
+                      <TableCell>{schedule.name}</TableCell>
+                      <TableCell>{registration.reference_number}</TableCell>
+                      <TableCell>{registration.lname}</TableCell>
+                      <TableCell>{registration.fname}</TableCell>
                       {/* Adjust field name if needed */}
-                      <Table.Cell>
+                      <TableCell>
                         {new Date(registration.deleted_at).toLocaleString()}
-                      </Table.Cell>
-                    </Table.Row>
+                      </TableCell>
+                    </TableRow>
                   )),
                 )}
-              </Table.Body>
+              </TableBody>
             </Table>
-          : <p>No deleted registrations available.</p>}
+          : <p>
+              {scheduleId ?
+                'No settled registrations for this schedule yet.'
+              : 'No settled registrations available.'}
+            </p>}
         </div>
       </Template>
     </AdminGuard>

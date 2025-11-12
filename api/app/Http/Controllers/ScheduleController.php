@@ -32,7 +32,11 @@ class ScheduleController extends Controller
 
     public function show(string $id)
     {
-        $schedule = Schedule::with('registrations')->find($id);
+        $schedule = Schedule::withTrashed()
+            ->with(['registrations' => function ($query) {
+                $query->withTrashed();
+            }])
+            ->find($id);
 
         if ($schedule) {
             $this->logActivity('get_schedule', $schedule);

@@ -17,7 +17,7 @@ const formatDate = (value) => {
 }
 
 const DividerLabel = ({ children }) => (
-  <div className='border-b border-black bg-slate-100 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide'>
+  <div className='border-y border-black bg-[#cfe2c3] px-3 py-1 text-[10.5px] font-semibold uppercase tracking-wide'>
     {children}
   </div>
 )
@@ -25,15 +25,24 @@ const DividerLabel = ({ children }) => (
 const LabeledLine = ({ label, value, className = '', grow = true }) => (
   <div className={`flex items-center text-[10px] ${className}`}>
     <span className='font-semibold'>{label}</span>
-    <span className={`ml-1 border-b border-black px-1 ${grow ? 'flex-1' : ''}`}>
-      {value || ' '}
+    <span className={`ml-1 border-b border-black px-2 leading-tight ${grow ? 'flex-1' : ''}`}>
+      {value || '\u00A0'}
     </span>
+  </div>
+)
+
+const NameSegment = ({ caption, value }) => (
+  <div className='flex flex-col text-[9px] leading-tight'>
+    <span className='min-h-[20px] border-b border-black px-2 pb-1 text-[10px] tracking-wide'>
+      {value || '\u00A0'}
+    </span>
+    <span className='pt-0.5 text-center italic text-[9px]'>{caption}</span>
   </div>
 )
 
 const Checkbox = ({ label, checked }) => (
   <div className='flex items-center space-x-1 text-[10px]'>
-    <span className='flex h-3 w-3 items-center justify-center border border-black text-[9px] font-semibold'>
+    <span className='flex h-3 w-3 items-center justify-center border border-black text-[9px] font-bold text-black'>
       {checked ? 'X' : ''}
     </span>
     <span>{label}</span>
@@ -53,7 +62,6 @@ const AdmissionFormLayout = React.forwardRef(
       data = {},
       className = '',
       logoSrc = '/logo.png',
-      footerSrc = '/footer.png',
     },
     ref,
   ) => {
@@ -74,19 +82,21 @@ const AdmissionFormLayout = React.forwardRef(
     return (
       <div
         ref={ref}
-        className={`mx-auto w-full max-w-[820px] border border-black bg-white text-[11px] text-gray-900 shadow ${className}`}
+        className={`mx-auto w-full max-w-[820px] border border-black bg-[#eef5ea] p-3 text-[11px] text-black shadow ${className}`}
+        style={{ fontFamily: '"Times New Roman", serif', lineHeight: 1.25 }}
       >
-        <div className='flex border-b border-black'>
-          <div className='flex w-[140px] items-center justify-center border-r border-black p-3'>
-            <Image src={logoSrc} alt='SICC Logo' width={90} height={90} priority />
-          </div>
-          <div className='flex-1 px-3 py-2 text-center text-[11px] leading-tight'>
-            <p className='text-sm font-bold'>SAMAL ISLAND CITY COLLEGE</p>
+        <div className='bg-white'>
+          <div className='flex border-b border-black'>
+            <div className='flex w-[140px] items-center justify-center border-r border-black p-3'>
+              <Image src={logoSrc} alt='SICC Logo' width={90} height={90} priority />
+            </div>
+            <div className='flex-1 px-3 py-2 text-center text-[11px] leading-tight'>
+              <p className='text-sm font-extrabold tracking-wide'>SAMAL ISLAND CITY COLLEGE</p>
             <p>Datu Taganiog Street, Brgy. Penaplata</p>
             <p>Samal District Island Garden City of Samal, Davao del Norte</p>
             <p>Email: samalislandcitycollege@gmail.com</p>
             <p>Website: https://sicc.samalcity.gov.ph</p>
-            <p className='mt-1 text-[13px] font-bold tracking-wide'>ADMISSION APPLICATION FORM</p>
+            <p className='mt-1 text-[13px] font-extrabold tracking-wide'>ADMISSION APPLICATION FORM</p>
           </div>
           <div className='w-[170px] border-l border-black text-[10px]'>
             <div className='grid border-b border-black grid-cols-[70px,1fr]'>
@@ -107,14 +117,14 @@ const AdmissionFormLayout = React.forwardRef(
         <div className='border-b border-black text-[10px]'>
           <div className='grid grid-cols-6 border-t border-black'>
             <div className='col-span-2 flex border-r border-black'>
-              <div className='border-r border-black bg-slate-100 px-2 py-1 font-semibold uppercase'>Semester:</div>
+              <div className='border-r border-black bg-[#dfeee0] px-2 py-1 font-semibold uppercase'>Semester:</div>
               <div className='flex flex-1 items-center justify-around px-2'>
                 <Checkbox label='1st' checked={bool(data.semester, '1st')} />
                 <Checkbox label='2nd' checked={bool(data.semester, '2nd')} />
               </div>
             </div>
             <div className='col-span-2 flex border-r border-black'>
-              <div className='border-r border-black bg-slate-100 px-2 py-1 font-semibold uppercase'>A.Y.</div>
+              <div className='border-r border-black bg-[#dfeee0] px-2 py-1 font-semibold uppercase'>A.Y.</div>
               <div className='flex flex-1 items-center justify-around px-2'>
                 <span className='border-b border-black px-2'>{data.academic_year_start || '____'}</span>
                 <span className='px-1'>-</span>
@@ -122,25 +132,25 @@ const AdmissionFormLayout = React.forwardRef(
               </div>
             </div>
             <div className='col-span-2 flex'>
-              <div className='border-r border-black bg-slate-100 px-2 py-1 font-semibold uppercase'>SY</div>
+              <div className='border-r border-black bg-[#dfeee0] px-2 py-1 font-semibold uppercase'>SY</div>
               <div className='flex flex-1 items-center px-2'>{fallback(data.sy || '')}</div>
             </div>
           </div>
 
           <div className='grid grid-cols-2 border-t border-black text-[10px]'>
             <div className='flex border-r border-black'>
-              <div className='border-r border-black bg-slate-100 px-2 py-1 font-semibold uppercase'>Student Application</div>
+              <div className='border-r border-black bg-[#dfeee0] px-2 py-1 font-semibold uppercase'>Student Application</div>
               <div className='flex flex-1 items-center px-2'>{fallback(data.application_number || data.reference_number)}</div>
             </div>
             <div className='flex'>
-              <div className='border-r border-black bg-slate-100 px-2 py-1 font-semibold uppercase'>Date of Application</div>
+              <div className='border-r border-black bg-[#dfeee0] px-2 py-1 font-semibold uppercase'>Date of Application</div>
               <div className='flex flex-1 items-center px-2'>{formatDate(data.application_date) || defaultPlaceholder}</div>
             </div>
           </div>
 
           <div className='grid grid-cols-[2fr,1fr] border-t border-black text-[10px]'>
             <div className='flex border-r border-black'>
-              <div className='border-r border-black bg-slate-100 px-2 py-1 font-semibold uppercase'>Type / Category</div>
+              <div className='border-r border-black bg-[#dfeee0] px-2 py-1 font-semibold uppercase'>Type / Category</div>
               <div className='flex flex-1 flex-col px-2 py-2'>
                 <div className='flex flex-wrap gap-4'>
                   {[
@@ -157,25 +167,27 @@ const AdmissionFormLayout = React.forwardRef(
                   <Checkbox label='Working student' checked={bool(data.StudentCat, 'wstudent')} />
                   <div className='flex items-center text-[10px]'>
                     <span>Nature of work:</span>
-                    <span className='ml-2 border-b border-black px-1'>{fallback(data.Nwork, '')}</span>
+                    <span className='ml-2 border-b border-black px-2 min-w-[120px]'>{fallback(data.Nwork, '')}</span>
                   </div>
                 </div>
               </div>
             </div>
             <div className='flex flex-col border-l border-black items-center justify-center px-2 py-2'>
-              <div className='mb-1 text-center text-[9px] font-semibold uppercase'>ID Photo<br />(1&quot; × 1&quot;)</div>
+              <div className='mb-1 text-center text-[9px] font-semibold uppercase leading-tight'>
+                ID Photo<br />(Passport Size)
+              </div>
               {photoSrc ? (
                 <Image src={photoSrc} alt='ID Photo' width={80} height={80} className='h-20 w-20 object-cover' />
               ) : (
-                <div className='flex h-20 w-20 items-center justify-center border border-dashed border-black text-center text-[9px] leading-tight'>
-                  1&quot; × 1&quot;<br />Passport Photo
+                <div className='flex h-24 w-24 items-center justify-center border-2 border-dashed border-black text-center text-[9px] leading-tight'>
+                  Passport<br />Photo
                 </div>
               )}
             </div>
           </div>
 
           <div className='border-t border-black text-[10px]'>
-            <div className='flex bg-slate-100 px-2 py-1 font-semibold uppercase'>Course Applied for</div>
+            <div className='flex bg-[#dfeee0] px-2 py-1 font-semibold uppercase'>Course Applied for</div>
             <div className='grid grid-cols-2 gap-1 px-4 py-2 text-[10px]'>
               {[
                 { label: 'BS in Agribusiness', value: '1' },
@@ -192,38 +204,63 @@ const AdmissionFormLayout = React.forwardRef(
                 </div>
               ))}
             </div>
+            <p className='px-3 pb-2 text-[9px] leading-snug italic'>
+              I certify that I have thoroughly read the admission requirements. <span className='font-semibold not-italic'>Note:</span> All information requested must be supplied.
+              If an item is not applicable, kindly indicate &quot;N/A&quot;. Only accomplished forms with complete requirements will be accepted.
+            </p>
           </div>
         </div>
 
         <DividerLabel>A. Personal Information</DividerLabel>
 
         <div className='space-y-2 px-3 py-3'>
-          <div className='grid grid-cols-[2fr,2fr,2fr,1fr] gap-2'>
-            <LabeledLine label='Name:' value={`${fallback(data.lname, 'Last Name')} ${fallback(data.fname, 'Given Name')} ${fallback(data.mname, 'Middle Name')} ${fallback(data.pref, 'Ext.')}`} />
+          <div className='flex items-start gap-2'>
+            <span className='mt-2 text-[10px] font-semibold'>Name:</span>
+            <div className='grid flex-1 grid-cols-4 gap-2'>
+              <NameSegment caption='(Last Name)' value={fallback(data.lname, '')} />
+              <NameSegment caption='(Given Name)' value={fallback(data.fname, '')} />
+              <NameSegment caption='(Middle Name)' value={fallback(data.mname, '')} />
+              <NameSegment caption='(Ext. Name Jr., Sr.)' value={fallback(data.pref, '')} />
+            </div>
           </div>
 
-          <div className='grid grid-cols-2 gap-2'>
-            <div className='flex flex-wrap gap-4'>
-              <span className='font-semibold'>Sex:</span>
+          <div className='grid grid-cols-2 gap-2 text-[10px]'>
+            <div className='flex items-center gap-3'>
+              <span className='font-semibold min-w-[55px]'>Sex:</span>
               <Checkbox label='Male' checked={bool(data.sex, 'male')} />
               <Checkbox label='Female' checked={bool(data.sex, 'female')} />
             </div>
-            <div className='flex flex-wrap gap-4'>
-              <span className='font-semibold'>Gender:</span>
+            <div className='flex items-center gap-3'>
+              <span className='font-semibold min-w-[75px]'>Gender:</span>
               <Checkbox label='Man' checked={bool(data.gender, 'man')} />
               <Checkbox label='Woman' checked={bool(data.gender, 'woman')} />
               <Checkbox label='LGBTQ' checked={bool(data.gender, 'lgbtqa+') || bool(data.gender, 'lgbtq')} />
             </div>
           </div>
 
-          <div className='grid grid-cols-3 gap-2'>
-            <LabeledLine label='Age' value={data.age} />
-            <LabeledLine label='Birthdate' value={formatDate(data.birthdate) || `${data.monthoption || ''} ${data.date || ''}, ${data.year || ''}`} />
-            <div className='flex flex-wrap items-center gap-x-3 gap-y-1'>
+          <div className='grid grid-cols-[1fr,1fr,2fr] gap-2 text-[10px]'>
+            <div className='flex items-center gap-2'>
+              <span className='font-semibold'>Age:</span>
+              <span className='flex-1 border-b border-black px-2'>{fallback(data.age, '')}</span>
+            </div>
+            <div className='flex items-center gap-2'>
+              <span className='font-semibold'>Birthdate:</span>
+              <span className='flex-1 border-b border-black px-2'>
+                {formatDate(data.birthdate) || `${data.monthoption || ''} ${data.date || ''}, ${data.year || ''}`}
+              </span>
+              <span className='italic text-[9px]'>(mm/dd/yyyy)</span>
+            </div>
+            <div className='grid grid-cols-[auto,1fr] gap-2'>
               <span className='font-semibold'>Civil Status:</span>
-              {['single', 'married', 'widowed', 'solo parent'].map((status) => (
-                <Checkbox key={status} label={status.replace(/\b\w/g, (c) => c.toUpperCase())} checked={bool(data.civilstatus, status)} />
-              ))}
+              <div className='flex flex-wrap items-center gap-3'>
+                {['single', 'married', 'widowed', 'solo parent'].map((status) => (
+                  <Checkbox key={status} label={status.replace(/\b\w/g, (c) => c.toUpperCase())} checked={bool(data.civilstatus, status)} />
+                ))}
+                <div className='flex items-center gap-2'>
+                  <span>Other:</span>
+                  <span className='border-b border-black px-2 leading-tight min-w-[80px]'>{fallback(data.civilstatus_other, '')}</span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -253,11 +290,12 @@ const AdmissionFormLayout = React.forwardRef(
             <LabeledLine label='GPA' value={data.gpa} />
           </div>
 
-          <div className='flex flex-wrap gap-4'>
+          <div className='flex flex-wrap items-center gap-3'>
             <span className='font-semibold'>Member of Cultural Minor Group?</span>
             <Checkbox label='No' checked={bool(data.indigentP, 'no')} />
             <Checkbox label='Yes (Specify)' checked={bool(data.indigentP, 'yes')} />
             <span className='border-b border-black px-2'>{fallback(data.indigentPy, '')}</span>
+            <span className='text-[9px] italic'>(Ex. Sama, Mandaya, Bagobo, etc.)</span>
           </div>
 
           <LabeledLine label='Father&apos;s Complete Name' value={data.father_name} />
@@ -279,7 +317,7 @@ const AdmissionFormLayout = React.forwardRef(
                 <col style={{ width: '10%' }} />
               </colgroup>
               <thead>
-                <tr className='bg-slate-100 text-center font-semibold'>
+                <tr className='bg-[#daf1da] text-center font-semibold'>
                   <th className='border border-black px-2 py-1'>Family/ Household Members (COMPLETE NAME)</th>
                   <th className='border border-black px-2 py-1'>Relationship to Applicant</th>
                   <th className='border border-black px-2 py-1'>Age</th>
@@ -362,11 +400,17 @@ const AdmissionFormLayout = React.forwardRef(
           <div className='flex-1 px-2 py-2'>Remarks:</div>
         </div>
 
-        <div className='border-t border-black'>
-          <Image src={footerSrc} alt='Decorative footer' height={24} width={800} className='h-6 w-full object-cover' />
-        </div>
+        <div
+          className='border-t border-black'
+          style={{
+            height: '18px',
+            backgroundImage:
+              'repeating-linear-gradient(135deg,#b9312b 0px,#b9312b 10px,#f3d87c 10px,#f3d87c 20px,#1c5f2e 20px,#1c5f2e 30px)',
+          }}
+        />
       </div>
-    )
+    </div>
+  )
   },
 )
 

@@ -27,10 +27,53 @@ const breadcrumbs = [
   },
 ]
 
+const sanitizeFileName = (value) =>
+  value ?
+    value
+      .replace(/[^\w\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '_')
+  : ''
+
+const formatDateForFilename = (dateString) => {
+  if (!dateString) return ''
+  const date = new Date(dateString)
+  if (Number.isNaN(date.getTime())) return ''
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+const formatTimeForFilename = (timeString) => {
+  if (!timeString) return ''
+  const [rawHours, rawMinutes] = timeString.split(':')
+  if (rawHours === undefined) return ''
+  const hours = parseInt(rawHours, 10)
+  if (Number.isNaN(hours)) return ''
+  const minutes = (rawMinutes || '00').slice(0, 2)
+  const period = hours >= 12 ? 'PM' : 'AM'
+  const normalizedHour = hours % 12 || 12
+  return `${String(normalizedHour).padStart(2, '0')}-${minutes}${period}`
+}
+
+const buildScheduleFileName = (schedule, fallbackName) => {
+  const namePart = sanitizeFileName(schedule?.name || fallbackName || 'schedule')
+  const datePart = formatDateForFilename(schedule?.date)
+  const startPart =
+    formatTimeForFilename(schedule?.startTime) ||
+    formatTimeForFilename(schedule?.start_time)
+  const endPart =
+    formatTimeForFilename(schedule?.endTime) ||
+    formatTimeForFilename(schedule?.end_time)
+  const timePart = [startPart, endPart].filter(Boolean).join('-to-')
+  return [namePart, timePart, datePart].filter(Boolean).join('_')
+}
+
 const Schedule = () => {
   const router = useRouter()
   const { scheduleId } = router.query
-  const { scheduleName, registrations, isLoading, isError } = useHooks()
+  const { schedule, scheduleName, registrations, isLoading, isError } = useHooks()
   const { user } = useUser() // Get the user data
 
   const TemplateComponent = user.role === 'admin' ? Template : StaffTemplate // Choose the template based on user role
@@ -41,9 +84,22 @@ const Schedule = () => {
     return map
   }, {})
 
-  const filteredRegistrations = registrations.filter(
-    (registration) => registration.schedule_id.toString() === scheduleId,
-  )
+  const filteredRegistrations = React.useMemo(() => {
+    if (!Array.isArray(registrations)) return []
+    if (!scheduleId) return registrations
+
+    const regsHaveScheduleId = registrations.some(
+      (registration) => registration.schedule_id !== undefined && registration.schedule_id !== null,
+    )
+
+    if (!regsHaveScheduleId) return registrations
+
+    return registrations.filter(
+      (registration) =>
+        registration.schedule_id &&
+        registration.schedule_id.toString() === scheduleId,
+    )
+  }, [registrations, scheduleId])
 
   const rows = [
     { key: 'lname', header: 'Last Name', render: (row) => row.lname },
@@ -77,17 +133,18 @@ const Schedule = () => {
 
   const handleDownloadCsv = () => {
     const dataToExport = filteredRegistrations.map((registration) => ({
-      Contacts: registration.contactnumber,
-      'Last Name': registration.lname,
-      'First Name': registration.fname,
-      'Reference Number': registration.reference_number,
-      'Scheduled Date of Admission Test':
-        registration.schedule ?
-          new Date(registration.schedule.date).toLocaleDateString('en-US')
-        : 'N/A',
+      'Last Name': registration.lname || '',
+      'First Name': registration.fname || '',
+      Gender: registration.gender ?
+        capitalizeFirstLetter(registration.gender)
+      : '',
+      'Mobile Number': registration.contactnumber || '',
     }))
 
-    if (!dataToExport.length) return
+    if (!dataToExport.length) {
+      window.alert('No registrations available to export yet.')
+      return
+    }
 
     const headers = Object.keys(dataToExport[0])
     const csvRows = [
@@ -97,7 +154,9 @@ const Schedule = () => {
       ),
     ]
     const csvContent = csvRows.join('\n')
-    const filename = `${scheduleName.replace(/[^a-zA-Z0-9]/g, '_')}_registrations.csv`
+    const filenameBase =
+      buildScheduleFileName(schedule, scheduleName) || sanitizeFileName(scheduleName)
+    const filename = `${filenameBase || 'schedule'}_registrations.csv`
 
     const blob = new Blob([`\uFEFF${csvContent}`], {
       type: 'text/csv;charset=utf-8;',
@@ -122,8 +181,8 @@ const Schedule = () => {
         <Link href='/schedule'>
           <Button color='blue'>Back to Schedules</Button>
         </Link>
-        <Button onClick={handleDownloadCsv} className='btn-download'>
-          Download CSV
+        <Button color='success' onClick={handleDownloadCsv} className='whitespace-nowrap'>
+          Download Excel
         </Button>
       </div>
 
